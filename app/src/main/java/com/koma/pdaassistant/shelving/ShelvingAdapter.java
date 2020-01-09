@@ -14,24 +14,7 @@
  * limitations under the License.
  */
 
-package com.koma.pdaassistant.base;
+package com.koma.pdaassistant.shelving;
 
-import androidx.lifecycle.ViewModel;
-
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-
-public class BaseViewModel extends ViewModel {
-    private CompositeDisposable disposables = new CompositeDisposable();
-
-    protected void addSubscription(Disposable disposable) {
-        disposables.add(disposable);
-    }
-
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-
-        disposables.clear();
-    }
+public class ShelvingAdapter {
 }

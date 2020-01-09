@@ -20,8 +20,24 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public class BaseAndroidViewModel extends AndroidViewModel {
+    private CompositeDisposable disposables = new CompositeDisposable();
+
     BaseAndroidViewModel(Application application) {
         super(application);
+    }
+
+    protected void addSubscription(Disposable disposable) {
+        disposables.add(disposable);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+
+        disposables.clear();
     }
 }
