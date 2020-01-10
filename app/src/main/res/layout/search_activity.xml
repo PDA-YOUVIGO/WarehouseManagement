@@ -76,6 +76,7 @@
             android:background="@drawable/bg_rectangle"
             android:maxLength="100"
             android:maxLines="1"
+            android:paddingStart="@dimen/dp_8"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/mbt_query"
             app:layout_constraintEnd_toStartOf="@id/mbt_query"
