@@ -21,6 +21,10 @@
         </activity>
 
         <activity
+            android:name=".search.SearchActivity"
+            android:label="@string/search" />
+
+        <activity
             android:name=".shelving.ShelvingActivity"
             android:label="@string/shelving" />
 

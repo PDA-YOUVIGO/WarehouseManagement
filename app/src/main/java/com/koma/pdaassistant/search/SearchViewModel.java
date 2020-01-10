@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.koma.pdaassistant.shelving;
+package com.koma.pdaassistant.search;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -35,7 +35,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class ShelvingViewModel extends BaseViewModel {
+public class SearchViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
     LiveData<Boolean> isLoading = _isLoading;

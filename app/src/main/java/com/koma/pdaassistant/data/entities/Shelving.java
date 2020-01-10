@@ -16,11 +16,5 @@
 
 package com.koma.pdaassistant.data.entities;
 
-public class Material {
-    //物料编号
-    public String materialDocument;
-    //批号
-    public String lotNumber;
-    //通用名称
-    public String name;
+public class Shelving {
 }

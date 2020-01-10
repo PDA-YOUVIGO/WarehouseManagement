@@ -18,23 +18,29 @@ package com.koma.pdaassistant;
 
 import android.os.Bundle;
 
-import com.koma.pdaassistant.base.BaseActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
+    protected Toolbar toolbar;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loadFragment(savedInstanceState, MainFragment.newInstance());
+        setContentView(R.layout.base_activity);
+
+        init(savedInstanceState);
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.base_activity;
-    }
-
-    @Override
-    protected boolean needBack() {
-        return false;
+    private void init(Bundle savedInstanceState) {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, MainFragment.newInstance())
+                    .commitNow();
+        }
     }
 }

@@ -27,6 +27,7 @@
     <string name="inventory_check">库存查询</string>
     <string name="switch_stock_locations">切换库存地</string>
     <string name="exit">退出</string>
+    <string name="search">查询</string>
     <!--shelving-->
     <string name="material_document">物料凭证</string>
     <string name="query">查询</string>

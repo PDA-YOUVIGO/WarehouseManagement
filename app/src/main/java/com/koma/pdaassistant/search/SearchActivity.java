@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.koma.pdaassistant.shelving;
+package com.koma.pdaassistant.search;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -30,34 +30,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.koma.pdaassistant.R;
-import com.koma.pdaassistant.base.BaseFragment;
 import com.koma.pdaassistant.data.entities.Material;
 
 import java.util.List;
 
-public class ShelvingFragment extends BaseFragment {
+public class SearchActivity extends AppCompatActivity {
     private MaterialButton materialButton;
     private ProgressBar progressBar;
     private AppCompatEditText editText;
     private RecyclerView recyclerView;
-    private ShelvingAdapter adapter;
+    private SearchAdapter adapter;
 
-    private ShelvingViewModel viewModel;
-
-    public static ShelvingFragment newInstance() {
-        return new ShelvingFragment();
-    }
+    private SearchViewModel viewModel;
 
     @Override
-    public int getLayoutId() {
-        return R.layout.shelving_fragment;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.search_activity);
+
+        initViews();
+
+        observeData();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        materialButton = view.findViewById(R.id.mbt_query);
+    private void initViews() {
+        materialButton = findViewById(R.id.mbt_query);
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,24 +64,18 @@ public class ShelvingFragment extends BaseFragment {
                 }
             }
         });
-        editText = view.findViewById(R.id.edit_materials);
-        progressBar = view.findViewById(R.id.progress_bar);
-        recyclerView = view.findViewById(R.id.recycler_view);
+        editText = findViewById(R.id.edit_materials);
+        progressBar = findViewById(R.id.progress_bar);
+        recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new ShelvingAdapter();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        viewModel = ViewModelProviders.of(this).get(ShelvingViewModel.class);
-
-        observeData();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SearchAdapter();
+        recyclerView.setAdapter(adapter);
     }
 
     private void observeData() {
+        viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+
         viewModel.isLoading.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isActive) {

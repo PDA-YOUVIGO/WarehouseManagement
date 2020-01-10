@@ -35,9 +35,4 @@ public class FinishedProductsActivity extends BaseActivity {
     protected int getLayoutId() {
         return R.layout.base_activity;
     }
-
-    @Override
-    protected boolean needBack() {
-        return true;
-    }
 }
