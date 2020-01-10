@@ -13,8 +13,6 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,14 +24,50 @@
     android:paddingBottom="@dimen/dp_8">
 
     <TextView
+        android:id="@+id/tv_material_document_description"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/material_document"
+        app:layout_constraintEnd_toStartOf="@id/tv_date_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_date_description"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/date"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
+        app:layout_constraintEnd_toStartOf="@id/tv_creator_description"
+        app:layout_constraintStart_toEndOf="@id/tv_material_document_description"
+        app:layout_constraintTop_toTopOf="@id/tv_material_document_description" />
+
+    <TextView
+        android:id="@+id/tv_creator_description"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/creator"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_date_description"
+        app:layout_constraintTop_toTopOf="@id/tv_material_document_description" />
+
+    <TextView
         android:id="@+id/tv_material_document"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_16"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_material_document_description"
         tools:text="000001" />
 
     <TextView
@@ -41,9 +75,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
         app:layout_constraintEnd_toStartOf="@id/tv_creator"
         app:layout_constraintStart_toEndOf="@id/tv_material_document"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_material_document"
         tools:text="2019-01-02" />
 
     <TextView
@@ -51,8 +86,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_date"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_material_document"
         tools:text="田家成" />
 </androidx.constraintlayout.widget.ConstraintLayout>

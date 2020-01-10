@@ -53,9 +53,9 @@ public class ShelvingViewModel extends BaseViewModel {
                 List<Material> materials = new ArrayList<>();
                 for (int i = 0; i < 20; i++) {
                     Material material = new Material();
-                    material.lotNumber = "00000" + i;
+                    material.date = "00000" + i;
                     material.materialDocument = materialDocument;
-                    material.name = "没有名字";
+                    material.creator = "没有名字";
                 }
             }
         }, BackpressureStrategy.LATEST)

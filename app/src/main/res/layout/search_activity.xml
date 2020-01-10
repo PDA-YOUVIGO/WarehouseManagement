@@ -16,6 +16,7 @@
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -27,55 +28,66 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/search_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </androidx.appcompat.widget.Toolbar>
+            android:layout_height="wrap_content" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingTop="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16"
-        android:paddingBottom="@dimen/dp_16"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tv_material_document"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_start"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@drawable/bg_rectangle"
+            android:gravity="center"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="@string/material_document"
+            app:layout_constraintEnd_toStartOf="@id/tv_end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2010-11-01" />
+
+        <TextView
+            android:id="@+id/tv_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@drawable/bg_rectangle"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
+            app:layout_constraintBottom_toBottomOf="@id/tv_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_start"
+            app:layout_constraintTop_toTopOf="@id/tv_start"
+            tools:text="2020-01-01" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_materials"
+            android:id="@+id/edit_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_shelving_query"
-            android:hint="@string/material_document_hint"
+            android:background="@drawable/bg_rectangle"
             android:maxLength="100"
             android:maxLines="1"
             android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
+            app:layout_constraintBottom_toBottomOf="@id/mbt_query"
             app:layout_constraintEnd_toStartOf="@id/mbt_query"
-            app:layout_constraintStart_toEndOf="@id/tv_material_document"
-            app:layout_constraintTop_toTopOf="@id/tv_material_document" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mbt_query" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbt_query"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
             android:paddingStart="@dimen/dp_16"
             android:paddingTop="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_16"
@@ -84,65 +96,8 @@
             android:textAppearance="?android:attr/textAppearance"
             android:textColor="@android:color/white"
             app:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_material_document" />
-
-        <TextView
-            android:id="@+id/tv_source_unit"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_16"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/source_unit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_material_document" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_source_unit"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_shelving_query"
-            android:hint="@string/source_unit_hint"
-            android:maxLength="100"
-            android:maxLines="1"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/tv_source_unit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_source_unit"
-            app:layout_constraintTop_toTopOf="@id/tv_source_unit" />
-
-        <TextView
-            android:id="@+id/tv_date"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_16"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/date"
-            app:layout_constraintEnd_toEndOf="@id/tv_source_unit"
-            app:layout_constraintTop_toBottomOf="@id/tv_source_unit" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_date"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_shelving_query"
-            android:hint="@string/source_unit_hint"
-            android:maxLength="100"
-            android:maxLines="1"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/tv_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_date"
-            app:layout_constraintTop_toTopOf="@id/tv_date" />
+            app:layout_constraintTop_toBottomOf="@id/tv_end" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -152,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_date" />
+            app:layout_constraintTop_toBottomOf="@id/mbt_query" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

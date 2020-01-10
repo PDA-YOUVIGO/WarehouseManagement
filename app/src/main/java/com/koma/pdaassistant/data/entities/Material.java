@@ -16,11 +16,47 @@
 
 package com.koma.pdaassistant.data.entities;
 
-public class Material {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Material implements Parcelable {
     //物料编号
     public String materialDocument;
-    //批号
-    public String lotNumber;
-    //通用名称
-    public String name;
+    //日期
+    public String date;
+    //创建者
+    public String creator;
+
+    public Material() {
+    }
+
+    protected Material(Parcel in) {
+        materialDocument = in.readString();
+        date = in.readString();
+        creator = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(materialDocument);
+        dest.writeString(date);
+        dest.writeString(creator);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Material> CREATOR = new Creator<Material>() {
+        @Override
+        public Material createFromParcel(Parcel in) {
+            return new Material(in);
+        }
+
+        @Override
+        public Material[] newArray(int size) {
+            return new Material[size];
+        }
+    };
 }

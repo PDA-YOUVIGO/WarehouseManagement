@@ -16,6 +16,7 @@
 
 package com.koma.pdaassistant.base;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.search.SearchActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 100;
     protected Toolbar toolbar;
 
     @Override
@@ -80,6 +82,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void launchSearchPage() {
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

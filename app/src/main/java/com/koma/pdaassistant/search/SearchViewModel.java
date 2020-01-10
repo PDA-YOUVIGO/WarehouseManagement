@@ -34,15 +34,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
+import timber.log.Timber;
 
 public class SearchViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    LiveData<Boolean> isLoading = _isLoading;
-
-    private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>(
-    );
-    LiveData<List<Material>> materials = _materials;
+    private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>();
 
     void query(String materialDocument) {
         _isLoading.setValue(true);
@@ -50,13 +47,16 @@ public class SearchViewModel extends BaseViewModel {
         Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
             @Override
             public void subscribe(FlowableEmitter<List<Material>> emitter) {
-                List<Material> materials = new ArrayList<>();
-                for (int i = 0; i < 20; i++) {
+                List<Material> mockData = new ArrayList<>();
+                for (int i = 0; i < 100; i++) {
                     Material material = new Material();
-                    material.lotNumber = "00000" + i;
-                    material.materialDocument = materialDocument;
-                    material.name = "没有名字";
+                    material.date = "00000" + i;
+                    material.materialDocument = materialDocument + i;
+                    material.creator = "我是谁";
+                    mockData.add(material);
                 }
+                emitter.onNext(mockData);
+                emitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
                 .delay(5, TimeUnit.SECONDS)
@@ -65,6 +65,7 @@ public class SearchViewModel extends BaseViewModel {
                 .subscribeWith(new DisposableSubscriber<List<Material>>() {
                     @Override
                     public void onNext(List<Material> materials) {
+                        Timber.d("----onNext%s", materials.size());
                         _materials.setValue(materials);
                     }
 
@@ -79,5 +80,13 @@ public class SearchViewModel extends BaseViewModel {
                     }
                 });
         addSubscription(disposable);
+    }
+
+    LiveData<Boolean> isLoading() {
+        return _isLoading;
+    }
+
+    LiveData<List<Material>> materials() {
+        return _materials;
     }
 }
