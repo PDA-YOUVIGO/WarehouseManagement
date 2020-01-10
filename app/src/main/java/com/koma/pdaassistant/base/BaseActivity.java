@@ -29,7 +29,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.koma.pdaassistant.R;
+import com.koma.pdaassistant.data.entities.Material;
 import com.koma.pdaassistant.search.SearchActivity;
+import com.koma.pdaassistant.util.Constants;
+
+import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 100;
@@ -87,9 +91,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Timber.d("onActivityResult");
+
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-
+                if (data != null) {
+                    Material material = data.getParcelableExtra(Constants.SEARCH_RESULT);
+                    Timber.d("onActivityResult material:%s", material.toString());
+                }
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

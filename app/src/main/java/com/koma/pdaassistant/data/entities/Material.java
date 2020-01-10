@@ -19,6 +19,8 @@ package com.koma.pdaassistant.data.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 public class Material implements Parcelable {
     //物料编号
     public String materialDocument;
@@ -59,4 +61,10 @@ public class Material implements Parcelable {
             return new Material[size];
         }
     };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "materialDocument:" + materialDocument + ",date:" + date + ",creator:" + creator;
+    }
 }

@@ -40,8 +40,6 @@ import com.koma.pdaassistant.data.entities.Material;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 public class SearchActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private AppCompatEditText editText;
@@ -129,8 +127,6 @@ public class SearchActivity extends AppCompatActivity {
         viewModel.materials().observe(this, new Observer<List<Material>>() {
             @Override
             public void onChanged(List<Material> materials) {
-                Timber.d("komamj---%s", materials.size());
-
                 adapter.submitList(materials);
             }
         });

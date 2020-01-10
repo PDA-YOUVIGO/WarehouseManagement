@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.data.entities.Material;
 
+import timber.log.Timber;
+
 import static com.koma.pdaassistant.util.Constants.SEARCH_RESULT;
 
 public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH> {
@@ -91,6 +93,7 @@ public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH>
         @Override
         public void onClick(View v) {
             Material material = getItem(getAdapterPosition());
+            Timber.d("onClick---%s", material.toString());
             if (itemView.getContext() instanceof SearchActivity) {
                 Intent intent = new Intent();
                 intent.putExtra(SEARCH_RESULT, material);

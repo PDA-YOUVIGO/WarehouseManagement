@@ -34,7 +34,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-import timber.log.Timber;
 
 public class SearchViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
@@ -50,9 +49,9 @@ public class SearchViewModel extends BaseViewModel {
                 List<Material> mockData = new ArrayList<>();
                 for (int i = 0; i < 100; i++) {
                     Material material = new Material();
-                    material.date = "00000" + i;
-                    material.materialDocument = materialDocument + i;
-                    material.creator = "我是谁";
+                    material.date = "2020-1-10";
+                    material.materialDocument = "101020300076" + i;
+                    material.creator = "我是谁" + i;
                     mockData.add(material);
                 }
                 emitter.onNext(mockData);
@@ -65,7 +64,6 @@ public class SearchViewModel extends BaseViewModel {
                 .subscribeWith(new DisposableSubscriber<List<Material>>() {
                     @Override
                     public void onNext(List<Material> materials) {
-                        Timber.d("----onNext%s", materials.size());
                         _materials.setValue(materials);
                     }
 
