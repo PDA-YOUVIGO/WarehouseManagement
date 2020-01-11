@@ -16,13 +16,16 @@
 
 package com.koma.pdaassistant.search;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
@@ -39,6 +42,8 @@ import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.data.entities.Material;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 public class SearchActivity extends AppCompatActivity {
     private ProgressBar progressBar;
@@ -130,5 +135,22 @@ public class SearchActivity extends AppCompatActivity {
                 adapter.submitList(materials);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        setResult(Activity.RESULT_CANCELED);
+        Timber.d("onBackPressed");
     }
 }

@@ -87,9 +87,11 @@ public class ShelvingActivity extends BaseActivity {
         viewModel.material().observe(this, new Observer<Material>() {
             @Override
             public void onChanged(Material material) {
-                materialDocument.setText(material.materialDocument);
-                sourceUnit.setText(material.sourceUnit);
-                date.setText(material.date);
+                if (material != null) {
+                    materialDocument.setText(material.materialDocument);
+                    sourceUnit.setText(material.sourceUnit);
+                    date.setText(material.date);
+                }
             }
         });
         viewModel.isLoading().observe(this, new Observer<Boolean>() {
@@ -117,7 +119,9 @@ public class ShelvingActivity extends BaseActivity {
 
         Timber.d("onActivityResult");
 
-        viewModel.handleData(searchResult);
+        if (searchResult != null) {
+            viewModel.handleData(searchResult);
+        }
     }
 
     @Override

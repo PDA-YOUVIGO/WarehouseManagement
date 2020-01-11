@@ -44,4 +44,7 @@
     <!--FinishedProduct-->
     <string name="material_coding">物料编码</string>
     <string name="batch_number">批次号</string>
+
+    <!--Detail-->
+    <string name="detail">详情</string>
 </resources>
