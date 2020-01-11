@@ -21,8 +21,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.koma.pdaassistant.base.BaseViewModel;
 import com.koma.pdaassistant.data.entities.Material;
+import com.koma.pdaassistant.data.entities.Shelving;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -38,34 +38,29 @@ import io.reactivex.subscribers.DisposableSubscriber;
 public class ShelvingViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    LiveData<Boolean> isLoading = _isLoading;
+    private MutableLiveData<Material> _material = new MutableLiveData<Material>();
 
-    private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>(
-    );
-    LiveData<List<Material>> materials = _materials;
+    private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<List<Shelving>>();
 
-    void query(String materialDocument) {
+    void handleData(Material material) {
         _isLoading.setValue(true);
 
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
+        _material.setValue(material);
+
+        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Shelving>>() {
             @Override
-            public void subscribe(FlowableEmitter<List<Material>> emitter) {
-                List<Material> materials = new ArrayList<>();
-                for (int i = 0; i < 20; i++) {
-                    Material material = new Material();
-                    material.date = "00000" + i;
-                    material.materialDocument = materialDocument;
-                    material.creator = "没有名字";
-                }
+            public void subscribe(FlowableEmitter<List<Shelving>> emitter) {
+                emitter.onNext(material.shelvings);
+                emitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
-                .delay(5, TimeUnit.SECONDS)
+                .delay(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<Material>>() {
+                .subscribeWith(new DisposableSubscriber<List<Shelving>>() {
                     @Override
-                    public void onNext(List<Material> materials) {
-                        _materials.setValue(materials);
+                    public void onNext(List<Shelving> shelvings) {
+                        _shelvings.setValue(shelvings);
                     }
 
                     @Override
@@ -79,5 +74,17 @@ public class ShelvingViewModel extends BaseViewModel {
                     }
                 });
         addSubscription(disposable);
+    }
+
+    LiveData<Boolean> isLoading() {
+        return _isLoading;
+    }
+
+    LiveData<List<Shelving>> shelvings() {
+        return _shelvings;
+    }
+
+    LiveData<Material> material() {
+        return _material;
     }
 }

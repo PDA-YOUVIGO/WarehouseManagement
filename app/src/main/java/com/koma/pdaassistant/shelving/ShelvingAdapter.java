@@ -19,6 +19,7 @@ package com.koma.pdaassistant.shelving;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -27,6 +28,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.data.entities.Shelving;
+
+import timber.log.Timber;
 
 public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.ShelvingVH> {
     public ShelvingAdapter() {
@@ -42,24 +45,40 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
 
     @Override
     public void onBindViewHolder(@NonNull ShelvingVH holder, int position) {
-
+        holder.bind(getItem(position));
     }
 
     class ShelvingVH extends RecyclerView.ViewHolder {
-        public ShelvingVH(@NonNull View itemView) {
+        private final TextView itemNumber;
+        private final TextView commonName;
+        private final TextView lotNumber;
+
+        ShelvingVH(@NonNull View itemView) {
             super(itemView);
+
+            itemNumber = itemView.findViewById(R.id.tv_item_number);
+            commonName = itemView.findViewById(R.id.tv_common_name);
+            lotNumber = itemView.findViewById(R.id.tv_lot_number);
+        }
+
+        void bind(Shelving shelving) {
+            Timber.d("bind %s", shelving.toString());
+            itemNumber.setText(shelving.itemNumber);
+            commonName.setText(shelving.commonName);
+            lotNumber.setText(shelving.lotNumber);
         }
     }
 
     static class ShelvingDiffCallback extends DiffUtil.ItemCallback<Shelving> {
         @Override
         public boolean areItemsTheSame(@NonNull Shelving oldItem, @NonNull Shelving newItem) {
-            return false;
+            return oldItem.itemNumber.equals(newItem.itemNumber);
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Shelving oldItem, @NonNull Shelving newItem) {
-            return false;
+            return oldItem.commonName.equals(newItem.commonName)
+                    && oldItem.lotNumber.equals(newItem.lotNumber);
         }
     }
 }

@@ -16,5 +16,56 @@
 
 package com.koma.pdaassistant.data.entities;
 
-public class Shelving {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class Shelving implements Parcelable {
+    // 物料编号
+    public String itemNumber;
+    // 通用名称
+    public String commonName;
+    // 批号
+    public String lotNumber;
+
+    public Shelving() {
+    }
+
+    protected Shelving(Parcel in) {
+        itemNumber = in.readString();
+        commonName = in.readString();
+        lotNumber = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(itemNumber);
+        dest.writeString(commonName);
+        dest.writeString(lotNumber);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Shelving> CREATOR = new Creator<Shelving>() {
+        @Override
+        public Shelving createFromParcel(Parcel in) {
+            return new Shelving(in);
+        }
+
+        @Override
+        public Shelving[] newArray(int size) {
+            return new Shelving[size];
+        }
+    };
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "shelving:itemNumber:" + itemNumber + ",commonName:" + commonName
+                + ",lotNumber:" + lotNumber;
+    }
 }

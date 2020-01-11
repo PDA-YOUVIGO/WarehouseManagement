@@ -21,6 +21,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.koma.pdaassistant.base.BaseViewModel;
 import com.koma.pdaassistant.data.entities.Material;
+import com.koma.pdaassistant.data.entities.Shelving;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +52,11 @@ public class SearchViewModel extends BaseViewModel {
                 List<Material> mockData = new ArrayList<>();
                 for (int i = 0; i < 100; i++) {
                     Material material = new Material();
+                    material.sourceUnit = "ThoughtWorks";
                     material.date = "2020-1-10";
                     material.materialDocument = "101020300076" + i;
                     material.creator = "我是谁" + i;
+                    material.shelvings = produceShelvings(i);
                     mockData.add(material);
                 }
                 emitter.onNext(mockData);
@@ -78,6 +83,19 @@ public class SearchViewModel extends BaseViewModel {
                     }
                 });
         addSubscription(disposable);
+    }
+
+    @NotNull
+    private List<Shelving> produceShelvings(int i) {
+        List<Shelving> shelvings = new ArrayList<>();
+        for (int j = 0; j <= i; j++) {
+            Shelving shelving = new Shelving();
+            shelving.itemNumber = "10102011111" + j;
+            shelving.commonName = "吸氧剂";
+            shelving.lotNumber = "O1234" + j;
+            shelvings.add(shelving);
+        }
+        return shelvings;
     }
 
     LiveData<Boolean> isLoading() {

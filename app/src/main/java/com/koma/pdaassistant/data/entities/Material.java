@@ -21,13 +21,19 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 public class Material implements Parcelable {
-    //物料编号
+    // 物料编号
     public String materialDocument;
-    //日期
+    // 日期
     public String date;
-    //创建者
+    // 创建者
     public String creator;
+    // 来源单位
+    public String sourceUnit;
+
+    public List<Shelving> shelvings;
 
     public Material() {
     }
@@ -36,6 +42,8 @@ public class Material implements Parcelable {
         materialDocument = in.readString();
         date = in.readString();
         creator = in.readString();
+        sourceUnit = in.readString();
+        shelvings = in.createTypedArrayList(Shelving.CREATOR);
     }
 
     @Override
@@ -43,6 +51,8 @@ public class Material implements Parcelable {
         dest.writeString(materialDocument);
         dest.writeString(date);
         dest.writeString(creator);
+        dest.writeString(sourceUnit);
+        dest.writeTypedList(shelvings);
     }
 
     @Override

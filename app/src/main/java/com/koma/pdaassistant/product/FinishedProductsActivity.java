@@ -19,20 +19,11 @@ package com.koma.pdaassistant.product;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.koma.pdaassistant.R;
-import com.koma.pdaassistant.base.BaseActivity;
-
-public class FinishedProductsActivity extends BaseActivity {
+public class FinishedProductsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        loadFragment(savedInstanceState, FinishedProductFragment.newInstance());
-    }
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.base_activity;
     }
 }

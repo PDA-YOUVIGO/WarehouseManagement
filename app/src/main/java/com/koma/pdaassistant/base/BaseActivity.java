@@ -26,7 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.data.entities.Material;
@@ -37,7 +36,11 @@ import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 100;
+
     protected Toolbar toolbar;
+
+    @Nullable
+    protected Material searchResult;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,17 +54,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void init() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    protected void loadFragment(@Nullable Bundle savedInstanceState, Fragment fragment) {
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, fragment)
-                    .commitNow();
         }
     }
 
@@ -96,8 +90,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    Material material = data.getParcelableExtra(Constants.SEARCH_RESULT);
-                    Timber.d("onActivityResult material:%s", material.toString());
+                    searchResult = data.getParcelableExtra(Constants.SEARCH_RESULT);
+                    Timber.d("onActivityResult material:%s", searchResult.toString());
                 }
             }
         }
