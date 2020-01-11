@@ -37,8 +37,11 @@
     <string name="date">日期</string>
     <string name="creator">创建人</string>
     <string name="date_hint">请输入日期</string>
-
     <string name="item_number">物料编号</string>
     <string name="common_name">通用名称</string>
     <string name="lot_number">批号</string>
+
+    <!--FinishedProduct-->
+    <string name="material_coding">物料编码</string>
+    <string name="batch_number">批次号</string>
 </resources>

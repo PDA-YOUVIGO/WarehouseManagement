@@ -16,16 +16,7 @@
 
 package com.koma.pdaassistant.product;
 
-import com.koma.pdaassistant.R;
-import com.koma.pdaassistant.base.BaseFragment;
+import com.koma.pdaassistant.base.BaseViewModel;
 
-public class FinishedProductFragment extends BaseFragment {
-    public static FinishedProductFragment newInstance() {
-        return new FinishedProductFragment();
-    }
-
-    @Override
-    public int getLayoutId() {
-        return R.layout.finished_product_fragment;
-    }
+public class FinishedProductsViewModel extends BaseViewModel {
 }
