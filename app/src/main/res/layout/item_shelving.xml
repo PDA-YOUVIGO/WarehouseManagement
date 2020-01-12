@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/item_number"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +45,7 @@
             android:id="@+id/tv_item_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_number_description"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +61,7 @@
             android:layout_marginTop="@dimen/dp_8"
             android:gravity="start|center"
             android:text="@string/common_name"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_item_number_description" />
 
@@ -67,7 +69,7 @@
             android:id="@+id/tv_common_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
             app:layout_constraintBottom_toBottomOf="@id/tv_common_name_description"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +84,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/lot_number"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
             app:layout_constraintTop_toBottomOf="@id/tv_common_name_description" />
@@ -90,7 +93,7 @@
             android:id="@+id/tv_lot_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
             app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
             app:layout_constraintEnd_toEndOf="parent"
