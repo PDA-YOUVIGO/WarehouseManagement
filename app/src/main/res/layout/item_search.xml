@@ -33,6 +33,7 @@
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_date"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="000001" />
@@ -43,6 +44,7 @@
         android:layout_height="wrap_content"
         android:gravity="start"
         app:layout_constraintEnd_toStartOf="@id/tv_creator"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_material_document"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="2019-01-02" />
@@ -53,6 +55,7 @@
         android:layout_height="wrap_content"
         android:gravity="start"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_date"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="田家成" />

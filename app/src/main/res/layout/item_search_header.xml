@@ -32,6 +32,7 @@
         android:gravity="start"
         android:text="@string/material_document"
         app:layout_constraintEnd_toStartOf="@id/tv_date_description"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,6 +45,7 @@
         android:text="@string/date"
         app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
         app:layout_constraintEnd_toStartOf="@id/tv_creator_description"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_material_document_description"
         app:layout_constraintTop_toTopOf="@id/tv_material_document_description" />
 
@@ -56,6 +58,7 @@
         android:text="@string/creator"
         app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_date_description"
         app:layout_constraintTop_toTopOf="@id/tv_material_document_description" />
 
@@ -65,11 +68,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
         android:gravity="start"
+        android:maxLines="1"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_date"
+        app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_material_document_description"
-        tools:text="000001" />
+        tools:text="101020300076000001" />
 
     <TextView
         android:id="@+id/tv_date"
@@ -78,6 +84,7 @@
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
         app:layout_constraintEnd_toStartOf="@id/tv_creator"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_material_document"
         app:layout_constraintTop_toTopOf="@id/tv_material_document"
         tools:text="2019-01-02" />
@@ -89,6 +96,7 @@
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/tv_date"
         app:layout_constraintTop_toTopOf="@id/tv_material_document"
         tools:text="田家成" />

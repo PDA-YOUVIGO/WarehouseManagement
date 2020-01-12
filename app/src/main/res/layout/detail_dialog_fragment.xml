@@ -14,41 +14,111 @@
   ~ limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="@dimen/dp_16">
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/detail" />
+        android:text="@string/detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_material_coding"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_16"
-        tools:text="物料编码：101213123" />
+        android:gravity="end|center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="物料编码：" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_material_coding_description"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_8"
-        tools:text="物料名称：气泡袋" />
+        android:layout_marginStart="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_coding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_material_coding"
+        app:layout_constraintTop_toTopOf="@id/tv_material_coding"
+        tools:text="101213123" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_material_name"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        tools:text="批次号：O119C0306" />
+        android:gravity="end|center"
+        app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
+        app:layout_constraintStart_toStartOf="@id/tv_material_coding"
+        app:layout_constraintTop_toBottomOf="@id/tv_material_coding"
+        tools:text="物料名称：" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_material_name_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="@id/tv_material_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_material_name"
+        app:layout_constraintTop_toTopOf="@id/tv_material_name"
+        tools:text="气泡袋" />
+
+    <TextView
+        android:id="@+id/tv_batch_number"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_8"
-        tools:text="规格：1440ml" />
+        android:gravity="end|center"
+        app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
+        app:layout_constraintStart_toStartOf="@id/tv_material_coding"
+        app:layout_constraintTop_toBottomOf="@id/tv_material_name"
+        tools:text="批次号：" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_batch_number_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="@id/tv_batch_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_batch_number"
+        app:layout_constraintTop_toTopOf="@id/tv_batch_number"
+        tools:text="O119C0306" />
+
+    <TextView
+        android:id="@+id/tv_specification"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:gravity="center|end"
+        app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
+        app:layout_constraintStart_toStartOf="@id/tv_material_coding"
+        app:layout_constraintTop_toBottomOf="@id/tv_batch_number"
+        tools:text="规格：" />
+
+    <TextView
+        android:id="@+id/tv_specification_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_8"
+        app:layout_constraintBottom_toBottomOf="@id/tv_specification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_specification"
+        app:layout_constraintTop_toTopOf="@id/tv_specification"
+        tools:text="440ml" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,7 +43,14 @@ public class SearchViewModel extends BaseViewModel {
 
     private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>();
 
-    void query(String materialDocument) {
+    /**
+     * 查询数据
+     *
+     * @param startDate        开始日期
+     * @param endDate          结束日期
+     * @param materialDocument 物料编号
+     */
+    void query(String startDate, String endDate, String materialDocument) {
         _isLoading.setValue(true);
 
         Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
@@ -54,7 +61,7 @@ public class SearchViewModel extends BaseViewModel {
                     Material material = new Material();
                     material.sourceUnit = "ThoughtWorks";
                     material.date = "2020-1-10";
-                    material.materialDocument = "101020300076" + i;
+                    material.materialDocument = "10102030007600000" + i;
                     material.creator = "我是谁" + i;
                     material.shelvings = produceShelvings(i);
                     mockData.add(material);
@@ -90,9 +97,9 @@ public class SearchViewModel extends BaseViewModel {
         List<Shelving> shelvings = new ArrayList<>();
         for (int j = 0; j <= i; j++) {
             Shelving shelving = new Shelving();
-            shelving.itemNumber = "10102011111" + j;
+            shelving.itemNumber = "1010201111100000" + j;
             shelving.commonName = "吸氧剂";
-            shelving.lotNumber = "O1234" + j;
+            shelving.lotNumber = "O12340000" + j;
             shelvings.add(shelving);
         }
         return shelvings;

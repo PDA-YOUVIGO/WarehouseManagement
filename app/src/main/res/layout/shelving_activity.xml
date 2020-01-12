@@ -55,7 +55,6 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
@@ -105,7 +104,6 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
@@ -136,7 +134,6 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
@@ -165,7 +162,9 @@
             android:layout_marginTop="@dimen/dp_16"
             android:gravity="start"
             android:text="@string/item_number"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintEnd_toStartOf="@id/tv_common_name"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_date_description" />
 
@@ -176,8 +175,10 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:text="@string/common_name"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
             app:layout_constraintEnd_toStartOf="@id/tv_lot_number"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@id/tv_item_number"
             app:layout_constraintTop_toTopOf="@id/tv_item_number" />
 
@@ -186,11 +187,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_16"
             android:gravity="start"
             android:text="@string/lot_number"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1.5"
             app:layout_constraintStart_toEndOf="@id/tv_common_name"
             app:layout_constraintTop_toTopOf="@id/tv_item_number" />
 

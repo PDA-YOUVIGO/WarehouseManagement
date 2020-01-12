@@ -22,14 +22,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.koma.pdaassistant.R;
 import com.koma.pdaassistant.data.entities.Shelving;
-
-import timber.log.Timber;
+import com.koma.pdaassistant.detail.DetailDialogFragment;
 
 public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.ShelvingVH> {
     public ShelvingAdapter() {
@@ -48,7 +48,7 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
         holder.bind(getItem(position));
     }
 
-    class ShelvingVH extends RecyclerView.ViewHolder {
+    class ShelvingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView itemNumber;
         private final TextView commonName;
         private final TextView lotNumber;
@@ -56,16 +56,26 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
         ShelvingVH(@NonNull View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+
             itemNumber = itemView.findViewById(R.id.tv_item_number);
             commonName = itemView.findViewById(R.id.tv_common_name);
             lotNumber = itemView.findViewById(R.id.tv_lot_number);
         }
 
         void bind(Shelving shelving) {
-            Timber.d("bind %s", shelving.toString());
             itemNumber.setText(shelving.itemNumber);
             commonName.setText(shelving.commonName);
             lotNumber.setText(shelving.lotNumber);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (itemView.getContext() instanceof ShelvingActivity) {
+                Shelving shelving = getItem(getAdapterPosition());
+                FragmentManager fragmentManager = ((ShelvingActivity) itemView.getContext()).getSupportFragmentManager();
+                DetailDialogFragment.show(fragmentManager, shelving);
+            }
         }
     }
 

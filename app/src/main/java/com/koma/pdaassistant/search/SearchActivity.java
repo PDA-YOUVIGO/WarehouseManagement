@@ -105,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onClick(View v) {
                 editText.clearFocus();
                 if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
-                    viewModel.query(editText.getText().toString());
+                    viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
                 }
             }
         });
@@ -120,6 +120,9 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * 观察数据变化
+     */
     private void observeData() {
         viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 

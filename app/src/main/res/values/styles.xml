@@ -26,4 +26,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DetailDialogTheme" parent="Theme.AppCompat.Light.Dialog.MinWidth" />
+
 </resources>

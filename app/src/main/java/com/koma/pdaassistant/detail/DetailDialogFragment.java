@@ -38,6 +38,11 @@ public class DetailDialogFragment extends DialogFragment {
 
     private Shelving shelving;
 
+    /**
+     * 展示详情页面
+     *
+     * @param shelving 详情数据
+     */
     public static void show(FragmentManager fragmentManager, Shelving shelving) {
         DetailDialogFragment dialogFragment = new DetailDialogFragment();
         Bundle bundle = new Bundle();
@@ -56,6 +61,8 @@ public class DetailDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.DetailDialogTheme);
 
         if (getArguments() != null) {
             shelving = getArguments().getParcelable(KEY_SHELVING);

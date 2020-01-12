@@ -86,7 +86,7 @@ public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH>
 
         void bind(Material material) {
             materialDocument.setText(material.materialDocument);
-            date.setText(material.creator);
+            date.setText(material.date);
             creator.setText(material.creator);
         }
 
