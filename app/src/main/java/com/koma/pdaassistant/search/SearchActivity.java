@@ -18,9 +18,11 @@ package com.koma.pdaassistant.search;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -102,6 +104,7 @@ public class SearchActivity extends AppCompatActivity {
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 editText.clearFocus();
                 if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
                     viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
@@ -153,5 +156,12 @@ public class SearchActivity extends AppCompatActivity {
 
         setResult(Activity.RESULT_CANCELED);
         Timber.d("onBackPressed");
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
     }
 }

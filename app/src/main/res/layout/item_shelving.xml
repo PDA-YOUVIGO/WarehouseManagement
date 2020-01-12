@@ -18,13 +18,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    app:cardElevation="@dimen/dp_2"
-    app:cardUseCompatPadding="true">
+    android:layout_marginStart="@dimen/dp_2"
+    android:layout_marginTop="@dimen/dp_1"
+    android:layout_marginEnd="@dimen/dp_2"
+    app:cardElevation="@dimen/dp_2">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
         android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_8"
@@ -37,7 +39,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/item_number"
-            android:textSize="@dimen/dp_16"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,10 +60,9 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start|center"
             android:text="@string/common_name"
-            android:textSize="@dimen/dp_16"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_item_number_description" />
 
@@ -84,7 +85,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:text="@string/lot_number"
-            android:textSize="@dimen/dp_16"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
             app:layout_constraintTop_toBottomOf="@id/tv_common_name_description" />

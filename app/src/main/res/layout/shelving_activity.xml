@@ -34,7 +34,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/dp_16"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
@@ -42,10 +41,9 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_8"
             android:text="@string/material_document"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,8 +55,6 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:gravity="start|center"
             android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
             app:layout_constraintEnd_toStartOf="@id/mbt_query"
@@ -89,12 +85,11 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
             android:text="@string/source_unit"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_document" />
 
@@ -106,8 +101,6 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:gravity="start|center"
             android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_source_unit"
             app:layout_constraintEnd_toEndOf="parent"
@@ -120,11 +113,10 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
             android:text="@string/date"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_source_unit"
             app:layout_constraintTop_toBottomOf="@id/tv_source_unit" />
 
@@ -136,8 +128,6 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:gravity="start|center"
             android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_date"
             app:layout_constraintEnd_toEndOf="parent"
@@ -145,15 +135,23 @@
             app:layout_constraintTop_toTopOf="@id/tv_date"
             tools:text="2018-12-01" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_description" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_description"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             tools:listitem="@layout/item_shelving" />
 
         <ProgressBar
