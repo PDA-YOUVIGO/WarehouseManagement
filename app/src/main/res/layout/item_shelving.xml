@@ -13,49 +13,89 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
-    android:paddingTop="@dimen/dp_8"
-    android:paddingBottom="@dimen/dp_8">
+    app:cardElevation="@dimen/dp_2"
+    app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tv_item_number"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16"
-        android:gravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv_common_name"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="000001232323" />
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_8">
 
-    <TextView
-        android:id="@+id/tv_common_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintEnd_toStartOf="@id/tv_lot_number"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/tv_item_number"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="吸氧剂" />
+        <TextView
+            android:id="@+id/tv_item_number_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/item_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_lot_number"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1.5"
-        app:layout_constraintStart_toEndOf="@id/tv_common_name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="O119000000" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_item_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_number_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_item_number_description"
+            tools:text="000001232323" />
+
+        <TextView
+            android:id="@+id/tv_common_name_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:gravity="start|center"
+            android:text="@string/common_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_number_description" />
+
+        <TextView
+            android:id="@+id/tv_common_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_common_name_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_common_name_description"
+            app:layout_constraintTop_toTopOf="@id/tv_common_name_description"
+            tools:text="吸氧剂" />
+
+        <TextView
+            android:id="@+id/tv_lot_number_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/lot_number"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_common_name_description" />
+
+        <TextView
+            android:id="@+id/tv_lot_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_lot_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_lot_number_description"
+            tools:text="O119000000" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

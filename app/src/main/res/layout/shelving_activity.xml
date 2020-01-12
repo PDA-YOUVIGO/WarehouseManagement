@@ -145,57 +145,6 @@
             app:layout_constraintTop_toTopOf="@id/tv_date"
             tools:text="2018-12-01" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:constraint_referenced_ids="tv_item_number,tv_common_name,tv_lot_number"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/tv_item_number"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_16"
-            android:gravity="start"
-            android:text="@string/item_number"
-            android:textSize="@dimen/dp_16"
-            app:layout_constraintEnd_toStartOf="@id/tv_common_name"
-            app:layout_constraintHorizontal_weight="2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_description" />
-
-        <TextView
-            android:id="@+id/tv_common_name"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start|center"
-            android:text="@string/common_name"
-            android:textSize="@dimen/dp_16"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
-            app:layout_constraintEnd_toStartOf="@id/tv_lot_number"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toEndOf="@id/tv_item_number"
-            app:layout_constraintTop_toTopOf="@id/tv_item_number" />
-
-        <TextView
-            android:id="@+id/tv_lot_number"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/lot_number"
-            android:textSize="@dimen/dp_16"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="1.5"
-            app:layout_constraintStart_toEndOf="@id/tv_common_name"
-            app:layout_constraintTop_toTopOf="@id/tv_item_number" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
@@ -204,7 +153,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_lot_number"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_description"
             tools:listitem="@layout/item_shelving" />
 
         <ProgressBar

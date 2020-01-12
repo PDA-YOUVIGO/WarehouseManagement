@@ -36,9 +36,6 @@ import timber.log.Timber;
 import static com.koma.pdaassistant.util.Constants.SEARCH_RESULT;
 
 public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH> {
-    private static final int TYPE_HEADER = 100;
-    private static final int TYPE_NORMAL = 101;
-
     public SearchAdapter() {
         super(new MaterialDiffCallback());
     }
@@ -46,27 +43,13 @@ public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH>
     @NonNull
     @Override
     public SearchVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view;
-        if (viewType == TYPE_HEADER) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_header, parent, false);
-        } else {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search, parent, false);
-        }
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search, parent, false);
         return new SearchVH(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SearchVH holder, int position) {
         holder.bind(getItem(position));
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
-        } else {
-            return TYPE_NORMAL;
-        }
     }
 
     class SearchVH extends RecyclerView.ViewHolder implements View.OnClickListener {

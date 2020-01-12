@@ -13,50 +13,81 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:selectableItemBackground"
-    android:paddingStart="@dimen/dp_16"
-    android:paddingTop="@dimen/dp_8"
-    android:paddingEnd="@dimen/dp_16"
-    android:paddingBottom="@dimen/dp_8">
+    app:cardElevation="@dimen/dp_2"
+    app:cardUseCompatPadding="true">
 
-    <TextView
-        android:id="@+id/tv_material_document"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv_date"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="000001" />
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_8">
 
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintEnd_toStartOf="@id/tv_creator"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/tv_material_document"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="2019-01-02" />
+        <TextView
+            android:id="@+id/tv_material_document_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/material_document"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_creator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/tv_date"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="田家成" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_material_document"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_material_document_description"
+            app:layout_constraintTop_toTopOf="@id/tv_material_document_description"
+            tools:text="101020300076000001" />
+
+        <TextView
+            android:id="@+id/tv_creator_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:gravity="start"
+            android:text="@string/creator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_document_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_document_description" />
+
+        <TextView
+            android:id="@+id/tv_creator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_creator_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_creator_description"
+            app:layout_constraintTop_toTopOf="@id/tv_creator_description"
+            tools:text="田家成" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="@id/tv_creator_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_material_document_description"
+            tools:text="2019-01-02" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -23,11 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.Group;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,13 +40,11 @@ import java.util.List;
 import timber.log.Timber;
 
 public class ShelvingActivity extends BaseActivity {
-    private MaterialButton materialButton;
     private ProgressBar progressBar;
     private TextView materialDocument;
     private TextView sourceUnit;
     private TextView date;
     private ShelvingAdapter adapter;
-    private Group group;
 
     private ShelvingViewModel viewModel;
 
@@ -62,13 +58,12 @@ public class ShelvingActivity extends BaseActivity {
     }
 
     private void init() {
-        materialButton = findViewById(R.id.mbt_query);
+        MaterialButton materialButton = findViewById(R.id.mbt_query);
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
-        group = findViewById(R.id.group);
         sourceUnit = findViewById(R.id.tv_source_unit_description);
         date = findViewById(R.id.tv_date_description);
         materialDocument = findViewById(R.id.tv_materials_description);
@@ -76,7 +71,6 @@ public class ShelvingActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShelvingAdapter();
         recyclerView.setAdapter(adapter);
@@ -104,10 +98,7 @@ public class ShelvingActivity extends BaseActivity {
             @Override
             public void onChanged(List<Shelving> shelvings) {
                 if (shelvings != null && !shelvings.isEmpty()) {
-                    group.setVisibility(View.VISIBLE);
                     adapter.submitList(shelvings);
-                } else {
-                    group.setVisibility(View.GONE);
                 }
             }
         });
