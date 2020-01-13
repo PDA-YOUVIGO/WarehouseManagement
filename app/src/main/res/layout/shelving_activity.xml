@@ -43,7 +43,7 @@
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_4"
             android:text="@string/material_document"
-            android:textSize="14sp"
+            android:textSize="@dimen/dp_14"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -89,7 +89,7 @@
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/source_unit"
-            android:textSize="14sp"
+            android:textSize="@dimen/dp_14"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_document" />
@@ -117,7 +117,7 @@
             android:layout_marginBottom="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/date"
-            android:textSize="14sp"
+            android:textSize="@dimen/dp_14"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="@id/tv_source_unit"
             app:layout_constraintTop_toBottomOf="@id/tv_source_unit" />

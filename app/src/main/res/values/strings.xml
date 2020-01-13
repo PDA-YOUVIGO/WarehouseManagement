@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">PDA Assistant</string>
+    <string name="app_name">仓库管理</string>
 
     <string name="shelving">入库上架</string>
     <string name="finished_products">成品上架</string>
