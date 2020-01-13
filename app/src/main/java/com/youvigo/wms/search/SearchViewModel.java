@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.youvigo.wms.base.BaseViewModel;
 import com.youvigo.wms.data.entities.Material;
 import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.data.source.Repository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -42,6 +43,12 @@ public class SearchViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
     private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>();
+
+    private Repository repository;
+
+    public SearchViewModel(Repository repository) {
+        this.repository = repository;
+    }
 
     /**
      * 查询数据
