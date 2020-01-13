@@ -38,12 +38,13 @@
 
         <TextView
             android:id="@+id/tv_material_document"
-            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
             android:text="@string/material_document"
-            android:textSize="@dimen/dp_14"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,14 +83,14 @@
 
         <TextView
             android:id="@+id/tv_source_unit"
-            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/source_unit"
-            android:textSize="@dimen/dp_14"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_document" />
 
@@ -110,13 +111,14 @@
 
         <TextView
             android:id="@+id/tv_date"
-            style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/date"
-            android:textSize="@dimen/dp_14"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="@id/tv_source_unit"
             app:layout_constraintTop_toBottomOf="@id/tv_source_unit" />
 
@@ -140,6 +142,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider"
+            android:layout_marginTop="@dimen/dp_4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_date_description" />
