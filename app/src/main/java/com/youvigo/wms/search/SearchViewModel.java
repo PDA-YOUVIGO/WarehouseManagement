@@ -44,11 +44,8 @@ public class SearchViewModel extends BaseViewModel {
 
     private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>();
 
+    // 初始化model层接口，单例提供
     private Repository repository;
-
-    public SearchViewModel(Repository repository) {
-        this.repository = repository;
-    }
 
     /**
      * 查询数据

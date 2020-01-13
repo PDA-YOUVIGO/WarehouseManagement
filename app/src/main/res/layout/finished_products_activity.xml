@@ -34,7 +34,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/dp_16"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
@@ -42,21 +41,23 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_8"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/material_coding"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_material_coding_description"
+        <EditText
+            android:id="@+id/et_material_coding"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
+            android:hint="请输入物料编码..."
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_8"
@@ -64,31 +65,32 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_material_coding"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toTopOf="@id/tv_material_coding"
-            tools:text="10111111" />
+            app:layout_constraintTop_toTopOf="@id/tv_material_coding" />
 
         <TextView
             android:id="@+id/tv_batch_number"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/batch_number"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
             app:layout_constraintTop_toBottomOf="@id/tv_material_coding" />
 
-        <TextView
-            android:id="@+id/tv_batch_number_description"
+        <EditText
+            android:id="@+id/et_batch_number"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
+            android:hint="请输入批次号..."
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_8"
@@ -96,64 +98,26 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_batch_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_batch_number"
-            app:layout_constraintTop_toTopOf="@id/tv_batch_number"
-            tools:text="ThoughtWorks" />
+            app:layout_constraintTop_toTopOf="@id/tv_batch_number" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:constraint_referenced_ids="tv_item_number,tv_common_name,tv_lot_number"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/tv_item_number"
-            style="@style/TextAppearance.AppCompat.Title"
+        <View
+            android:id="@+id/divider"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_16"
-            android:gravity="start"
-            android:text="@string/item_number"
-            app:layout_constraintEnd_toStartOf="@id/tv_common_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_batch_number_description" />
-
-        <TextView
-            android:id="@+id/tv_common_name"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start|center"
-            android:text="@string/common_name"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
-            app:layout_constraintEnd_toStartOf="@id/tv_lot_number"
-            app:layout_constraintStart_toEndOf="@id/tv_item_number"
-            app:layout_constraintTop_toTopOf="@id/tv_item_number" />
-
-        <TextView
-            android:id="@+id/tv_lot_number"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_16"
-            android:gravity="start"
-            android:text="@string/lot_number"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_number"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_common_name"
-            app:layout_constraintTop_toTopOf="@id/tv_item_number" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_batch_number" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/dp_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_lot_number"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             tools:listitem="@layout/item_shelving" />
 
         <ProgressBar

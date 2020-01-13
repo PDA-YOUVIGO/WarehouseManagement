@@ -18,6 +18,7 @@ package com.youvigo.wms;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -87,6 +88,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             case R.id.tv_switch_stock_locations:
                 break;
             case R.id.tv_exit:
+                Process.killProcess(Process.myPid());
                 break;
             default:
                 break;

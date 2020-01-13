@@ -29,13 +29,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.Material;
-import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
 import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE = 100;
+    protected static final int REQUEST_CODE = 100;
 
     protected Toolbar toolbar;
 
@@ -73,15 +72,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             onBackPressed();
             return true;
         } else if (item.getItemId() == R.id.menu_search) {
-            launchSearchPage();
+            onMenuSearchClicked();
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
-    private void launchSearchPage() {
-        Intent intent = new Intent(this, SearchActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
+    protected abstract void onMenuSearchClicked();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

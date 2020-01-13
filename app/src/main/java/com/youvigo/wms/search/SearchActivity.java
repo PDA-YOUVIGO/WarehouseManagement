@@ -41,11 +41,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.product.FinishedProductsActivity;
+import com.youvigo.wms.util.Constants;
 
 import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * 搜索页面
+ */
 public class SearchActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private AppCompatEditText editText;
@@ -55,6 +60,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private SearchViewModel viewModel;
 
+    // 从成品上架主页传过来的物料编码和批次号
+    private String materialCoding, batchNumber;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +71,22 @@ public class SearchActivity extends AppCompatActivity {
 
         initViews();
 
+        initIntent();
+
         observeData();
+    }
+
+    private void initIntent() {
+        if (getIntent() != null) {
+            String category = getIntent().getStringExtra(Constants.CATEGORY);
+            if (category == null) {
+                return;
+            }
+            if (category.equals(Constants.TYPE_PRODUCT)) {
+                materialCoding = getIntent().getStringExtra(FinishedProductsActivity.MATERIAL_CODING);
+                batchNumber = getIntent().getStringExtra(FinishedProductsActivity.BATCH_NUMBER);
+            }
+        }
     }
 
     private void initViews() {

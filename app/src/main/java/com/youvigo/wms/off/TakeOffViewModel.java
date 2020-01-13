@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.product;
+package com.youvigo.wms.off;
 
 import com.youvigo.wms.base.BaseViewModel;
 
-public class FinishedProductsViewModel extends BaseViewModel {
+public class TakeOffViewModel extends BaseViewModel {
 }

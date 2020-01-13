@@ -34,11 +34,16 @@ import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.entities.Material;
 import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.search.SearchActivity;
+import com.youvigo.wms.util.Constants;
 
 import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * 入库上架页面
+ */
 public class ShelvingActivity extends BaseActivity {
     private ProgressBar progressBar;
     private TextView materialDocument;
@@ -118,5 +123,12 @@ public class ShelvingActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
         return R.layout.shelving_activity;
+    }
+
+    @Override
+    protected void onMenuSearchClicked() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(Constants.CATEGORY, Constants.TYPE_SHELVING);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 }
