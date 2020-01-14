@@ -36,8 +36,12 @@ public class MaterialVoucher implements Parcelable {
     // 来源单位
     public String sourceUnit;
 
+    // 入库上架、成品上架搜索结果
     @SerializedName("ITEM")
     public List<Shelving> shelvings;
+    
+    // 出库下架搜索结果
+    public List<TakeOff> takeOffs;
 
     public MaterialVoucher() {
     }
@@ -48,6 +52,7 @@ public class MaterialVoucher implements Parcelable {
         creator = in.readString();
         sourceUnit = in.readString();
         shelvings = in.createTypedArrayList(Shelving.CREATOR);
+        takeOffs = in.createTypedArrayList(TakeOff.CREATOR);
     }
 
     @Override
@@ -57,6 +62,7 @@ public class MaterialVoucher implements Parcelable {
         dest.writeString(creator);
         dest.writeString(sourceUnit);
         dest.writeTypedList(shelvings);
+        dest.writeTypedList(takeOffs);
     }
 
     @Override

@@ -40,127 +40,165 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.product.FinishedProductsActivity;
+import com.youvigo.wms.util.Constants;
 
 import java.util.Calendar;
 import java.util.List;
 
 import timber.log.Timber;
 
+/**
+ * 搜索页面
+ */
 public class SearchActivity extends AppCompatActivity {
 
-	private ProgressBar progressBar;
-	private AppCompatEditText editText;
-	private SearchAdapter adapter;
-	private TextView startDate;
-	private TextView endDate;
+    private ProgressBar progressBar;
+    private AppCompatEditText editText;
+    private SearchAdapter adapter;
+    private TextView startDate;
+    private TextView endDate;
 
-	private SearchViewModel viewModel;
+    private SearchViewModel viewModel;
 
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    // 从成品上架主页传过来的物料编码和批次号
+    private String materialCoding, batchNumber;
 
-		setContentView(R.layout.search_activity);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		initViews();
+        setContentView(R.layout.search_activity);
 
-		observeData();
-	}
+        initViews();
 
-	private void initViews() {
-		Toolbar toolbar = findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+        initIntent();
 
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		}
+        observeData();
+    }
+
+    private void initIntent() {
+        if (getIntent() != null) {
+            String category = getIntent().getStringExtra(Constants.CATEGORY);
+            if (category == null) {
+                return;
+            }
+            if (category.equals(Constants.TYPE_PRODUCT)) {
+                materialCoding = getIntent().getStringExtra(FinishedProductsActivity.MATERIAL_CODING);
+                batchNumber = getIntent().getStringExtra(FinishedProductsActivity.BATCH_NUMBER);
+            } else if (category.equals(Constants.TYPE_TAKE_OFF)) {
+
+            } else if (category.equals(Constants.TYPE_OUT_OF_STOCK)) {
+
+            }
+        }
+    }
+
+    private void initViews() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
 		Calendar mCalendar = Calendar.getInstance();
 		int currentYear = mCalendar.get(Calendar.YEAR);
 		int currentMonth = mCalendar.get(Calendar.MONTH) + 1;
 		int currentDay = mCalendar.get(Calendar.DAY_OF_MONTH);
 
-		startDate = findViewById(R.id.tv_start);
-		startDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
+        startDate = findViewById(R.id.tv_start);
+        startDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
 
-		startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-			String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-			startDate.setText(text);
-		}, currentYear, currentMonth, currentDay).show());
+        startDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
+                        startDate.setText(text);
+                    }
+                }, 2018, 12, 1)
+                        .show();
+            }
+        });
+        endDate = findViewById(R.id.tv_end);
+        endDate.setText(setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay)));
+        endDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
+                        endDate.setText(text);
+                    }
+                }, 2018, 12, 1).show();
+            }
+        });
+        MaterialButton materialButton = findViewById(R.id.mbt_query);
+        materialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard();
+                editText.clearFocus();
+                if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
+                    viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
+                }
+            }
+        });
+        editText = findViewById(R.id.edit_text);
+        progressBar = findViewById(R.id.progress_bar);
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SearchAdapter();
+        recyclerView.setAdapter(adapter);
+    }
 
-		endDate = findViewById(R.id.tv_end);
-		endDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
+    /**
+     * 观察数据变化
+     */
+    private void observeData() {
+        viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
-		endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-			String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-			endDate.setText(text);
-		}, currentYear, currentMonth, currentDay).show());
+        viewModel.isLoading().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isActive) {
+                progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
+            }
+        });
+        viewModel.materials().observe(this, new Observer<List<Material>>() {
+            @Override
+            public void onChanged(List<Material> materials) {
+                adapter.submitList(materials);
+            }
+        });
+    }
 
-		MaterialButton materialButton = findViewById(R.id.mbt_query);
-		materialButton.setOnClickListener(v -> {
-			hideKeyboard();
-			editText.clearFocus();
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-			if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
-				viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
-			} else {
-				viewModel.query(startDate.getText().toString(), endDate.getText().toString(), "");
-			}
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
 
-		});
+        setResult(Activity.RESULT_CANCELED);
+        Timber.d("onBackPressed");
+    }
 
-		editText = findViewById(R.id.edit_text);
-		progressBar = findViewById(R.id.progress_bar);
-		RecyclerView recyclerView = findViewById(R.id.recycler_view);
-		recyclerView.setHasFixedSize(true);
-		recyclerView.setItemAnimator(new DefaultItemAnimator());
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		adapter = new SearchAdapter();
-		recyclerView.setAdapter(adapter);
-	}
-
-	/**
-	 * 观察数据变化
-	 */
-	private void observeData() {
-		viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
-
-		viewModel.isLoading().observe(this, new Observer<Boolean>() {
-			@Override
-			public void onChanged(Boolean isActive) {
-				progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
-			}
-		});
-
-		viewModel.materials().observe(this, new Observer<List<MaterialVoucher>>() {
-			@Override
-			public void onChanged(List<MaterialVoucher> materialVouchers) {
-				adapter.submitList(materialVouchers);
-			}
-		});
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-		if (item.getItemId() == android.R.id.home) {
-			onBackPressed();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-
-		setResult(Activity.RESULT_CANCELED);
-		Timber.d("onBackPressed");
-	}
-
-	private void hideKeyboard() {
-		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		if (inputMethodManager != null) {
-			inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-		}
-	}
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+        }
+    }
 }

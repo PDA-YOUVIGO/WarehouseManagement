@@ -23,4 +23,15 @@ public class Constants {
     public static final String PDA_ADDRESS = "pda_address";
     public static final String FACTORY = "factory_code";
     public static final String STOCKLOCATION = "stocklocation";
+    
+    public static final String CATEGORY = "category";
+    public static final String TYPE_SHELVING = "type_shelving";
+    public static final String TYPE_PRODUCT = "type_finished_products";
+    public static final String TYPE_TAKE_OFF = "type_take_off";
+    public static final String TYPE_OUT_OF_STOCK = "out_of_stock";
+    public static final String TYPE_NO_RESERVED_OUTBOUND = "no_reserved_outbound";
+    public static final String TYPE_WAREHOURE_INVENTORY = "warehouse_inventory";
+    public static final String TYPE_POSITION_MOVEMENT = "position_movement";
+    public static final String TYPE_INVENTORY_CHECK = "inventory_check";
+    public static final String TYPE_SWITCH_STOCK_LOCATIONS = "switch_stock_locations";
 }

@@ -31,6 +31,10 @@
         <activity
             android:name="com.youvigo.wms.product.FinishedProductsActivity"
             android:label="@string/finished_products" />
+
+        <activity
+            android:name="com.youvigo.wms.off.TakeOffActivity"
+            android:label="@string/take_off" />
     </application>
 
 </manifest>

@@ -18,6 +18,7 @@ package com.youvigo.wms;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Process;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.youvigo.wms.base.BaseFragment;
+import com.youvigo.wms.off.TakeOffActivity;
 import com.youvigo.wms.product.FinishedProductsActivity;
 import com.youvigo.wms.shelving.ShelvingActivity;
 
@@ -73,6 +75,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                 launchFinishedProductActivity();
                 break;
             case R.id.tv_take_off:
+                launchTakeOffActivity();
                 break;
             case R.id.tv_out_of_stock:
                 break;
@@ -87,6 +90,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
             case R.id.tv_switch_stock_locations:
                 break;
             case R.id.tv_exit:
+                Process.killProcess(Process.myPid());
                 break;
             default:
                 break;
@@ -100,6 +104,11 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     private void launchFinishedProductActivity() {
         Intent intent = new Intent(context, FinishedProductsActivity.class);
+        startActivity(intent);
+    }
+
+    private void launchTakeOffActivity() {
+        Intent intent = new Intent(context, TakeOffActivity.class);
         startActivity(intent);
     }
 }

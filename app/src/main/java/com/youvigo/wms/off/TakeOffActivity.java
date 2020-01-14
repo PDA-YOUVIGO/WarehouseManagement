@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.product;
+package com.youvigo.wms.off;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,10 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
-import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.search.SearchActivity;
-import com.youvigo.wms.shelving.ShelvingAdapter;
-import com.youvigo.wms.shelving.ShelvingViewModel;
 import com.youvigo.wms.util.Constants;
 
 import java.util.List;
@@ -43,18 +41,19 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * 成品上架页面
+ * 出库下架架页面
  */
-public class FinishedProductsActivity extends BaseActivity {
-    public static final String MATERIAL_CODING = "material_coding";
-    public static final String BATCH_NUMBER = "batch_number";
+public class TakeOffActivity extends BaseActivity {
+    public static final String TASK_NUMBER = "task_number";
+    public static final String RECEIVING_DEPARTMENT = "receiving_department";
+    public static final String DOCUMENT_DATE = "document_date";
 
-    private EditText materialCoding, batchNumber;
+    private EditText taskNumber, receivingDepartment, documentDate;
 
     private ProgressBar progressBar;
-    private ShelvingAdapter adapter;
+    private TakeOffAdapter adapter;
 
-    private ShelvingViewModel viewModel;
+    private TakeOffViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,31 +65,31 @@ public class FinishedProductsActivity extends BaseActivity {
     }
 
     private void initViews() {
-        materialCoding = findViewById(R.id.et_material_coding);
-        batchNumber = findViewById(R.id.et_batch_number);
-
+        taskNumber = findViewById(R.id.et_task_number);
+        receivingDepartment = findViewById(R.id.et_receiving_department);
+        documentDate = findViewById(R.id.et_document_date);
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ShelvingAdapter();
+        adapter = new TakeOffAdapter();
         recyclerView.setAdapter(adapter);
     }
 
     private void observeData() {
-        viewModel = ViewModelProviders.of(this).get(ShelvingViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(TakeOffViewModel.class);
         viewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isActive) {
                 progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
             }
         });
-        viewModel.shelvings().observe(this, new Observer<List<Shelving>>() {
+        viewModel.takeOffs().observe(this, new Observer<List<TakeOff>>() {
             @Override
-            public void onChanged(List<Shelving> shelvings) {
-                if (shelvings != null && !shelvings.isEmpty()) {
-                    adapter.submitList(shelvings);
+            public void onChanged(List<TakeOff> takeOffs) {
+                if (takeOffs != null && !takeOffs.isEmpty()) {
+                    adapter.submitList(takeOffs);
                 }
             }
         });
@@ -109,20 +108,22 @@ public class FinishedProductsActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.finished_products_activity;
+        return R.layout.take_off_activity;
     }
 
     @Override
     protected void onMenuSearchClicked() {
-        String code = materialCoding.getText().toString();
-        String number = batchNumber.getText().toString();
-        if (TextUtils.isEmpty(code) || TextUtils.isEmpty(number)) {
+        String task = taskNumber.getText().toString();
+        String department = receivingDepartment.getText().toString();
+        String date = documentDate.getText().toString();
+        if (TextUtils.isEmpty(task) || TextUtils.isEmpty(department) || TextUtils.isEmpty(date)) {
             return;
         }
         Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(Constants.CATEGORY, Constants.TYPE_PRODUCT);
-        intent.putExtra(MATERIAL_CODING, code);
-        intent.putExtra(BATCH_NUMBER, number);
+        intent.putExtra(Constants.CATEGORY, Constants.TYPE_TAKE_OFF);
+        intent.putExtra(TASK_NUMBER, task);
+        intent.putExtra(RECEIVING_DEPARTMENT, department);
+        intent.putExtra(DOCUMENT_DATE, date);
         startActivityForResult(intent, REQUEST_CODE);
     }
 }

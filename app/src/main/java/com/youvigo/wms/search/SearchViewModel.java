@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.youvigo.wms.base.BaseViewModel;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.data.source.Repository;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,7 @@ class SearchViewModel extends BaseViewModel {
 
     private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
 
+    // 初始化model层接口，单例提供
     private Repository repository;
 
     /**
@@ -69,21 +71,25 @@ class SearchViewModel extends BaseViewModel {
 //
 //        List<MaterialVoucher> shelvings = remoteDataSource.getShelvings(shelvingQueryRequest);
 
-        Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
-            List<MaterialVoucher> mockData = new ArrayList<>();
-            for (int i = 0; i < 100; i++) {
-                MaterialVoucher materialVoucher = new MaterialVoucher();
-                materialVoucher.sourceUnit = "ThoughtWorks";
-                materialVoucher.date = "2020-1-10";
-                materialVoucher.materialDocument = "10102030007600000" + i;
-                materialVoucher.creator = "我是谁" + i;
-                materialVoucher.shelvings = produceShelvings(i);
-                mockData.add(materialVoucher);
+        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
+            @Override
+            public void subscribe(FlowableEmitter<List<Material>> emitter) {
+                List<Material> mockData = new ArrayList<>();
+                for (int i = 0; i < 100; i++) {
+                    Material material = new Material();
+                    material.sourceUnit = "ThoughtWorks";
+                    material.date = "2020-1-10";
+                    material.materialDocument = "10102030007600000" + i;
+                    material.creator = "我是谁" + i;
+                    material.shelvings = produceShelvings(i);
+                    material.takeOffs = produceTakeOffs(i);
+                    mockData.add(material);
+                }
+                emitter.onNext(mockData);
+                emitter.onComplete();
             }
-            emitter.onNext(mockData);
-            emitter.onComplete();
         }, BackpressureStrategy.LATEST)
-                .delay(5, TimeUnit.SECONDS)
+                .delay(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
@@ -116,6 +122,21 @@ class SearchViewModel extends BaseViewModel {
             shelvings.add(shelving);
         }
         return shelvings;
+    }
+
+    @NotNull
+    private List<TakeOff> produceTakeOffs(int i) {
+        List<TakeOff> takeOffs = new ArrayList<>();
+        for (int j = 0; j <= i; j++) {
+            TakeOff takeOff = new TakeOff();
+            takeOff.itemNumber = "1010201111100000" + j;
+            takeOff.materialName = "吸氧剂";
+            takeOff.basicOrder = "KG";
+            takeOff.specification = "药用级";
+            takeOff.lotNumber = "O12340000" + j;
+            takeOffs.add(takeOff);
+        }
+        return takeOffs;
     }
 
     LiveData<Boolean> isLoading() {

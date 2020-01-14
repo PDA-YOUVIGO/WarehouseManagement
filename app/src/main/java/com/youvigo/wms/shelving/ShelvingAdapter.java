@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -29,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.Shelving;
-import com.youvigo.wms.detail.DetailDialogFragment;
 
 public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.ShelvingVH> {
     public ShelvingAdapter() {
@@ -71,10 +71,10 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
 
         @Override
         public void onClick(View v) {
-            if (itemView.getContext() instanceof ShelvingActivity) {
+            if (itemView.getContext() instanceof AppCompatActivity) {
                 Shelving shelving = getItem(getAdapterPosition());
-                FragmentManager fragmentManager = ((ShelvingActivity) itemView.getContext()).getSupportFragmentManager();
-                DetailDialogFragment.show(fragmentManager, shelving);
+                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
+                ShelvingDetailDialogFragment.show(fragmentManager, shelving);
             }
         }
     }

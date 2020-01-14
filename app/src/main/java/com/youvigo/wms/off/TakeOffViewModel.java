@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.shelving;
+package com.youvigo.wms.off;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
-import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.TakeOff;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -35,32 +35,28 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class ShelvingViewModel extends BaseViewModel {
+public class TakeOffViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    private MutableLiveData<MaterialVoucher> _material = new MutableLiveData<MaterialVoucher>();
+    private MutableLiveData<List<TakeOff>> _takeOffs = new MutableLiveData<List<TakeOff>>();
 
-    private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<List<Shelving>>();
-
-    public void handleData(MaterialVoucher material) {
+    public void handleData(Material material) {
         _isLoading.setValue(true);
 
-        _material.setValue(materialVoucher);
-
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Shelving>>() {
+        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<TakeOff>>() {
             @Override
-            public void subscribe(FlowableEmitter<List<Shelving>> emitter) {
-                emitter.onNext(materialVoucher.shelvings);
+            public void subscribe(FlowableEmitter<List<TakeOff>> emitter) {
+                emitter.onNext(material.takeOffs);
                 emitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
                 .delay(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<Shelving>>() {
+                .subscribeWith(new DisposableSubscriber<List<TakeOff>>() {
                     @Override
-                    public void onNext(List<Shelving> shelvings) {
-                        _shelvings.setValue(shelvings);
+                    public void onNext(List<TakeOff> result) {
+                        _takeOffs.setValue(result);
                     }
 
                     @Override
@@ -80,11 +76,7 @@ public class ShelvingViewModel extends BaseViewModel {
         return _isLoading;
     }
 
-    public LiveData<List<Shelving>> shelvings() {
-        return _shelvings;
-    }
-
-    public LiveData<Material> material() {
-        return _material;
+    public LiveData<List<TakeOff>> takeOffs() {
+        return _takeOffs;
     }
 }
