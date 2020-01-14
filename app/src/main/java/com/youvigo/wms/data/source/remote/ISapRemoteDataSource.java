@@ -14,7 +14,19 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source.local;
+package com.youvigo.wms.data.source.remote;
 
-public class LocalDataSource {
+import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.data.dto.ShelvingQueryRequest;
+
+import java.util.List;
+
+public interface ISapRemoteDataSource {
+
+	/**
+	 * 获取入库上架信息
+	 * @return
+	 */
+	List<MaterialVoucher> getShelvings(ShelvingQueryRequest queryRequest);
+
 }

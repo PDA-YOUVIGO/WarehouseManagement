@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.data.source.Repository;
 
@@ -32,23 +32,19 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class SearchViewModel extends BaseViewModel {
+class SearchViewModel extends BaseViewModel {
+
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    private MutableLiveData<List<Material>> _materials = new MutableLiveData<List<Material>>();
+    private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
 
     private Repository repository;
-
-    public SearchViewModel(Repository repository) {
-        this.repository = repository;
-    }
 
     /**
      * 查询数据
@@ -60,29 +56,39 @@ public class SearchViewModel extends BaseViewModel {
     void query(String startDate, String endDate, String materialDocument) {
         _isLoading.setValue(true);
 
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<Material>> emitter) {
-                List<Material> mockData = new ArrayList<>();
-                for (int i = 0; i < 100; i++) {
-                    Material material = new Material();
-                    material.sourceUnit = "ThoughtWorks";
-                    material.date = "2020-1-10";
-                    material.materialDocument = "10102030007600000" + i;
-                    material.creator = "我是谁" + i;
-                    material.shelvings = produceShelvings(i);
-                    mockData.add(material);
-                }
-                emitter.onNext(mockData);
-                emitter.onComplete();
+//        ShelvingQueryRequest shelvingQueryRequest = new ShelvingQueryRequest();
+//        shelvingQueryRequest.setControlInfo(new ControlInfo());
+//        ShelvingQueryRequestDetails requestDetails = new ShelvingQueryRequestDetails();
+//        requestDetails.setStartDate(startDate);
+//        requestDetails.setEndDate(endDate);
+//        requestDetails.setYear("2020");
+//        requestDetails.setMaterialVoucherCode(materialDocument != null && !materialDocument.isEmpty() ? materialDocument : "");
+//        requestDetails.setStockLocationCode("FZ01");
+//        requestDetails.setWarehouseNumber("X01");
+//        shelvingQueryRequest.setRequestDetails(requestDetails);
+//
+//        List<MaterialVoucher> shelvings = remoteDataSource.getShelvings(shelvingQueryRequest);
+
+        Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
+            List<MaterialVoucher> mockData = new ArrayList<>();
+            for (int i = 0; i < 100; i++) {
+                MaterialVoucher materialVoucher = new MaterialVoucher();
+                materialVoucher.sourceUnit = "ThoughtWorks";
+                materialVoucher.date = "2020-1-10";
+                materialVoucher.materialDocument = "10102030007600000" + i;
+                materialVoucher.creator = "我是谁" + i;
+                materialVoucher.shelvings = produceShelvings(i);
+                mockData.add(materialVoucher);
             }
+            emitter.onNext(mockData);
+            emitter.onComplete();
         }, BackpressureStrategy.LATEST)
                 .delay(5, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<Material>>() {
+                .subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
                     @Override
-                    public void onNext(List<Material> materials) {
+                    public void onNext(List<MaterialVoucher> materials) {
                         _materials.setValue(materials);
                     }
 
@@ -116,7 +122,7 @@ public class SearchViewModel extends BaseViewModel {
         return _isLoading;
     }
 
-    LiveData<List<Material>> materials() {
+    LiveData<List<MaterialVoucher>> materials() {
         return _materials;
     }
 }

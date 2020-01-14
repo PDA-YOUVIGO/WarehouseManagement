@@ -22,6 +22,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 public class Shelving implements Parcelable {
+
     // 物料编号
     public String itemNumber;
     // 通用名称

@@ -32,7 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.Shelving;
 
 import java.util.List;
@@ -59,11 +59,13 @@ public class ShelvingActivity extends BaseActivity {
 
     private void init() {
         MaterialButton materialButton = findViewById(R.id.mbt_query);
+
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
+
         sourceUnit = findViewById(R.id.tv_source_unit_description);
         date = findViewById(R.id.tv_date_description);
         materialDocument = findViewById(R.id.tv_materials_description);
@@ -78,22 +80,24 @@ public class ShelvingActivity extends BaseActivity {
 
     private void observeData() {
         viewModel = ViewModelProviders.of(this).get(ShelvingViewModel.class);
-        viewModel.material().observe(this, new Observer<Material>() {
+        viewModel.material().observe(this, new Observer<MaterialVoucher>() {
             @Override
-            public void onChanged(Material material) {
-                if (material != null) {
-                    materialDocument.setText(material.materialDocument);
-                    sourceUnit.setText(material.sourceUnit);
-                    date.setText(material.date);
+            public void onChanged(MaterialVoucher materialVoucher) {
+                if (materialVoucher != null) {
+                    materialDocument.setText(materialVoucher.materialDocument);
+                    sourceUnit.setText(materialVoucher.sourceUnit);
+                    date.setText(materialVoucher.date);
                 }
             }
         });
+
         viewModel.isLoading().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isActive) {
                 progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
             }
         });
+
         viewModel.shelvings().observe(this, new Observer<List<Shelving>>() {
             @Override
             public void onChanged(List<Shelving> shelvings) {

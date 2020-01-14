@@ -18,4 +18,9 @@ package com.youvigo.wms.util;
 
 public class Constants {
     public static final String SEARCH_RESULT = "search_result";
+
+    public static final String SAP_ADDRESS = "sap_address";
+    public static final String PDA_ADDRESS = "pda_address";
+    public static final String FACTORY = "factory_code";
+    public static final String STOCKLOCATION = "stocklocation";
 }

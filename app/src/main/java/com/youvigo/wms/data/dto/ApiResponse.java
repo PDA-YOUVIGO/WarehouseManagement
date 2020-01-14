@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source.remote;
+package com.youvigo.wms.data.dto;
 
-public class RemoteDataSource {
-    private WebService webService;
+import com.google.gson.annotations.SerializedName;
 
-    public RemoteDataSource(WebService webService) {
-        this.webService = webService;
-    }
+/**
+ * Pda后台返回的数据结构
+ * @param <T>
+ */
+public class ApiResponse<T> {
+	private int code;
+	private boolean success;
+	private T data;
+
+	@SerializedName("msg")
+	private String message;
 }

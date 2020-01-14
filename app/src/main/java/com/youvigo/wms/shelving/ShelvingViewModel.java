@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.Shelving;
 
 import java.util.List;
@@ -38,19 +38,19 @@ import io.reactivex.subscribers.DisposableSubscriber;
 public class ShelvingViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    private MutableLiveData<Material> _material = new MutableLiveData<Material>();
+    private MutableLiveData<MaterialVoucher> _material = new MutableLiveData<MaterialVoucher>();
 
     private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<List<Shelving>>();
 
-    void handleData(Material material) {
+    void handleData(MaterialVoucher materialVoucher) {
         _isLoading.setValue(true);
 
-        _material.setValue(material);
+        _material.setValue(materialVoucher);
 
         Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Shelving>>() {
             @Override
             public void subscribe(FlowableEmitter<List<Shelving>> emitter) {
-                emitter.onNext(material.shelvings);
+                emitter.onNext(materialVoucher.shelvings);
                 emitter.onComplete();
             }
         }, BackpressureStrategy.LATEST)
@@ -84,7 +84,7 @@ public class ShelvingViewModel extends BaseViewModel {
         return _shelvings;
     }
 
-    LiveData<Material> material() {
+    LiveData<MaterialVoucher> material() {
         return _material;
     }
 }

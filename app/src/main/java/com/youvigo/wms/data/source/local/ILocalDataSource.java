@@ -14,17 +14,39 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source;
+package com.youvigo.wms.data.source.local;
 
-import com.youvigo.wms.data.source.local.ILocalDataSource;
-import com.youvigo.wms.data.source.remote.ISapRemoteDataSource;
+public interface ILocalDataSource {
 
-public class Repository {
-	private ILocalDataSource localDataSource;
-	private ISapRemoteDataSource sapRemoteDataSource;
+	/**
+	 * 获取SAP接口地址
+	 * @return
+	 */
+	String getSapAddress();
 
-	public Repository(ILocalDataSource localDataSource, ISapRemoteDataSource sapRemoteDataSource) {
-		this.localDataSource = localDataSource;
-		this.sapRemoteDataSource = sapRemoteDataSource;
-	}
+	/**
+	 * 获取PDA后台地址
+	 * @return
+	 */
+	String getPdaAddress();
+
+	/**
+	 * 获取当前用户登陆的工厂编号
+	 * @return
+	 */
+	String getFactoryCode();
+
+	/**
+	 * 获取当前用户选择的库存地点
+	 * @return
+	 */
+	String getStockLocationCode();
+
+	/**
+	 * 获取程序设置值
+	 * @param key Key
+	 *
+	 * @return
+	 */
+	String getPreference(String key);
 }

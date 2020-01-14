@@ -21,9 +21,12 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
-public class Material implements Parcelable {
+public class MaterialVoucher implements Parcelable {
+
     // 物料编号
     public String materialDocument;
     // 日期
@@ -33,12 +36,13 @@ public class Material implements Parcelable {
     // 来源单位
     public String sourceUnit;
 
+    @SerializedName("ITEM")
     public List<Shelving> shelvings;
 
-    public Material() {
+    public MaterialVoucher() {
     }
 
-    protected Material(Parcel in) {
+    protected MaterialVoucher(Parcel in) {
         materialDocument = in.readString();
         date = in.readString();
         creator = in.readString();
@@ -60,15 +64,15 @@ public class Material implements Parcelable {
         return 0;
     }
 
-    public static final Creator<Material> CREATOR = new Creator<Material>() {
+    public static final Creator<MaterialVoucher> CREATOR = new Creator<MaterialVoucher>() {
         @Override
-        public Material createFromParcel(Parcel in) {
-            return new Material(in);
+        public MaterialVoucher createFromParcel(Parcel in) {
+            return new MaterialVoucher(in);
         }
 
         @Override
-        public Material[] newArray(int size) {
-            return new Material[size];
+        public MaterialVoucher[] newArray(int size) {
+            return new MaterialVoucher[size];
         }
     };
 

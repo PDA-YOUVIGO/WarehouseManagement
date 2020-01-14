@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source.remote;
+package com.youvigo.wms.data.dto;
 
-public interface WebService {
+import com.google.gson.annotations.SerializedName;
+
+public class SapResponse<T> {
+	@SerializedName("ControlInfo")
+	public ControlInfo controlInfo;
+
+	@SerializedName("RETURN")
+	public MessageInfo messageInfo;
+
+	@SerializedName("ITEM")
+	public T data;
 }

@@ -29,13 +29,13 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 
 import timber.log.Timber;
 
 import static com.youvigo.wms.util.Constants.SEARCH_RESULT;
 
-public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH> {
+public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.SearchVH> {
     public SearchAdapter() {
         super(new MaterialDiffCallback());
     }
@@ -67,34 +67,34 @@ public class SearchAdapter extends ListAdapter<Material, SearchAdapter.SearchVH>
             creator = itemView.findViewById(R.id.tv_creator);
         }
 
-        void bind(Material material) {
-            materialDocument.setText(material.materialDocument);
-            date.setText(material.date);
-            creator.setText(material.creator);
+        void bind(MaterialVoucher materialVoucher) {
+            materialDocument.setText(materialVoucher.materialDocument);
+            date.setText(materialVoucher.date);
+            creator.setText(materialVoucher.creator);
         }
 
         @Override
         public void onClick(View v) {
-            Material material = getItem(getAdapterPosition());
-            Timber.d("onClick---%s", material.toString());
+            MaterialVoucher materialVoucher = getItem(getAdapterPosition());
+            Timber.d("onClick---%s", materialVoucher.toString());
             if (itemView.getContext() instanceof SearchActivity) {
                 Intent intent = new Intent();
-                intent.putExtra(SEARCH_RESULT, material);
+                intent.putExtra(SEARCH_RESULT, materialVoucher);
                 ((SearchActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
                 ((SearchActivity) itemView.getContext()).finish();
             }
         }
     }
 
-    static class MaterialDiffCallback extends DiffUtil.ItemCallback<Material> {
+    static class MaterialDiffCallback extends DiffUtil.ItemCallback<MaterialVoucher> {
 
         @Override
-        public boolean areItemsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
+        public boolean areItemsTheSame(@NonNull MaterialVoucher oldItem, @NonNull MaterialVoucher newItem) {
             return oldItem.materialDocument.equals(newItem.materialDocument);
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
+        public boolean areContentsTheSame(@NonNull MaterialVoucher oldItem, @NonNull MaterialVoucher newItem) {
             return oldItem.creator.equals(newItem.creator) && oldItem.date.equals(newItem.date);
         }
     }

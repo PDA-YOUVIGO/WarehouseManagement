@@ -28,7 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
@@ -40,7 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
 
     @Nullable
-    protected Material searchResult;
+    protected MaterialVoucher searchResult;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
