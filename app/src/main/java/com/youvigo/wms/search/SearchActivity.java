@@ -85,6 +85,10 @@ public class SearchActivity extends AppCompatActivity {
             if (category.equals(Constants.TYPE_PRODUCT)) {
                 materialCoding = getIntent().getStringExtra(FinishedProductsActivity.MATERIAL_CODING);
                 batchNumber = getIntent().getStringExtra(FinishedProductsActivity.BATCH_NUMBER);
+            } else if (category.equals(Constants.TYPE_TAKE_OFF)) {
+
+            } else if (category.equals(Constants.TYPE_OUT_OF_STOCK)) {
+
             }
         }
     }

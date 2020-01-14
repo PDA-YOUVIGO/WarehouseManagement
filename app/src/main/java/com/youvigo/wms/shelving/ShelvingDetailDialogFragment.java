@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.detail;
+package com.youvigo.wms.shelving;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -36,8 +36,8 @@ import com.youvigo.wms.data.entities.Shelving;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DetailDialogFragment extends DialogFragment {
-    private static final String TAG = "DetailDialogFragment";
+public class ShelvingDetailDialogFragment extends DialogFragment {
+    private static final String TAG = "ShelvingDetailDialogFragment";
     private static final String KEY_SHELVING = "key_shelving";
 
     // 物料编码
@@ -69,7 +69,7 @@ public class DetailDialogFragment extends DialogFragment {
      * @param shelving 详情数据
      */
     public static void show(FragmentManager fragmentManager, Shelving shelving) {
-        DetailDialogFragment dialogFragment = new DetailDialogFragment();
+        ShelvingDetailDialogFragment dialogFragment = new ShelvingDetailDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_SHELVING, shelving);
         dialogFragment.setArguments(bundle);
@@ -97,7 +97,7 @@ public class DetailDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(context).inflate(R.layout.detail_dialog_fragment, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.sheling_detail_dialog_fragment, null);
 
         initViews(view);
 

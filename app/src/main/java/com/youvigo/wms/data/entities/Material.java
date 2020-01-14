@@ -32,8 +32,10 @@ public class Material implements Parcelable {
     public String creator;
     // 来源单位
     public String sourceUnit;
-
+    // 入库上架、成品上架搜索结果
     public List<Shelving> shelvings;
+    // 出库下架搜索结果
+    public List<TakeOff> takeOffs;
 
     public Material() {
     }
@@ -44,6 +46,7 @@ public class Material implements Parcelable {
         creator = in.readString();
         sourceUnit = in.readString();
         shelvings = in.createTypedArrayList(Shelving.CREATOR);
+        takeOffs = in.createTypedArrayList(TakeOff.CREATOR);
     }
 
     @Override
@@ -53,6 +56,7 @@ public class Material implements Parcelable {
         dest.writeString(creator);
         dest.writeString(sourceUnit);
         dest.writeTypedList(shelvings);
+        dest.writeTypedList(takeOffs);
     }
 
     @Override

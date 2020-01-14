@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. komamj
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_4"
+    android:layout_marginStart="@dimen/dp_2"
+    android:layout_marginTop="@dimen/dp_1"
+    android:layout_marginEnd="@dimen/dp_2"
+    app:cardElevation="@dimen/dp_4">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_4">
+
+        <TextView
+            android:id="@+id/tv_item_number_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/item_number"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_number_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_item_number_description"
+            tools:text="000001232323" />
+
+        <TextView
+            android:id="@+id/tv_material_name_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/common_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_number_description" />
+
+        <TextView
+            android:id="@+id/tv_material_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_name_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_material_name_description"
+            app:layout_constraintTop_toTopOf="@id/tv_material_name_description"
+            tools:text="吸氧剂" />
+
+        <TextView
+            android:id="@+id/tv_specification_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/specification"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_name_description" />
+
+        <TextView
+            android:id="@+id/tv_specification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_specification_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_specification_description"
+            app:layout_constraintTop_toTopOf="@id/tv_specification_description"
+            tools:text="药用级" />
+
+        <TextView
+            android:id="@+id/tv_basic_order_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/basic_order"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_specification_description" />
+
+        <TextView
+            android:id="@+id/tv_basic_order"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_basic_order_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_basic_order_description"
+            app:layout_constraintTop_toTopOf="@id/tv_basic_order_description"
+            tools:text="KG" />
+
+        <TextView
+            android:id="@+id/tv_lot_number_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/lot_number"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_basic_order_description" />
+
+        <TextView
+            android:id="@+id/tv_lot_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_lot_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_lot_number_description"
+            tools:text="O119000000" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
