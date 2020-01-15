@@ -64,9 +64,9 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
         }
 
         void bind(Shelving shelving) {
-            itemNumber.setText(shelving.itemNumber);
+            itemNumber.setText(shelving.getMaterialVoucherCode());
             commonName.setText(shelving.commonName);
-            lotNumber.setText(shelving.lotNumber);
+            lotNumber.setText(shelving.batchNumber);
         }
 
         @Override
@@ -82,13 +82,13 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
     static class ShelvingDiffCallback extends DiffUtil.ItemCallback<Shelving> {
         @Override
         public boolean areItemsTheSame(@NonNull Shelving oldItem, @NonNull Shelving newItem) {
-            return oldItem.itemNumber.equals(newItem.itemNumber);
+            return oldItem.getMaterialVoucherCode().equals(newItem.getMaterialVoucherCode());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull Shelving oldItem, @NonNull Shelving newItem) {
             return oldItem.commonName.equals(newItem.commonName)
-                    && oldItem.lotNumber.equals(newItem.lotNumber);
+                    && oldItem.batchNumber.equals(newItem.batchNumber);
         }
     }
 }
