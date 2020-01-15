@@ -42,7 +42,7 @@ public class ShelvingViewModel extends BaseViewModel {
 
     private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<List<Shelving>>();
 
-    public void handleData(MaterialVoucher material) {
+    public void handleData(MaterialVoucher materialVoucher) {
         _isLoading.setValue(true);
 
         _material.setValue(materialVoucher);
@@ -84,7 +84,7 @@ public class ShelvingViewModel extends BaseViewModel {
         return _shelvings;
     }
 
-    public LiveData<Material> material() {
+    public LiveData<MaterialVoucher> material() {
         return _material;
     }
 }

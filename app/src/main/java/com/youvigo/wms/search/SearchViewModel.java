@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -41,109 +42,96 @@ import io.reactivex.subscribers.DisposableSubscriber;
 
 class SearchViewModel extends BaseViewModel {
 
-    private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
+	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
 
-    private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
+	private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
 
-    // 初始化model层接口，单例提供
-    private Repository repository;
+	// 初始化model层接口，单例提供
+	private Repository repository;
 
-    /**
-     * 查询数据
-     *
-     * @param startDate        开始日期
-     * @param endDate          结束日期
-     * @param materialDocument 物料编号
-     */
-    void query(String startDate, String endDate, String materialDocument) {
-        _isLoading.setValue(true);
+	/**
+	 * 查询数据
+	 *
+	 * @param startDate        开始日期
+	 * @param endDate          结束日期
+	 * @param materialDocument 物料编号
+	 */
+	void query(String startDate, String endDate, String materialDocument) {
+		_isLoading.setValue(true);
 
-//        ShelvingQueryRequest shelvingQueryRequest = new ShelvingQueryRequest();
-//        shelvingQueryRequest.setControlInfo(new ControlInfo());
-//        ShelvingQueryRequestDetails requestDetails = new ShelvingQueryRequestDetails();
-//        requestDetails.setStartDate(startDate);
-//        requestDetails.setEndDate(endDate);
-//        requestDetails.setYear("2020");
-//        requestDetails.setMaterialVoucherCode(materialDocument != null && !materialDocument.isEmpty() ? materialDocument : "");
-//        requestDetails.setStockLocationCode("FZ01");
-//        requestDetails.setWarehouseNumber("X01");
-//        shelvingQueryRequest.setRequestDetails(requestDetails);
-//
-//        List<MaterialVoucher> shelvings = remoteDataSource.getShelvings(shelvingQueryRequest);
+		Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<MaterialVoucher>>() {
+			@Override
+			public void subscribe(FlowableEmitter<List<MaterialVoucher>> emitter) {
+				List<MaterialVoucher> mockData = new ArrayList<>();
+				for (int i = 0; i < 100; i++) {
+					MaterialVoucher material = new MaterialVoucher();
+					material.sourceUnit = "ThoughtWorks";
+					material.date = "2020-1-10";
+					material.materialDocument = "10102030007600000" + i;
+					material.creator = "我是谁" + i;
+					material.shelvings = produceShelvings(i);
+					material.takeOffs = produceTakeOffs(i);
+					mockData.add(material);
+				}
+				emitter.onNext(mockData);
+				emitter.onComplete();
+			}
+		}, BackpressureStrategy.LATEST)
+				.delay(2, TimeUnit.SECONDS)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+					@Override
+					public void onNext(List<MaterialVoucher> materials) {
+						_materials.setValue(materials);
+					}
 
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<Material>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<Material>> emitter) {
-                List<Material> mockData = new ArrayList<>();
-                for (int i = 0; i < 100; i++) {
-                    Material material = new Material();
-                    material.sourceUnit = "ThoughtWorks";
-                    material.date = "2020-1-10";
-                    material.materialDocument = "10102030007600000" + i;
-                    material.creator = "我是谁" + i;
-                    material.shelvings = produceShelvings(i);
-                    material.takeOffs = produceTakeOffs(i);
-                    mockData.add(material);
-                }
-                emitter.onNext(mockData);
-                emitter.onComplete();
-            }
-        }, BackpressureStrategy.LATEST)
-                .delay(2, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
-                    @Override
-                    public void onNext(List<MaterialVoucher> materials) {
-                        _materials.setValue(materials);
-                    }
+					@Override
+					public void onError(Throwable t) {
+						_isLoading.setValue(false);
+					}
 
-                    @Override
-                    public void onError(Throwable t) {
-                        _isLoading.setValue(false);
-                    }
+					@Override
+					public void onComplete() {
+						_isLoading.setValue(false);
+					}
+				});
+		addSubscription(disposable);
+	}
 
-                    @Override
-                    public void onComplete() {
-                        _isLoading.setValue(false);
-                    }
-                });
-        addSubscription(disposable);
-    }
+	@NotNull
+	private List<Shelving> produceShelvings(int i) {
+		List<Shelving> shelvings = new ArrayList<>();
+		for (int j = 0; j <= i; j++) {
+			Shelving shelving = new Shelving();
+			shelving.itemNumber = "1010201111100000" + j;
+			shelving.commonName = "吸氧剂";
+			shelving.lotNumber = "O12340000" + j;
+			shelvings.add(shelving);
+		}
+		return shelvings;
+	}
 
-    @NotNull
-    private List<Shelving> produceShelvings(int i) {
-        List<Shelving> shelvings = new ArrayList<>();
-        for (int j = 0; j <= i; j++) {
-            Shelving shelving = new Shelving();
-            shelving.itemNumber = "1010201111100000" + j;
-            shelving.commonName = "吸氧剂";
-            shelving.lotNumber = "O12340000" + j;
-            shelvings.add(shelving);
-        }
-        return shelvings;
-    }
+	@NotNull
+	private List<TakeOff> produceTakeOffs(int i) {
+		List<TakeOff> takeOffs = new ArrayList<>();
+		for (int j = 0; j <= i; j++) {
+			TakeOff takeOff = new TakeOff();
+			takeOff.itemNumber = "1010201111100000" + j;
+			takeOff.materialName = "吸氧剂";
+			takeOff.basicOrder = "KG";
+			takeOff.specification = "药用级";
+			takeOff.lotNumber = "O12340000" + j;
+			takeOffs.add(takeOff);
+		}
+		return takeOffs;
+	}
 
-    @NotNull
-    private List<TakeOff> produceTakeOffs(int i) {
-        List<TakeOff> takeOffs = new ArrayList<>();
-        for (int j = 0; j <= i; j++) {
-            TakeOff takeOff = new TakeOff();
-            takeOff.itemNumber = "1010201111100000" + j;
-            takeOff.materialName = "吸氧剂";
-            takeOff.basicOrder = "KG";
-            takeOff.specification = "药用级";
-            takeOff.lotNumber = "O12340000" + j;
-            takeOffs.add(takeOff);
-        }
-        return takeOffs;
-    }
+	LiveData<Boolean> isLoading() {
+		return _isLoading;
+	}
 
-    LiveData<Boolean> isLoading() {
-        return _isLoading;
-    }
-
-    LiveData<List<MaterialVoucher>> materials() {
-        return _materials;
-    }
+	LiveData<List<MaterialVoucher>> materials() {
+		return _materials;
+	}
 }

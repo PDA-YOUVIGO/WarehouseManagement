@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -124,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         endDate = findViewById(R.id.tv_end);
-        endDate.setText(setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay)));
+        endDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,9 +171,9 @@ public class SearchActivity extends AppCompatActivity {
                 progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
             }
         });
-        viewModel.materials().observe(this, new Observer<List<Material>>() {
+        viewModel.materials().observe(this, new Observer<List<MaterialVoucher>>() {
             @Override
-            public void onChanged(List<Material> materials) {
+            public void onChanged(List<MaterialVoucher> materials) {
                 adapter.submitList(materials);
             }
         });

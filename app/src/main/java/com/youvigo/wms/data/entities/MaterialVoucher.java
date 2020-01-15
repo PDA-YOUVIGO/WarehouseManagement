@@ -21,8 +21,6 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class MaterialVoucher implements Parcelable {
@@ -37,7 +35,7 @@ public class MaterialVoucher implements Parcelable {
     public String sourceUnit;
 
     // 入库上架、成品上架搜索结果
-    @SerializedName("ITEM")
+//    @SerializedName("ITEM")
     public List<Shelving> shelvings;
     
     // 出库下架搜索结果

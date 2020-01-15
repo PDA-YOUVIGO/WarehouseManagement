@@ -20,7 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.TakeOff;
 
 import java.util.List;
@@ -40,7 +40,7 @@ public class TakeOffViewModel extends BaseViewModel {
 
     private MutableLiveData<List<TakeOff>> _takeOffs = new MutableLiveData<List<TakeOff>>();
 
-    public void handleData(Material material) {
+    public void handleData(MaterialVoucher material) {
         _isLoading.setValue(true);
 
         Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<TakeOff>>() {
