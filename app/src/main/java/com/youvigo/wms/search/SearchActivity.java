@@ -49,7 +49,7 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * 搜索页面
+ * 查询页面
  */
 public class SearchActivity extends AppCompatActivity {
     private ProgressBar progressBar;
