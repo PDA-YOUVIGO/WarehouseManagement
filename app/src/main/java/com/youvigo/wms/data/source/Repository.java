@@ -19,7 +19,7 @@ package com.youvigo.wms.data.source;
 import com.youvigo.wms.data.source.local.ILocalDataSource;
 import com.youvigo.wms.data.source.remote.ISapRemoteDataSource;
 
-public class Repository {
+public class Repository{
 	private ILocalDataSource localDataSource;
 	private ISapRemoteDataSource sapRemoteDataSource;
 
@@ -27,4 +27,6 @@ public class Repository {
 		this.localDataSource = localDataSource;
 		this.sapRemoteDataSource = sapRemoteDataSource;
 	}
+
+
 }

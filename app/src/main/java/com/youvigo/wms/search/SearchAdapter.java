@@ -68,7 +68,7 @@ public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.Se
         }
 
         void bind(MaterialVoucher materialVoucher) {
-            materialDocument.setText(materialVoucher.materialDocument);
+            materialDocument.setText(materialVoucher.orderNumber);
             date.setText(materialVoucher.date);
             creator.setText(materialVoucher.creator);
         }
@@ -90,7 +90,7 @@ public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.Se
 
         @Override
         public boolean areItemsTheSame(@NonNull MaterialVoucher oldItem, @NonNull MaterialVoucher newItem) {
-            return oldItem.materialDocument.equals(newItem.materialDocument);
+            return oldItem.orderNumber.equals(newItem.orderNumber);
         }
 
         @Override

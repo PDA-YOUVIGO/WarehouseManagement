@@ -17,196 +17,51 @@
 package com.youvigo.wms.data.dto;
 
 import com.google.gson.annotations.SerializedName;
+import com.youvigo.wms.data.entities.Shelving;
 
-/**
- * 入库上架SAP返回数据报文
- */
+import java.util.List;
+
 public class ShelvingQueryResponse {
 
-	/**
-	 * 仓库号
-	 */
-	@SerializedName("LGNUM")
-	private String warehouseNumber;
+	@SerializedName("ControlInfo")
+	private ControlInfo controlInfo;
 
+	@SerializedName("ITEM")
+	private List<Shelving> data;
 
-	/**
-	 * 移动类型
-	 */
-	@SerializedName("BWLVS")
-	public String moveType;
+	@SerializedName("RETURN")
+	private SapResult result;
 
-	/**
-	 * 单据号（物料凭证号）
-	 */
-	@SerializedName("MBLNR")
-	private String materialVoucherCode;
+	public ControlInfo getControlInfo() {
+		return controlInfo;
+	}
 
-	/**
-	 * 物料凭证行项目编号（行号）
-	 */
-	@SerializedName("ZEILE")
-	public String voucherLineNumber;
+	public void setControlInfo(ControlInfo controlInfo) {
+		this.controlInfo = controlInfo;
+	}
 
+	public List<Shelving> getData() {
+		return data;
+	}
 
-	/**
-	 * 物料编号
-	 */
-	@SerializedName("MATNR")
-	public String materialNumber;
+	public void setData(List<Shelving> data) {
+		this.data = data;
+	}
 
-	/**
-	 * 物料描述
-	 */
-	@SerializedName("MAKTX")
-	public String materialDescription;
+	public SapResult getResult() {
+		return result;
+	}
 
-	/**
-	 * 工厂
-	 */
-	@SerializedName("WERKS")
-	public String factoryCode;
+	public void setResult(SapResult result) {
+		this.result = result;
+	}
 
-	/**
-	 * 批号
-	 */
-	@SerializedName("CHARG")
-	public String batchNumber;
+	public ShelvingQueryResponse(ControlInfo controlInfo, List<Shelving> data, SapResult result) {
+		this.controlInfo = controlInfo;
+		this.data = data;
+		this.result = result;
+	}
 
-	/**
-	 * 基本单位
-	 */
-	@SerializedName("MEINS")
-	public String baseUnit;
-
-	/**
-	 * 基本单位中文值
-	 */
-	@SerializedName("MEINS_TXT")
-	public String baseUnitTxt;
-
-	/**
-	 * 基本单位数量
-	 */
-	@SerializedName("OFMEA")
-	public double basicQuantity;
-
-	/**
-	 * 辅助单位
-	 */
-	@SerializedName("ALTME")
-	public String auxiliaryUnit;
-
-	/**
-	 * 辅助单位中文值
-	 */
-	@SerializedName("ALTME_TXT")
-	public String auxiliaryUnitTxt;
-
-	/**
-	 * 辅助单位数量
-	 */
-	@SerializedName("VSOLA")
-	public double auxiliaryQuantity;
-
-	/**
-	 * 转移要求号
-	 */
-	@SerializedName("TBNUM")
-	public String tbnum;
-
-	/**
-	 * 转储需求项目
-	 */
-	@SerializedName("TBPOS")
-	public String tbpos;
-
-	/**
-	 * 附加字段
-	 */
-	@SerializedName("ADDITIONAL")
-	public Additional additional;
-
-
-	/**
-	 * 创建人
-	 */
-	@SerializedName("USNAM")
-	public String creator;
-
-
-	/**
-	 * 凭证日期
-	 */
-	@SerializedName("BLDAT")
-	public String voucherDate;
-
-
-	/**
-	 * 规格
-	 */
-	@SerializedName("ZZDRUGSPEC")
-	public String specifications;
-
-
-	/**
-	 * 通用名称
-	 */
-	@SerializedName("ZZCOMMONNAME")
-	public String commonName;
-
-
-	/**
-	 * 供应商名称
-	 */
-	@SerializedName("VENDORNAME")
-	public String supplierName;
-
-
-	/**
-	 * 供应商批次
-	 */
-	@SerializedName("LICHA")
-	@Deprecated
-	public String supplierBatchNumber;
-
-
-	/**
-	 * 供应商批次
-	 */
-	@SerializedName("ZZLICHA")
-	public String supplierBatchCode;
-
-
-	/**
-	 * 是否合箱
-	 */
-	@SerializedName("ZZPACKAGING")
-	public String packaging;
-
-
-	/**
-	 * 主批次
-	 */
-	@SerializedName("ZZLICHA_MAIN")
-	public String mainBatchNumber;
-
-	/**
-	 * 主批次数量
-	 */
-	@SerializedName("ZZMENGE_MAIN")
-	public String mainBatchNumberQuantity;
-
-	/**
-	 * 辅批次
-	 */
-	@SerializedName("ZZLICHA_AUXILIARY")
-	public String auxiliaryBatchNumber;
-
-	/**
-	 * 辅批次数量
-	 */
-	@SerializedName("ZZMENGE_AUXILIARY")
-	public String auxiliaryBatchNumberQuantity;
-
+	public ShelvingQueryResponse() {
+	}
 }

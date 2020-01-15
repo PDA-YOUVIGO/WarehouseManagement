@@ -89,8 +89,8 @@ public class ShelvingActivity extends BaseActivity {
             @Override
             public void onChanged(MaterialVoucher materialVoucher) {
                 if (materialVoucher != null) {
-                    materialDocument.setText(materialVoucher.materialDocument);
-                    sourceUnit.setText(materialVoucher.sourceUnit);
+                    materialDocument.setText(materialVoucher.orderNumber);
+                    sourceUnit.setText(materialVoucher.supplierName);
                     date.setText(materialVoucher.date);
                 }
             }

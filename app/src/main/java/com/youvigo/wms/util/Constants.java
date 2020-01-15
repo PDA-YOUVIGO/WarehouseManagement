@@ -20,6 +20,8 @@ public class Constants {
     public static final String SEARCH_RESULT = "search_result";
 
     public static final String SAP_ADDRESS = "sap_address";
+    public static final String SAP_USERNAME = "sap_username";
+    public static final String SAP_PASSWORD = "sap_password";
     public static final String PDA_ADDRESS = "pda_address";
     public static final String FACTORY = "factory_code";
     public static final String STOCKLOCATION = "stocklocation";

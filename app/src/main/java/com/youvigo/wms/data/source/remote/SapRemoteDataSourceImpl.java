@@ -17,11 +17,18 @@
 package com.youvigo.wms.data.source.remote;
 
 import com.google.gson.Gson;
-import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.dto.ShelvingQueryRequest;
+import com.youvigo.wms.data.dto.ShelvingQueryResponse;
+import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.data.source.local.ILocalDataSource;
+import com.youvigo.wms.util.Constants;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Credentials;
@@ -39,12 +46,18 @@ public class SapRemoteDataSourceImpl implements ISapRemoteDataSource {
 	private OkHttpClient mOkHttpClient;
 	private Gson mGson = new Gson();
 
+	private ILocalDataSource localDataSource;
+
+	public SapRemoteDataSourceImpl(ILocalDataSource localDataSource) {
+		this.localDataSource = localDataSource;
+	}
+
 	@Override
 	public List<MaterialVoucher> getShelvings(ShelvingQueryRequest queryRequest) {
 
-		String url = String.format("http://%s/RESTAdapter/PDA/On_The_Shelf", "52.82.87.90:50000");
-		String username = "zengzx";
-		String password = "abcd1234";
+		String url = String.format("http://%s/RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender", "52.82.87.90:50000");
+		String username = localDataSource.getPreference(Constants.SAP_USERNAME);
+		String password = localDataSource.getPreference(Constants.SAP_PASSWORD);
 		String postJson = mGson.toJson(queryRequest);
 
 		mOkHttpClient = new OkHttpClient.Builder().authenticator((route, response) -> {
@@ -61,11 +74,28 @@ public class SapRemoteDataSourceImpl implements ISapRemoteDataSource {
 			if (response.isSuccessful()) {
 
 				String resultString = response.body().string();
-//				JSONObject jsonObject = new JSONObject(resultString);
-//				jsonObject.get("");
 
-				MaterialVoucher materialVoucher = mGson.fromJson(resultString, MaterialVoucher.class);
+				ShelvingQueryResponse shelvingData = mGson.fromJson(resultString, ShelvingQueryResponse.class);
 
+				Map<String, MaterialVoucher> groupMap = new HashMap<>();
+				if (shelvingData.getResult().getSuccess().equals("S") && shelvingData.getData() != null) {
+					// 按凭证分组数据
+					for (Shelving item : shelvingData.getData()) {
+						MaterialVoucher materialVoucher = groupMap.get(item.getMaterialVoucherCode());
+
+						if (materialVoucher == null) {
+							materialVoucher = new MaterialVoucher();
+							materialVoucher.creator = item.getCreator();
+							materialVoucher.date = item.getVoucherDate();
+							materialVoucher.orderNumber = item.getMaterialVoucherCode();
+							materialVoucher.supplierName = item.getSupplierName();
+
+							List<Shelving> shelvings = new ArrayList<>();
+							Shelving shelving = new Shelving();
+							// TODO 等逻辑
+						}
+					}
+				}
 
 			}
 		} catch (IOException e) {

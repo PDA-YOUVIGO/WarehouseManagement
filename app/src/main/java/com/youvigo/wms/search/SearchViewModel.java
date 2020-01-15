@@ -65,9 +65,9 @@ class SearchViewModel extends BaseViewModel {
 				List<MaterialVoucher> mockData = new ArrayList<>();
 				for (int i = 0; i < 100; i++) {
 					MaterialVoucher material = new MaterialVoucher();
-					material.sourceUnit = "ThoughtWorks";
+					material.supplierName = "ThoughtWorks";
 					material.date = "2020-1-10";
-					material.materialDocument = "10102030007600000" + i;
+					material.orderNumber = "10102030007600000" + i;
 					material.creator = "我是谁" + i;
 					material.shelvings = produceShelvings(i);
 					material.takeOffs = produceTakeOffs(i);
@@ -104,9 +104,9 @@ class SearchViewModel extends BaseViewModel {
 		List<Shelving> shelvings = new ArrayList<>();
 		for (int j = 0; j <= i; j++) {
 			Shelving shelving = new Shelving();
-			shelving.itemNumber = "1010201111100000" + j;
+			shelving.setMaterialVoucherCode("1010201111100000" + 1);
 			shelving.commonName = "吸氧剂";
-			shelving.lotNumber = "O12340000" + j;
+			shelving.batchNumber = "O12340000" + j;
 			shelvings.add(shelving);
 		}
 		return shelvings;

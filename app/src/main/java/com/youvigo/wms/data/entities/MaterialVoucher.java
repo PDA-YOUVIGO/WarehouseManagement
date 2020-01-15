@@ -25,17 +25,27 @@ import java.util.List;
 
 public class MaterialVoucher implements Parcelable {
 
-    // 物料编号
-    public String materialDocument;
-    // 日期
+    /**
+     * 单据编号
+     */
+    public String orderNumber;
+
+    /**
+     * 单据日期
+     */
     public String date;
-    // 创建者
+
+    /**
+     * 创建者
+     */
     public String creator;
-    // 来源单位
-    public String sourceUnit;
+
+    /**
+     * 供应商名称（来源单位）
+     */
+    public String supplierName;
 
     // 入库上架、成品上架搜索结果
-//    @SerializedName("ITEM")
     public List<Shelving> shelvings;
     
     // 出库下架搜索结果
@@ -45,20 +55,20 @@ public class MaterialVoucher implements Parcelable {
     }
 
     protected MaterialVoucher(Parcel in) {
-        materialDocument = in.readString();
+        orderNumber = in.readString();
         date = in.readString();
         creator = in.readString();
-        sourceUnit = in.readString();
+        supplierName = in.readString();
         shelvings = in.createTypedArrayList(Shelving.CREATOR);
         takeOffs = in.createTypedArrayList(TakeOff.CREATOR);
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(materialDocument);
+        dest.writeString(orderNumber);
         dest.writeString(date);
         dest.writeString(creator);
-        dest.writeString(sourceUnit);
+        dest.writeString(supplierName);
         dest.writeTypedList(shelvings);
         dest.writeTypedList(takeOffs);
     }
@@ -83,6 +93,6 @@ public class MaterialVoucher implements Parcelable {
     @NonNull
     @Override
     public String toString() {
-        return "materialDocument:" + materialDocument + ",date:" + date + ",creator:" + creator;
+        return "orderNumber:" + orderNumber + ",date:" + date + ",creator:" + creator;
     }
 }
