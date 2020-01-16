@@ -17,20 +17,29 @@
 package com.youvigo.wms;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
+import com.youvigo.wms.activityresult.ActivityResult;
+import com.youvigo.wms.activityresult.InterceptWith;
+import com.youvigo.wms.inteceptor.LoginInterceptor;
+
+@InterceptWith(LoginInterceptor.class)
 public class MainActivity extends AppCompatActivity {
     protected Toolbar toolbar;
-
+    protected ActivityResult mActivityResult;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.base_activity);
-
+        mActivityResult = new ActivityResult(this);
+        mActivityResult.intercept(() -> Toast.makeText(getApplicationContext(), "请先登录系统", Toast.LENGTH_LONG).show());
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("loginState", false).apply();
         init(savedInstanceState);
     }
 

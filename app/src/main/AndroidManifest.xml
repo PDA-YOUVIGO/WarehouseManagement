@@ -4,7 +4,7 @@
     package="com.youvigo.wms">
 
     <application
-        android:name="com.youvigo.wms.PDAAssistantApplication"
+        android:name="com.youvigo.wms.common.WarehouseManagementApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -35,6 +35,14 @@
         <activity
             android:name="com.youvigo.wms.off.TakeOffActivity"
             android:label="@string/take_off" />
+
+        <activity
+            android:name="com.youvigo.wms.login.LoginActivity"
+            android:label="@string/title_activity_login" />
+
+        <activity
+            android:name="com.youvigo.wms.SettingsActivity"
+            android:label="@string/action_settings" />
     </application>
 
 </manifest>
