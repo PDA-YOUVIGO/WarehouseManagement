@@ -111,42 +111,29 @@ public class SearchActivity extends AppCompatActivity {
         startDate = findViewById(R.id.tv_start);
         startDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
 
-        startDate.setOnClickListener(new View.OnClickListener() {
+        startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-                new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-                        startDate.setText(text);
-                    }
-                }, 2018, 12, 1)
-                        .show();
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
+                startDate.setText(text);
             }
-        });
+        }, 2018, 12, 1)
+                .show());
         endDate = findViewById(R.id.tv_end);
         endDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
-        endDate.setOnClickListener(new View.OnClickListener() {
+        endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-                new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-                        endDate.setText(text);
-                    }
-                }, 2018, 12, 1).show();
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
+                endDate.setText(text);
             }
-        });
+        }, 2018, 12, 1).show());
         MaterialButton materialButton = findViewById(R.id.mbt_query);
-        materialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideKeyboard();
-                editText.clearFocus();
-                if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
-                    viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
-                }
+        materialButton.setOnClickListener(v -> {
+            hideKeyboard();
+            editText.clearFocus();
+            if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
+                viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
             }
         });
         editText = findViewById(R.id.edit_text);
