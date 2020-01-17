@@ -18,9 +18,9 @@ package com.youvigo.wms;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 public class PermissionGrantActivity extends AppCompatActivity {
 

@@ -18,7 +18,8 @@ package com.youvigo.wms.common;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 /**
  * 保存到本地的配置文件

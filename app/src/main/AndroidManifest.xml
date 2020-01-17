@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.youvigo.wms">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="com.youvigo.wms.common.WarehouseManagementApplication"
         android:allowBackup="true"
