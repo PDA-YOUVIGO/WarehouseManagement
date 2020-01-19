@@ -77,20 +77,41 @@
             app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
             app:layout_constraintTop_toBottomOf="@id/tv_movement_type" />
 
-        <TextView
-            android:id="@+id/tv_internal_order_description"
+        <EditText
+            android:id="@+id/et_internal_order"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
+            android:hint="请输入内部订单号..."
             android:maxLines="1"
             android:singleLine="true"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/tv_internal_order"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_query"
             app:layout_constraintStart_toEndOf="@id/tv_internal_order"
             app:layout_constraintTop_toTopOf="@id/tv_internal_order"
             tools:text="O11wsadsad11111111" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
+            android:text="@string/query"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dp_14"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_internal_order"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_internal_order" />
 
         <TextView
             android:id="@+id/tv_employer"
@@ -189,31 +210,22 @@
             app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
             app:layout_constraintTop_toBottomOf="@id/tv_harvest" />
 
-        <TextView
-            android:id="@+id/tv_remark_description"
+        <EditText
+            android:id="@+id/et_remark"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
+            android:hint="请输入备注信息..."
             android:maxLines="1"
             android:singleLine="true"
-            android:text="我其实不该领啊"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/tv_remark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_remark"
             app:layout_constraintTop_toTopOf="@id/tv_remark" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_16"
-            android:contentDescription="捻货"
-            android:src="@drawable/ic_store_black_24dp"
-            android:tint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <View
             android:id="@+id/divider"
@@ -223,7 +235,18 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_remark_description" />
+            app:layout_constraintTop_toBottomOf="@id/et_remark" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@drawable/ic_add_black_24dp"
+            android:tint="@android:color/white"
+            android:tooltipText="新增发货"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -233,7 +256,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:listitem="@layout/item_shelving" />
+            tools:listitem="@layout/item_no_reserved_outbound" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

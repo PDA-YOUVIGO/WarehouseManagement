@@ -42,11 +42,11 @@ import timber.log.Timber;
 public class OutOfStockActivity extends BaseActivity {
     public static final String DOCUMENT_NUMBER = "document_number";
 
-    private EditText documentNumber;
+    private EditText documentNumber, remark;
 
     private ProgressBar progressBar;
 
-    private TextView movementType, costCenter, internalOrder, employer, receivingDepartment, harvest, remark;
+    private TextView movementType, costCenter, internalOrder, employer, receivingDepartment, harvest;
 
     private OutOfStockAdapter adapter;
 
@@ -69,7 +69,7 @@ public class OutOfStockActivity extends BaseActivity {
         employer = findViewById(R.id.tv_employer_description);
         receivingDepartment = findViewById(R.id.tv_receiving_department_description);
         harvest = findViewById(R.id.tv_harvest_description);
-        remark = findViewById(R.id.tv_remark_description);
+        remark = findViewById(R.id.et_remark);
 
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
