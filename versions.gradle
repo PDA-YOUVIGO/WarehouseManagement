@@ -28,8 +28,8 @@ ext {
     permissionVersion = '3.0.0'
 
     glideVersion = '4.10.0'
-    retrofitVersion = '2.6.2'
-    interceptorVersion = '4.2.0'
+    retrofitVersion = '2.7.1'
+    interceptorVersion = '4.3.0'
     rxJavaVersion = '2.2.11'
     rxAndroidVersion = '2.1.1'
     daggerVersion = '2.25.2'
@@ -40,7 +40,7 @@ ext {
     leakcanaryVersion = '2.0-beta-3'
 
     //unit test
-    junitVersion = '4.12'
+    junitVersion = '4.13'
     mockitoCoreVersion = '2.25.0'
     mockitoAndroidVersion = '2.25.0'
     xcoreVersion = '1.2.0'
@@ -58,4 +58,6 @@ ext {
     rulesVersion = '1.2.0'
     fragmenttestVersion = '1.1.0'
     databindingcompilerVersion = '3.5.3'
+
+    daggerVersion = '2.25.4'
 }

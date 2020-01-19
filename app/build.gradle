@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.youvigo.wms"
-        minSdkVersion 22
+        minSdkVersion 27
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
+    implementation 'androidx.preference:preference:1.1.0'
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
@@ -51,6 +52,11 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$interceptorVersion"
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion" //用于提供support类相关功能
+    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoCoreVersion"

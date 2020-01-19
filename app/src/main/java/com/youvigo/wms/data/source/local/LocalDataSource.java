@@ -21,15 +21,21 @@ import android.content.SharedPreferences;
 
 import com.youvigo.wms.util.Constants;
 
-public class LocalDataSourceImpl implements ILocalDataSource {
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-	private static final String TAG = LocalDataSourceImpl.class.getSimpleName();
-	private final Context mContext;
+@Singleton
+public class LocalDataSource implements ILocalDataSource {
+
+	private static final String TAG = LocalDataSource.class.getSimpleName();
+
 	private final SharedPreferences mSharedPreferences;
+	private final Context mContext;
 
-	public LocalDataSourceImpl(Context context, SharedPreferences sharedPreferences) {
-		this.mContext = context;
+	@Inject
+	public LocalDataSource(SharedPreferences sharedPreferences, Context context) {
 		this.mSharedPreferences = sharedPreferences;
+		this.mContext = context;
 	}
 
 	@Override

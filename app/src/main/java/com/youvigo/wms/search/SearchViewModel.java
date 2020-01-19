@@ -21,19 +21,18 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
 import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.data.entities.TakeOff;
-import com.youvigo.wms.data.source.Repository;
+import com.youvigo.wms.data.SapRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -47,7 +46,9 @@ public class SearchViewModel extends BaseViewModel {
 	private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
 
 	// 初始化model层接口，单例提供
-	private Repository repository;
+
+	@Inject
+	SapRepository sapRepository;
 
 	/**
 	 * 查询数据
@@ -59,57 +60,29 @@ public class SearchViewModel extends BaseViewModel {
 	void query(String startDate, String endDate, String materialDocument) {
 		_isLoading.setValue(true);
 
-		Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<MaterialVoucher>>() {
+		Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
+
+			List<MaterialVoucher> mockData = sapRepository.getShelvings(startDate, endDate, materialDocument);
+
+			emitter.onNext(mockData);
+			emitter.onComplete();
+		}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
 			@Override
-			public void subscribe(FlowableEmitter<List<MaterialVoucher>> emitter) {
-				List<MaterialVoucher> mockData = new ArrayList<>();
-				for (int i = 0; i < 100; i++) {
-					MaterialVoucher material = new MaterialVoucher();
-					material.supplierName = "ThoughtWorks";
-					material.date = "2020-1-10";
-					material.orderNumber = "10102030007600000" + i;
-					material.creator = "我是谁" + i;
-					material.shelvings = produceShelvings(i);
-					material.takeOffs = produceTakeOffs(i);
-					mockData.add(material);
-				}
-				emitter.onNext(mockData);
-				emitter.onComplete();
+			public void onNext(List<MaterialVoucher> materials) {
+				_materials.setValue(materials);
 			}
-		}, BackpressureStrategy.LATEST)
-				.delay(2, TimeUnit.SECONDS)
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
-					@Override
-					public void onNext(List<MaterialVoucher> materials) {
-						_materials.setValue(materials);
-					}
 
-					@Override
-					public void onError(Throwable t) {
-						_isLoading.setValue(false);
-					}
+			@Override
+			public void onError(Throwable t) {
+				_isLoading.setValue(false);
+			}
 
-					@Override
-					public void onComplete() {
-						_isLoading.setValue(false);
-					}
-				});
+			@Override
+			public void onComplete() {
+				_isLoading.setValue(false);
+			}
+		});
 		addSubscription(disposable);
-	}
-
-	@NotNull
-	private List<Shelving> produceShelvings(int i) {
-		List<Shelving> shelvings = new ArrayList<>();
-		for (int j = 0; j <= i; j++) {
-			Shelving shelving = new Shelving();
-			shelving.setMaterialVoucherCode("1010201111100000" + 1);
-			shelving.commonName = "吸氧剂";
-			shelving.batchNumber = "O12340000" + j;
-			shelvings.add(shelving);
-		}
-		return shelvings;
 	}
 
 	@NotNull

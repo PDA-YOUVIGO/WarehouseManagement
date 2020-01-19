@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms;
+package com.youvigo.wms.data;
 
-import android.app.Application;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import timber.log.Timber;
+import javax.inject.Scope;
 
-public class PDAAssistantApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        }
-    }
-}
+@Documented
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Local {}

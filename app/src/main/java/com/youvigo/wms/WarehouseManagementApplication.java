@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source.remote;
+package com.youvigo.wms;
 
-import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.dto.ShelvingQueryRequest;
+import android.app.Application;
 
-import java.util.List;
+import com.youvigo.wms.data.SapRepositoryComponent;
 
-public interface ISapRemoteDataSource {
+import timber.log.Timber;
 
-	/**
-	 * 获取入库上架信息
-	 * @return
-	 */
-	List<MaterialVoucher> getShelvings(ShelvingQueryRequest queryRequest);
+public class WarehouseManagementApplication extends Application {
 
+    private static final String TAG = WarehouseManagementApplication.class.getSimpleName();
+    private SapRepositoryComponent sapRepositoryComponent;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+
+//        sapRepositoryComponent = DaggerSapRepositoryComponent.build();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+
+
+
+    }
 }

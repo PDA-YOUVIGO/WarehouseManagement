@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source;
+package com.youvigo.wms.data;
 
-import com.youvigo.wms.data.source.local.ILocalDataSource;
-import com.youvigo.wms.data.source.remote.ISapRemoteDataSource;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public class Repository{
-	private ILocalDataSource localDataSource;
-	private ISapRemoteDataSource sapRemoteDataSource;
+import javax.inject.Scope;
 
-	public Repository(ILocalDataSource localDataSource, ISapRemoteDataSource sapRemoteDataSource) {
-		this.localDataSource = localDataSource;
-		this.sapRemoteDataSource = sapRemoteDataSource;
-	}
-
-
-}
+@Documented
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Remote {}

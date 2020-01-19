@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,7 +31,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,12 +38,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.product.FinishedProductsActivity;
 import com.youvigo.wms.util.Constants;
 
-import java.util.Calendar;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import timber.log.Timber;
 
@@ -103,39 +100,33 @@ public class SearchActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-		Calendar mCalendar = Calendar.getInstance();
-		int currentYear = mCalendar.get(Calendar.YEAR);
-		int currentMonth = mCalendar.get(Calendar.MONTH) + 1;
-		int currentDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+        LocalDate localDate = LocalDate.now();
 
         startDate = findViewById(R.id.tv_start);
-        startDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
+        startDate.setText(localDate.toString());
 
-        startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-                startDate.setText(text);
-            }
-        }, 2018, 12, 1)
-                .show());
+        startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
+            startDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
+        }, 2019, 1, 1).show());
+
         endDate = findViewById(R.id.tv_end);
-        endDate.setText(String.format("%s年%s月%s日", currentYear, currentMonth, currentDay));
-        endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String text = String.format("%s年%s月%s日", year, month, dayOfMonth);
-                endDate.setText(text);
-            }
-        }, 2018, 12, 1).show());
+        endDate.setText(localDate.toString());
+        endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
+            endDate.setText(LocalDate.of(year,month+1,dayOfMonth).toString());
+        }, 2019, 1, 1).show());
+
         MaterialButton materialButton = findViewById(R.id.mbt_query);
         materialButton.setOnClickListener(v -> {
             hideKeyboard();
             editText.clearFocus();
-            if (editText.getText() != null && !editText.getText().toString().isEmpty()) {
-                viewModel.query(startDate.getText().toString(), endDate.getText().toString(), editText.getText().toString());
-            }
+
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN);
+            LocalDate localDateStart = LocalDate.parse(this.startDate.getText().toString());
+            LocalDate localDateEnd = LocalDate.parse(this.endDate.getText().toString());
+
+            viewModel.query(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), editText.getText() == null ? "" : editText.getText().toString());
         });
+
         editText = findViewById(R.id.edit_text);
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -152,18 +143,8 @@ public class SearchActivity extends AppCompatActivity {
     private void observeData() {
         viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
-        viewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isActive) {
-                progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
-            }
-        });
-        viewModel.materials().observe(this, new Observer<List<MaterialVoucher>>() {
-            @Override
-            public void onChanged(List<MaterialVoucher> materials) {
-                adapter.submitList(materials);
-            }
-        });
+        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+        viewModel.materials().observe(this, materials -> adapter.submitList(materials));
     }
 
     @Override
