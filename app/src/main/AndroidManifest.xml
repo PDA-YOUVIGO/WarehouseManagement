@@ -60,6 +60,10 @@
             android:label="@string/warehouse_inventory" />
 
         <activity
+            android:name=".warehouse.PositionMovementActivity"
+            android:label="@string/position_movement" />
+
+        <activity
             android:name=".inventory.InventoryCheckActivity"
             android:label="@string/inventory_check" />
 

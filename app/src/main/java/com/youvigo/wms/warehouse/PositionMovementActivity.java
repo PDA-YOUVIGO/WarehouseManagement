@@ -16,12 +16,16 @@
 
 package com.youvigo.wms.warehouse;
 
+import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
 
+/**
+ * 仓位移动页面
+ */
 public class PositionMovementActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.position_movement_activity;
     }
 
     @Override

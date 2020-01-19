@@ -19,6 +19,9 @@ package com.youvigo.wms.warehouse;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
 
+/**
+ * 仓库盘点页面
+ */
 public class WarehouseInventoryActivity extends BaseActivity {
     @Override
     protected int getLayoutId() {

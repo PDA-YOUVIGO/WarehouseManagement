@@ -89,4 +89,5 @@
     <string name="internal_order_number">订单号</string>
     <string name="description">描述</string>
     <string name="factory">工厂</string>
+    <string name="material_batch">物料批次</string>
 </resources>

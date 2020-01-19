@@ -19,13 +19,10 @@ package com.youvigo.wms.outstock;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -92,22 +89,6 @@ public class OutOfStockActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Timber.d("onActivityResult");
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.out_of_stock_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_in) {
-            // 拣货
-        } else if (item.getItemId() == R.id.menu_out) {
-            // 出库
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
