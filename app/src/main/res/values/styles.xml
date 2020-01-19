@@ -28,4 +28,8 @@
 
     <style name="DetailDialogTheme" parent="Theme.AppCompat.Light.Dialog.MinWidth" />
 
+    <style name="PrimaryButton">
+        <item name="android:background">@drawable/button_share</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
 </resources>

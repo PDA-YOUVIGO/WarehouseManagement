@@ -17,6 +17,20 @@
 <resources>
     <string name="app_name">仓库管理</string>
 
+    <!--login-->
+    <string name="systemTitle">科伦药业仓库管理系统</string>
+    <string name="prompt_username">用户名</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="action_sign_in">登录</string>
+    <string name="login_system">设置</string>
+    <string name="login_system_change">环境切换</string>
+    <string name="title_activity_login">登录</string>
+    <!--setting-->
+    <string name="factoryPromptTitle">Factory</string>
+    <string name="stockLocationPromptTitle">Stock location</string>
+    <string name="action_settings">Settings</string>
+
     <string name="shelving">入库上架</string>
     <string name="finished_products">成品上架</string>
     <string name="take_off">出库下架</string>
@@ -56,4 +70,25 @@
     <string name="document_date">单据日期</string>
     <string name="specification">规格</string>
     <string name="basic_order">基本单</string>
+
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Invalid password</string>
+    <string name="stockLocationExample">2100 - 科伦药物研究院</string>
+
+    <!-- Preference Titles -->
+    <string name="interface_settings_header">Interface Settings</string>
+    <string name="business_settings_header">Business Settings</string>
+
+    <!-- Interface Preferences -->
+    <string name="sap_interface_address_title">SAP Interface Address</string>
+    <string name="pda_interface_address_title">PDA Interface Address</string>
+    <string name="printer_name_title">Printer name</string>
+
+    <!-- Business Preferences -->
+    <string name="display_mergebox_title">Display Merge Box</string>
+    <string name="display_mergebox_summary">Display data on business panel.</string>
+    <string name="business_type_title">Business Type</string>
+    <string name="inventory_method_title">Inventory Method</string>
+    <string name="inventory_header">Inventory Settings</string>
+    <string name="hybrid_storage_title">Hybrid storage</string>
 </resources>

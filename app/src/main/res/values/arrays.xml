@@ -1,0 +1,39 @@
+<resources>
+	<!-- 业务类型 -->
+	<string-array name="business_type_entries">
+		<item>辅助物资</item>
+		<item>成品</item>
+		<item>物料</item>
+	</string-array>
+
+	<string-array name="business_type_values">
+		<item>LowValueConsumptionGoods</item>
+		<item>FinishedProduct</item>
+		<item>Materiel</item>
+	</string-array>
+
+	<!-- 盘点类型 -->
+	<string-array name="inventory_type_entries">
+		<item>明盘</item>
+		<item>盲盘</item>
+	</string-array>
+
+	<string-array name="inventory_type_values">
+		<item>BrightDisk</item>
+		<item>BlindDisk</item>
+	</string-array>
+
+	<!-- 混批储存策略 -->
+	<string-array name="hybrid_storage_entries">
+		<item>无</item>
+		<item>提示</item>
+		<item>禁止</item>
+	</string-array>
+
+	<string-array name="hybrid_storage_values">
+		<item>none</item>
+		<item>prompt</item>
+		<item>prohibit</item>
+	</string-array>
+
+</resources>

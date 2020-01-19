@@ -1,0 +1,71 @@
+<PreferenceScreen
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<PreferenceCategory app:title="@string/interface_settings_header">
+
+		<!-- sap接口地址-->
+		<EditTextPreference
+			app:key="sap_interface_address"
+			app:title="@string/sap_interface_address_title"
+			app:useSimpleSummaryProvider="true" />
+
+		<EditTextPreference
+			app:key="pda_interface_address"
+			app:title="@string/pda_interface_address_title"
+			app:useSimpleSummaryProvider="true" />
+
+		<EditTextPreference
+			app:key="printer_name"
+			app:title="@string/printer_name_title"
+			app:useSimpleSummaryProvider="true" />
+
+	</PreferenceCategory>
+
+	<PreferenceCategory app:title="@string/business_settings_header" >
+
+		<!-- 显示合箱 -->
+		<SwitchPreferenceCompat
+			app:key="display_mergebox"
+			app:title="@string/display_mergebox_title"
+			app:summaryOff="@string/display_mergebox_summary"/>
+
+		<!-- 业务类型 -->
+		<ListPreference
+			app:defaultValue="LowValueConsumptionGoods"
+			app:entries="@array/business_type_entries"
+			app:entryValues="@array/business_type_values"
+			app:key="business_type"
+			app:title="@string/business_type_title"
+			app:useSimpleSummaryProvider="true" />
+
+		<!-- 混批存储 -->
+		<SwitchPreferenceCompat
+			app:key="hybrid_storage"
+			app:title="@string/hybrid_storage_title" />
+
+		<!-- 混批策略 -->
+		<ListPreference
+			app:dependency="hybrid_storage"
+			app:defaultValue="none"
+			app:entries="@array/hybrid_storage_entries"
+			app:entryValues="@array/hybrid_storage_values"
+			app:key="hybrid_storage_strategy"
+			app:title="@string/business_type_title"
+			app:useSimpleSummaryProvider="true" />
+
+	</PreferenceCategory>
+
+	<PreferenceCategory app:title="@string/inventory_header">
+
+		<!-- 盘点方式 -->
+		<ListPreference
+			app:defaultValue="BrightDisk"
+			app:entries="@array/inventory_type_entries"
+			app:entryValues="@array/inventory_type_values"
+			app:key="inventory_method"
+			app:title="@string/inventory_method_title"
+			app:useSimpleSummaryProvider="true" />
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
