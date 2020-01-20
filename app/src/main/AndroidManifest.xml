@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name="com.youvigo.wms.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -67,6 +68,9 @@
             android:name=".inventory.InventoryCheckActivity"
             android:label="@string/inventory_check" />
 
+        <activity
+            android:name=".inventory.SwitchStockLocationActivity"
+            android:label="@string/switch_stock_locations" />
     </application>
 
 </manifest>

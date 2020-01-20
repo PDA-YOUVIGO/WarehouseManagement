@@ -26,7 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.youvigo.wms.base.BaseFragment;
-import com.youvigo.wms.inventory.InventoryCheckActivity;
+import com.youvigo.wms.inventory.SwitchStockLocationActivity;
 import com.youvigo.wms.off.TakeOffActivity;
 import com.youvigo.wms.outstock.NoReservedOutboundActivity;
 import com.youvigo.wms.outstock.OutOfStockActivity;
@@ -150,8 +150,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void launchSwitchLocationsActivity() {
-        // todo switch locations
-        Intent intent = new Intent(context, InventoryCheckActivity.class);
+        Intent intent = new Intent(context, SwitchStockLocationActivity.class);
         startActivity(intent);
     }
 }
