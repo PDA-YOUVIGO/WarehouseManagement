@@ -20,9 +20,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
+import com.youvigo.wms.data.Repository;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.TakeOff;
-import com.youvigo.wms.data.SapRepository;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public class SearchViewModel extends BaseViewModel {
 	// 初始化model层接口，单例提供
 
 	@Inject
-	SapRepository sapRepository;
+	Repository repository;
 
 	/**
 	 * 查询数据
@@ -60,9 +60,13 @@ public class SearchViewModel extends BaseViewModel {
 	void query(String startDate, String endDate, String materialDocument) {
 		_isLoading.setValue(true);
 
+
+		Flowable<List<MaterialVoucher>> shelvings = repository.getShelvings(null);
+
 		Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
 
-			List<MaterialVoucher> mockData = sapRepository.getShelvings(startDate, endDate, materialDocument);
+
+			List<MaterialVoucher> mockData = null;
 
 			emitter.onNext(mockData);
 			emitter.onComplete();

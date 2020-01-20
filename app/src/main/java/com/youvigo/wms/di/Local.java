@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.source.remote;
+package com.youvigo.wms.di;
 
-import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.dto.ShelvingQueryRequest;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-import java.util.List;
+import javax.inject.Scope;
 
-import dagger.Component;
-
-public interface ISapDataSource {
-
-	/**
-	 * 获取入库上架信息
-	 * @return
-	 */
-	List<MaterialVoucher> getShelvings(ShelvingQueryRequest queryRequest);
-
-}
+@Documented
+@Scope
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Local {}

@@ -14,14 +14,24 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data;
+package com.youvigo.wms.di.component;
+
+
+import android.content.Context;
+
+import com.youvigo.wms.di.module.ApplicationModule;
+import com.youvigo.wms.di.module.NetWorkModule;
+import com.youvigo.wms.di.module.RepositoryModule;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
 
 @Singleton
-@Component(modules = {ApplicationModule.class, SapRepositoryModule.class})
-public interface SapRepositoryComponent {
-	SapRepository getRepository();
+@Component(modules = {ApplicationModule.class, RepositoryModule.class, NetWorkModule.class})
+public interface RepositoryComponent {
+
+	Context getContext();
+
+
 }

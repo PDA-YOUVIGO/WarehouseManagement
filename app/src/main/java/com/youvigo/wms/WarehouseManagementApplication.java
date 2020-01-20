@@ -18,21 +18,22 @@ package com.youvigo.wms;
 
 import android.app.Application;
 
-import com.youvigo.wms.data.SapRepositoryComponent;
+import com.youvigo.wms.di.component.DaggerRepositoryComponent;
+import com.youvigo.wms.di.component.RepositoryComponent;
+import com.youvigo.wms.di.module.ApplicationModule;
 
 import timber.log.Timber;
 
 public class WarehouseManagementApplication extends Application {
 
     private static final String TAG = WarehouseManagementApplication.class.getSimpleName();
-    private SapRepositoryComponent sapRepositoryComponent;
+    private RepositoryComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-
-//        sapRepositoryComponent = DaggerSapRepositoryComponent.build();
+        component = DaggerRepositoryComponent.builder().applicationModule(new ApplicationModule(this)).build();
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

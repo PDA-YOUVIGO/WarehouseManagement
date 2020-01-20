@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data;
+package com.youvigo.wms.di;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

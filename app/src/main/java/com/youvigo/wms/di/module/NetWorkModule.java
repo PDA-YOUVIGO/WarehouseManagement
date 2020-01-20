@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data;
+package com.youvigo.wms.di.module;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.preference.PreferenceManager;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.youvigo.wms.BuildConfig;
-import com.youvigo.wms.data.source.local.LocalDataSource;
 import com.youvigo.wms.util.Constants;
 
 import java.util.concurrent.TimeUnit;
@@ -42,35 +37,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class SapRepositoryModule {
-
-	private static final String TAG = SapRepositoryModule.class.getSimpleName();
-
-	@Singleton
-	@Provides
-	LocalDataSource provideLocalDataSource(SharedPreferences sharedPreferences, Context context) {
-		return new LocalDataSource(sharedPreferences, context);
-	}
-
-	@Singleton
-	@Provides
-	SharedPreferences provideSharePreferences(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context);
-	}
-
-	@Singleton
-	@Provides
-	Cache provideCache(Context context) {
-		int cacheSize = 10 * 1024 * 1024; // 10 MiB
-		return new Cache(context.getCacheDir(), cacheSize);
-	}
-
-	@Singleton
-	@Provides
-	Gson provideGson() {
-		GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss");
-		return gsonBuilder.create();
-	}
+public class NetWorkModule {
 
 	@Singleton
 	@Provides

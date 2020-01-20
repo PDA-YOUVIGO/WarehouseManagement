@@ -14,26 +14,35 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data;
+package com.youvigo.wms.data.source.remote;
 
+import com.youvigo.wms.data.api.SapApi;
 import com.youvigo.wms.data.dto.ShelvingQueryRequest;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.reactivex.Flowable;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
 
-public interface SapApi {
+@Singleton
+public class RemoteDataSource implements IRemoteDataSource {
 
-	/**
-	 * 获取SAP入库上架单据
-	 * @param request
-	 *
-	 * @return
-	 */
-	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender")
-	Flowable<List<MaterialVoucher>> getShelvings(@Body ShelvingQueryRequest request);
+	private final String TAG = this.getClass().getSimpleName();
+
+	private SapApi sapApi;
+
+	@Inject
+	public RemoteDataSource(SapApi sapApi) {
+		this.sapApi = sapApi;
+	}
+
+
+	@Override
+	public Flowable<List<MaterialVoucher>> getShelvings(ShelvingQueryRequest queryRequest) {
+		return sapApi.getShelvings(queryRequest);
+	}
 
 }
