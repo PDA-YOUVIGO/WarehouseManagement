@@ -33,7 +33,10 @@ public class WarehouseManagementApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        component = DaggerRepositoryComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        component = DaggerRepositoryComponent
+				.builder()
+				.applicationModule(new ApplicationModule(this))
+				.build();
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

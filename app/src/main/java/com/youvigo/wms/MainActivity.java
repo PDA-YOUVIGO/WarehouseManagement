@@ -25,10 +25,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 
 import com.youvigo.wms.activityresult.ActivityResult;
-import com.youvigo.wms.activityresult.InterceptWith;
-import com.youvigo.wms.inteceptor.LoginInterceptor;
 
-@InterceptWith(LoginInterceptor.class)
+//@InterceptWith(LoginInterceptor.class)
 public class MainActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ActivityResult mActivityResult;

@@ -19,6 +19,9 @@ package com.youvigo.wms.di.component;
 
 import android.content.Context;
 
+import com.youvigo.wms.data.Repository;
+import com.youvigo.wms.data.source.local.LocalDataSource;
+import com.youvigo.wms.data.source.remote.RemoteDataSource;
 import com.youvigo.wms.di.module.ApplicationModule;
 import com.youvigo.wms.di.module.NetWorkModule;
 import com.youvigo.wms.di.module.RepositoryModule;
@@ -32,6 +35,12 @@ import dagger.Component;
 public interface RepositoryComponent {
 
 	Context getContext();
+
+	LocalDataSource getLocalDataSource();
+
+	RemoteDataSource getRemoteDataSource();
+
+	Repository getRepository();
 
 
 }
