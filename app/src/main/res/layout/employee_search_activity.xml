@@ -36,76 +36,22 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/tv_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
-            app:layout_constraintEnd_toStartOf="@id/tv_end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="2010-11-01" />
-
-        <TextView
-            android:id="@+id/tv_end"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
-            app:layout_constraintBottom_toBottomOf="@id/tv_start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_start"
-            app:layout_constraintTop_toTopOf="@id/tv_start"
-            tools:text="2020-01-01" />
-
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_2"
             android:layout_marginTop="@dimen/dp_2"
             android:layout_marginEnd="@dimen/dp_8"
-            android:layout_marginBottom="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
-            android:textSize="14sp"
             android:maxLength="100"
             android:maxLines="1"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
+            android:paddingStart="@dimen/dp_2"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/mbt_query"
-            app:layout_constraintEnd_toStartOf="@id/mbt_query"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/mbt_query" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mbt_query"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:paddingStart="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingEnd="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_2"
-            android:text="@string/query"
-            android:textAppearance="?android:attr/textAppearance"
-            android:textColor="@android:color/white"
-            app:backgroundTint="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/edit_text"
-            app:layout_constraintTop_toBottomOf="@id/tv_end" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -114,7 +60,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mbt_query" />
+            app:layout_constraintTop_toBottomOf="@id/edit_text"
+            tools:listitem="@layout/item_employee_search" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

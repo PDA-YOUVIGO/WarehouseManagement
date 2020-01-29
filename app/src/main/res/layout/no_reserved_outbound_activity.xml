@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. komamj
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/tv_movement_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/movement_type"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_movement_type_description"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_movement_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toTopOf="@id/tv_movement_type"
+            tools:text="Fast" />
+
+        <TextView
+            android:id="@+id/tv_internal_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/internal_order"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toBottomOf="@id/tv_movement_type" />
+
+        <EditText
+            android:id="@+id/et_internal_order"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rectangle"
+            android:gravity="start|center"
+            android:hint="请输入内部订单号..."
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_internal_order"
+            app:layout_constraintEnd_toStartOf="@id/mb_query"
+            app:layout_constraintStart_toEndOf="@id/tv_internal_order"
+            app:layout_constraintTop_toTopOf="@id/tv_internal_order"
+            tools:text="O11wsadsad11111111" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
+            android:text="@string/query"
+            android:textAppearance="?android:attr/textAppearance"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/dp_14"
+            app:backgroundTint="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_internal_order"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_internal_order" />
+
+        <TextView
+            android:id="@+id/tv_employer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/employer"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toBottomOf="@id/tv_internal_order" />
+
+        <TextView
+            android:id="@+id/tv_employer_description"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_employer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_employer"
+            app:layout_constraintTop_toTopOf="@id/tv_employer"
+            tools:text="田家成" />
+
+        <TextView
+            android:id="@+id/tv_receiving_department"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/receiving_department"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toBottomOf="@id/tv_employer" />
+
+        <TextView
+            android:id="@+id/tv_receiving_department_description"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_receiving_department"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_receiving_department"
+            app:layout_constraintTop_toTopOf="@id/tv_receiving_department"
+            tools:text="IT部门" />
+
+        <TextView
+            android:id="@+id/tv_harvest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/harvest"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toBottomOf="@id/tv_receiving_department" />
+
+        <TextView
+            android:id="@+id/tv_harvest_description"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:gravity="start|center"
+            android:maxLines="1"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_harvest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_harvest"
+            app:layout_constraintTop_toTopOf="@id/tv_harvest"
+            tools:text="成都" />
+
+        <TextView
+            android:id="@+id/tv_remark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/remark"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
+            app:layout_constraintTop_toBottomOf="@id/tv_harvest" />
+
+        <EditText
+            android:id="@+id/et_remark"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rectangle"
+            android:gravity="start|center"
+            android:hint="请输入备注信息..."
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_remark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_remark"
+            app:layout_constraintTop_toTopOf="@id/tv_remark" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/dp_4"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_remark" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_16"
+            android:src="@drawable/ic_add_black_24dp"
+            android:tint="@android:color/white"
+            android:tooltipText="新增发货"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            tools:listitem="@layout/item_no_reserved_outbound" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

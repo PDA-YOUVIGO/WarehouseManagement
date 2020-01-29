@@ -14,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name="com.youvigo.wms.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,18 +34,53 @@
         <activity
             android:name="com.youvigo.wms.search.SearchActivity"
             android:label="@string/search" />
+        <activity
+            android:name=".search.MaterialsSearchActivity"
+            android:label="@string/materials_search" />
 
         <activity
-            android:name="com.youvigo.wms.shelving.ShelvingActivity"
+            android:name=".search.EmployeeSearchActivity"
+            android:label="@string/employee_search" />
+
+        <activity
+            android:name=".search.InternalOrderSearchActivity"
+            android:label="@string/internal_order_search" />
+
+        <activity
+            android:name=".shelving.ShelvingActivity"
             android:label="@string/shelving" />
 
         <activity
-            android:name="com.youvigo.wms.product.FinishedProductsActivity"
+            android:name=".product.FinishedProductsActivity"
             android:label="@string/finished_products" />
 
         <activity
-            android:name="com.youvigo.wms.off.TakeOffActivity"
+            android:name=".off.TakeOffActivity"
             android:label="@string/take_off" />
+
+        <activity
+            android:name=".outstock.OutOfStockActivity"
+            android:label="@string/out_of_stock" />
+
+        <activity
+            android:name=".outstock.NoReservedOutboundActivity"
+            android:label="@string/no_reserved_outbound" />
+
+        <activity
+            android:name=".warehouse.WarehouseInventoryActivity"
+            android:label="@string/warehouse_inventory" />
+
+        <activity
+            android:name=".warehouse.PositionMovementActivity"
+            android:label="@string/position_movement" />
+
+        <activity
+            android:name=".inventory.InventoryCheckActivity"
+            android:label="@string/inventory_check" />
+
+        <activity
+            android:name=".inventory.SwitchStockLocationActivity"
+            android:label="@string/switch_stock_locations" />
     </application>
 
 </manifest>

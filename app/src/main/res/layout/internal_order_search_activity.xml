@@ -37,80 +37,35 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tv_material_coding"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/material_coding"
-            android:textSize="@dimen/dp_14"
+            android:layout_marginStart="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_2"
+            android:text="2010-研发项目-基地自研(科伦)"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/et_material_coding"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edit_text"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="start|center"
-            android:hint="请输入物料编码..."
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
-            android:singleLine="true"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_coding"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toTopOf="@id/tv_material_coding" />
-
-        <TextView
-            android:id="@+id/tv_batch_number"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:gravity="start"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/batch_number"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toBottomOf="@id/tv_material_coding" />
-
-        <EditText
-            android:id="@+id/et_batch_number"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_2"
             android:layout_marginEnd="@dimen/dp_8"
             android:background="@drawable/bg_rectangle"
-            android:gravity="start|center"
-            android:hint="请输入批次号..."
+            android:maxLength="100"
             android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
+            android:paddingStart="@dimen/dp_2"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_batch_number"
-            app:layout_constraintTop_toTopOf="@id/tv_batch_number" />
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dp_4"
-            android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_batch_number" />
+            app:layout_constraintTop_toBottomOf="@id/tv_name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -119,8 +74,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:listitem="@layout/item_shelving" />
+            app:layout_constraintTop_toBottomOf="@id/edit_text"
+            tools:listitem="@layout/item_internal_order_search" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

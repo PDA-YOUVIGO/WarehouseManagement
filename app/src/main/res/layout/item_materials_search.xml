@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2020. komamj
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~    https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/dp_4"
+    android:layout_marginStart="@dimen/dp_2"
+    android:layout_marginTop="@dimen/dp_1"
+    android:layout_marginEnd="@dimen/dp_2"
+    app:cardElevation="@dimen/dp_4">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:selectableItemBackground"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_4">
+
+        <TextView
+            android:id="@+id/tv_material_coding_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/material_coding"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_material_coding"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="000001232323"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_coding_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toTopOf="@id/tv_material_coding_description" />
+
+        <TextView
+            android:id="@+id/tv_material_name_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/material_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_coding_description" />
+
+        <TextView
+            android:id="@+id/tv_material_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="吸氧剂"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_name_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_material_name_description"
+            app:layout_constraintTop_toTopOf="@id/tv_material_name_description" />
+
+        <TextView
+            android:id="@+id/tv_specification_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/specification"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_name_description" />
+
+        <TextView
+            android:id="@+id/tv_specification"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="药用级"
+            app:layout_constraintBottom_toBottomOf="@id/tv_specification_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_specification_description"
+            app:layout_constraintTop_toTopOf="@id/tv_specification_description" />
+
+        <TextView
+            android:id="@+id/tv_unit_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="@string/unit"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_specification_description" />
+
+        <TextView
+            android:id="@+id/tv_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="ThoughtWorks"
+            app:layout_constraintBottom_toBottomOf="@id/tv_unit_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_unit_description"
+            app:layout_constraintTop_toTopOf="@id/tv_unit_description" />
+
+        <TextView
+            android:id="@+id/tv_lot_number_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/lot_number"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_unit_description" />
+
+        <TextView
+            android:id="@+id/tv_lot_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="O119000000"
+            app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_lot_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_lot_number_description" />
+
+        <TextView
+            android:id="@+id/tv_demand_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/demand"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_lot_number_description" />
+
+        <TextView
+            android:id="@+id/tv_demand"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="100"
+            app:layout_constraintBottom_toBottomOf="@id/tv_demand_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_demand_description"
+            app:layout_constraintTop_toTopOf="@id/tv_demand_description" />
+
+        <TextView
+            android:id="@+id/tv_picked_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/picked"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_demand_description" />
+
+        <TextView
+            android:id="@+id/tv_picked"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="10"
+            app:layout_constraintBottom_toBottomOf="@id/tv_picked_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_picked_description"
+            app:layout_constraintTop_toTopOf="@id/tv_picked_description" />
+
+        <TextView
+            android:id="@+id/tv_cargo_space_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/cargo_space"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_picked_description" />
+
+        <TextView
+            android:id="@+id/tv_cargo_space"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="101111111"
+            app:layout_constraintBottom_toBottomOf="@id/tv_cargo_space_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_cargo_space_description"
+            app:layout_constraintTop_toTopOf="@id/tv_cargo_space_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

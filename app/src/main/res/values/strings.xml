@@ -42,6 +42,9 @@
     <string name="switch_stock_locations">切换库存地</string>
     <string name="exit">退出</string>
     <string name="search">查询</string>
+    <string name="materials_search">物料查询</string>
+    <string name="employee_search">员工查询</string>
+    <string name="internal_order_search">内部订单查询</string>
     <!--shelving-->
     <string name="material_document">物料凭证</string>
     <string name="query">查询</string>
@@ -69,6 +72,7 @@
     <string name="receiving_department">领用部门</string>
     <string name="document_date">单据日期</string>
     <string name="specification">规格</string>
+<<<<<<< HEAD
     <string name="basic_order">基本单</string>
 
     <string name="invalid_username">Not a valid username</string>
@@ -91,4 +95,38 @@
     <string name="inventory_method_title">Inventory Method</string>
     <string name="inventory_header">Inventory Settings</string>
     <string name="hybrid_storage_title">Hybrid storage</string>
+=======
+    <string name="basic_order">基本单位</string>
+
+    <!--out of stock-->
+    <string name="document_number">单据编号</string>
+    <string name="movement_type">移动类型</string>
+    <string name="cost_center">成本中心</string>
+    <string name="internal_order">内部订单</string>
+    <string name="employer">领用人</string>
+    <string name="harvest">收货地</string>
+    <string name="remark">备注</string>
+
+    <!--warehouse-->
+    <string name="voucher_number">凭证号</string>
+    <string name="material_name">物料名称</string>
+    <string name="demand">需求量</string>
+    <string name="unit">单位</string>
+    <string name="picked">已拣</string>
+    <string name="cargo_space">货位</string>
+
+    <string name="item_description">物料描述</string>
+    <string name="position">仓位</string>
+
+    <string name="out">出库</string>
+    <string name="in">拣货</string>
+    <string name="employee_code">员工编码</string>
+    <string name="employee_name">员工姓名</string>
+    <string name="department_code">部门编码</string>
+    <string name="department_name">部门名称</string>
+    <string name="internal_order_number">订单号</string>
+    <string name="description">描述</string>
+    <string name="factory">工厂</string>
+    <string name="material_batch">物料批次</string>
+>>>>>>> master
 </resources>

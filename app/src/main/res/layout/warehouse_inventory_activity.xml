@@ -37,104 +37,38 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tv_task_number"
+            android:id="@+id/tv_voucher_number"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="@string/task_number"
+            android:text="@string/voucher_number"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_receiving_department"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/et_task_number"
+            android:id="@+id/et_voucher_number"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
             android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
-            android:hint="请输入任务号..."
+            android:hint="请输入凭证号..."
             android:maxLines="1"
             android:paddingStart="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_task_number"
+            app:layout_constraintBottom_toBottomOf="@id/tv_voucher_number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_task_number"
-            app:layout_constraintTop_toTopOf="@id/tv_task_number" />
-
-        <TextView
-            android:id="@+id/tv_receiving_department"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:gravity="start"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/receiving_department"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_task_number" />
-
-        <EditText
-            android:id="@+id/et_receiving_department"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="start|center"
-            android:hint="请输入领用部门..."
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
-            android:singleLine="true"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_receiving_department"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_receiving_department"
-            app:layout_constraintTop_toTopOf="@id/tv_receiving_department" />
-
-        <TextView
-            android:id="@+id/tv_document_date"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginTop="@dimen/dp_8"
-            android:gravity="start"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/document_date"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_task_number"
-            app:layout_constraintTop_toBottomOf="@id/tv_receiving_department" />
-
-        <EditText
-            android:id="@+id/et_document_date"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="start|center"
-            android:hint="请输入单据日期..."
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
-            android:singleLine="true"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_document_date"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_document_date"
-            app:layout_constraintTop_toTopOf="@id/tv_document_date" />
+            app:layout_constraintStart_toEndOf="@id/tv_voucher_number"
+            app:layout_constraintTop_toTopOf="@id/tv_voucher_number" />
 
         <View
             android:id="@+id/divider"
@@ -144,7 +78,7 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_document_date" />
+            app:layout_constraintTop_toBottomOf="@id/tv_voucher_number" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -154,7 +88,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:listitem="@layout/item_shelving" />
+            tools:listitem="@layout/item_warehouse_inventory" />
 
         <ProgressBar
             android:id="@+id/progress_bar"
