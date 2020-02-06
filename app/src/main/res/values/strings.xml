@@ -72,8 +72,6 @@
     <string name="receiving_department">领用部门</string>
     <string name="document_date">单据日期</string>
     <string name="specification">规格</string>
-<<<<<<< HEAD
-    <string name="basic_order">基本单</string>
 
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Invalid password</string>
@@ -95,7 +93,6 @@
     <string name="inventory_method_title">Inventory Method</string>
     <string name="inventory_header">Inventory Settings</string>
     <string name="hybrid_storage_title">Hybrid storage</string>
-=======
     <string name="basic_order">基本单位</string>
 
     <!--out of stock-->
@@ -128,5 +125,4 @@
     <string name="description">描述</string>
     <string name="factory">工厂</string>
     <string name="material_batch">物料批次</string>
->>>>>>> master
 </resources>

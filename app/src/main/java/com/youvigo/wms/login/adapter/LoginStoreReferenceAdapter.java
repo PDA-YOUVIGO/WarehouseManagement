@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.adapter;
+package com.youvigo.wms.login.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

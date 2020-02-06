@@ -84,7 +84,6 @@
             android:paddingTop="@dimen/dp_2"
             android:paddingBottom="@dimen/dp_2"
             android:singleLine="true"
-            android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/mbt_query"
             app:layout_constraintEnd_toStartOf="@id/mbt_query"
             app:layout_constraintStart_toStartOf="parent"

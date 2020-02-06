@@ -21,6 +21,8 @@ import android.app.Application;
 import com.youvigo.wms.di.component.DaggerRepositoryComponent;
 import com.youvigo.wms.di.component.RepositoryComponent;
 import com.youvigo.wms.di.module.ApplicationModule;
+import com.youvigo.wms.di.module.NetWorkModule;
+import com.youvigo.wms.di.module.RepositoryModule;
 
 import timber.log.Timber;
 
@@ -36,6 +38,8 @@ public class WarehouseManagementApplication extends Application {
         component = DaggerRepositoryComponent
 				.builder()
 				.applicationModule(new ApplicationModule(this))
+                .repositoryModule(new RepositoryModule())
+                .netWorkModule(new NetWorkModule())
 				.build();
 
         if (BuildConfig.DEBUG) {

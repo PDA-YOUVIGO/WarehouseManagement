@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.youvigo.wms.BuildConfig;
+import com.youvigo.wms.data.api.SapApi;
 import com.youvigo.wms.util.Constants;
 
 import java.util.concurrent.TimeUnit;
@@ -43,6 +44,12 @@ public class NetWorkModule {
 	@Provides
 	Retrofit provideRetrofit(Gson gson, OkHttpClient client) {
 		return new Retrofit.Builder().baseUrl(Constants.SAP_URL).client(client).addConverterFactory(GsonConverterFactory.create(gson)).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build();
+	}
+
+	@Singleton
+	@Provides
+	SapApi provideSapApi(Retrofit retrofit) {
+		return retrofit.create(SapApi.class);
 	}
 
 	@Singleton
