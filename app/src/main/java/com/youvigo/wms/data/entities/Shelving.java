@@ -22,7 +22,7 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
-import com.youvigo.wms.data.dto.Additional;
+import com.youvigo.wms.data.dto.base.Additional;
 
 public class Shelving implements Parcelable {
 

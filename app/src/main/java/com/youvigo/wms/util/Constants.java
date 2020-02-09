@@ -18,12 +18,13 @@ package com.youvigo.wms.util;
 
 public class Constants {
 
+    public static final String SAP_URL = "http://52.82.87.90:50000/";
+    public static final String PDA_URL = "http://52.83.32.16:8081/";
+    public static final String SAP_USERNAME = "zengzx";
+    public static final String SAP_PASSWORD = "abcd1234";
+
     public static final String DATE_TIME_PATTERN = "yyyyMMdd";
-    public static final String SAP_URL = "";
-    public static final String PDA_URL = "";
     public static final String SAP_ADDRESS = "sap_address";
-    public static final String SAP_USERNAME = "sap_username";
-    public static final String SAP_PASSWORD = "sap_password";
     public static final String PDA_ADDRESS = "pda_address";
     public static final String FACTORY = "factory_code";
     public static final String STOCKLOCATION = "stocklocation";
@@ -33,7 +34,6 @@ public class Constants {
     // response
     public static final String SAP_RESPONSE_RES_CODE = "res_code";
     public static final String RESPONSE_RES_MESSAGE = "res_message";
-
 
     public static final String SEARCH_RESULT = "search_result";
     public static final String CATEGORY = "category";

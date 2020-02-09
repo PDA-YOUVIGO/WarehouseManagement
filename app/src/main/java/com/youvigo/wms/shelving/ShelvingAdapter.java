@@ -51,7 +51,9 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
     class ShelvingVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView itemNumber;
         private final TextView commonName;
-        private final TextView lotNumber;
+        private final TextView batchNumber;
+        private final TextView quantity;
+        private final TextView unit;
 
         ShelvingVH(@NonNull View itemView) {
             super(itemView);
@@ -60,13 +62,17 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
 
             itemNumber = itemView.findViewById(R.id.tv_item_number);
             commonName = itemView.findViewById(R.id.tv_common_name);
-            lotNumber = itemView.findViewById(R.id.tv_lot_number);
+            batchNumber = itemView.findViewById(R.id.tv_batch_number);
+            quantity = itemView.findViewById(R.id.tv_quantity);
+            unit = itemView.findViewById(R.id.tv_unit);
         }
 
         void bind(Shelving shelving) {
             itemNumber.setText(shelving.getMaterialVoucherCode());
             commonName.setText(shelving.commonName);
-            lotNumber.setText(shelving.batchNumber);
+            batchNumber.setText(shelving.batchNumber);
+            quantity.setText(String.valueOf(shelving.getBasicQuantity()));
+            unit.setText(shelving.getBaseUnitTxt());
         }
 
         @Override

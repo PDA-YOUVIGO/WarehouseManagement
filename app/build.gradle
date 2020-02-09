@@ -54,10 +54,10 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     // Dagger 2.x
-    implementation "com.google.dagger:dagger-android:$daggerVersion"
-    implementation "com.google.dagger:dagger-android-support:$daggerVersion" // if you use the support libraries
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+//    implementation "com.google.dagger:dagger-android:$daggerVersion"
+//    implementation "com.google.dagger:dagger-android-support:$daggerVersion" // if you use the support libraries
+//    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+//    annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.mockito:mockito-core:$mockitoCoreVersion"
@@ -66,6 +66,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.preference:preference:1.1.0'
-    implementation 'androidx.navigation:navigation-fragment:2.1.0'
-    implementation 'androidx.navigation:navigation-ui:2.1.0'
+    implementation 'androidx.navigation:navigation-fragment:2.2.1'
+    implementation 'androidx.navigation:navigation-ui:2.2.1'
 }

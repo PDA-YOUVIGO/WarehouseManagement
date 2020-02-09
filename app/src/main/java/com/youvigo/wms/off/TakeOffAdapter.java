@@ -64,7 +64,7 @@ public class TakeOffAdapter extends ListAdapter<TakeOff, TakeOffAdapter.TakeOffV
             materialName = itemView.findViewById(R.id.tv_material_name);
             basicOrder = itemView.findViewById(R.id.tv_basic_order);
             specification = itemView.findViewById(R.id.tv_specification);
-            lotNumber = itemView.findViewById(R.id.tv_lot_number);
+            lotNumber = itemView.findViewById(R.id.tv_batch_number);
         }
 
         void bind(TakeOff takeOff) {

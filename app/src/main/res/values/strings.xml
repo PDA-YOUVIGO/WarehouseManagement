@@ -56,7 +56,6 @@
     <string name="date_hint">请输入日期</string>
     <string name="item_number">物料编号</string>
     <string name="common_name">通用名称</string>
-    <string name="lot_number">批号</string>
 
     <!--FinishedProduct-->
     <string name="material_coding">物料编码</string>
@@ -125,4 +124,7 @@
     <string name="description">描述</string>
     <string name="factory">工厂</string>
     <string name="material_batch">物料批次</string>
+    <string name="shelving_quantity">上架数量</string>
+    <string name="main_quantity">主数量</string>
+    <string name="auxiliary_quantity">辅数量</string>
 </resources>

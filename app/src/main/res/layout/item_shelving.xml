@@ -83,29 +83,68 @@
             tools:text="吸氧剂" />
 
         <TextView
-            android:id="@+id/tv_lot_number_description"
+            android:id="@+id/tv_batch_number_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/lot_number"
-            android:textSize="@dimen/dp_14"
-            android:textColor="@color/colorPrimary"
             android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/batch_number"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_common_name_description" />
+            app:layout_constraintEnd_toEndOf="@id/tv_common_name_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_number" />
 
         <TextView
-            android:id="@+id/tv_lot_number"
+            android:id="@+id/tv_batch_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_lot_number_description"
-            app:layout_constraintTop_toTopOf="@id/tv_lot_number_description"
+            app:layout_constraintStart_toEndOf="@id/tv_batch_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_batch_number_description"
             tools:text="O119000000" />
+
+        <TextView
+            android:id="@+id/tv_quantity_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:gravity="start"
+            android:text="@string/shelving_quantity"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_common_name_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_batch_number_description" />
+
+        <TextView
+            android:id="@+id/tv_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_quantity_description"
+            app:layout_constraintStart_toEndOf="@id/tv_quantity_description"
+            app:layout_constraintTop_toTopOf="@id/tv_quantity_description"
+            tools:text="212121" />
+
+        <TextView
+            android:id="@+id/tv_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:textColor="@color/colorAccent"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_quantity"
+            app:layout_constraintStart_toEndOf="@id/tv_quantity"
+            app:layout_constraintTop_toTopOf="@id/tv_quantity"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="瓶" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

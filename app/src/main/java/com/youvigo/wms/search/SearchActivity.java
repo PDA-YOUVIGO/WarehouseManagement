@@ -25,13 +25,14 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -123,8 +124,9 @@ public class SearchActivity extends AppCompatActivity {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN);
             LocalDate localDateStart = LocalDate.parse(this.startDate.getText().toString());
             LocalDate localDateEnd = LocalDate.parse(this.endDate.getText().toString());
+            String year = String.valueOf(localDateStart.getYear());
 
-            viewModel.query(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), editText.getText() == null ? "" : editText.getText().toString());
+            viewModel.query(year,localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), editText.getText() == null ? "" : editText.getText().toString());
         });
 
         editText = findViewById(R.id.edit_text);
@@ -141,10 +143,20 @@ public class SearchActivity extends AppCompatActivity {
      * 观察数据变化
      */
     private void observeData() {
-        viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+        viewModel = new ViewModelProvider.NewInstanceFactory().create(SearchViewModel.class);
+
+        //viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
         viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
         viewModel.materials().observe(this, materials -> adapter.submitList(materials));
+
+        // 显示查询结果信息
+        viewModel.getQueryState().observe(this, queryState -> {
+            if (queryState == null) return;
+            if (!queryState.isSuccess()) {
+                Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

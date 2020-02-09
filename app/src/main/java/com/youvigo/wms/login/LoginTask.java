@@ -21,7 +21,7 @@ import android.os.AsyncTask;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.youvigo.wms.common.Result;
-import com.youvigo.wms.dto.LoggedInUserResponseEntity;
+import com.youvigo.wms.data.dto.login.LoggedInUserResponseEntity;
 
 import java.io.IOException;
 

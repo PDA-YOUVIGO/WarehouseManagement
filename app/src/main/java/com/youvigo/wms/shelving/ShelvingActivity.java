@@ -23,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,12 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
-import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
-
-import java.util.List;
 
 import timber.log.Timber;
 
@@ -85,30 +80,20 @@ public class ShelvingActivity extends BaseActivity {
 
     private void observeData() {
         viewModel = ViewModelProviders.of(this).get(ShelvingViewModel.class);
-        viewModel.material().observe(this, new Observer<MaterialVoucher>() {
-            @Override
-            public void onChanged(MaterialVoucher materialVoucher) {
-                if (materialVoucher != null) {
-                    materialDocument.setText(materialVoucher.orderNumber);
-                    sourceUnit.setText(materialVoucher.supplierName);
-                    date.setText(materialVoucher.date);
-                }
+
+        viewModel.material().observe(this, materialVoucher -> {
+            if (materialVoucher != null) {
+                materialDocument.setText(materialVoucher.orderNumber);
+                sourceUnit.setText(materialVoucher.supplierName);
+                date.setText(materialVoucher.date);
             }
         });
 
-        viewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isActive) {
-                progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
-            }
-        });
+        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
 
-        viewModel.shelvings().observe(this, new Observer<List<Shelving>>() {
-            @Override
-            public void onChanged(List<Shelving> shelvings) {
-                if (shelvings != null && !shelvings.isEmpty()) {
-                    adapter.submitList(shelvings);
-                }
+        viewModel.shelvings().observe(this, shelvings -> {
+            if (shelvings != null && !shelvings.isEmpty()) {
+                adapter.submitList(shelvings);
             }
         });
     }

@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,11 +54,14 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     // 货位码
     private TextView cargoCode;
     // 未上架
-    private TextView notListedFirst, notListedSecond;
+    private TextView notOnShelvesQuantity, notOnShelvesUnit;
     // 已上架
-    private TextView listedFirst, listedSecond;
+    private TextView onShelveQuantity, OnShelvesUnit;
     // 当前上架
-    private EditText listingFirst, listingSecond, listingThird, listingFourth;
+    private EditText onShelvesMainQuantity, onShelvesAuxiliayQuantity;
+
+    // 单位
+    private Spinner mainUnit, auxiliaryUnit;
 
     private Context context;
 
@@ -118,6 +122,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
                         // 点击确定时回调
+
                     }
                 })
                 .setView(view)
@@ -131,13 +136,23 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         specification = view.findViewById(R.id.tv_specification_description);
         supplierBatch = view.findViewById(R.id.tv_supplier_batch_description);
         cargoCode = view.findViewById(R.id.tv_cargo_code_description);
-        notListedFirst = view.findViewById(R.id.tv_not_listed_description_first);
-        notListedSecond = view.findViewById(R.id.tv_not_listed_description_second);
-        listedFirst = view.findViewById(R.id.tv_listed_description_first);
-        listedSecond = view.findViewById(R.id.tv_listed_description_second);
-        listingFirst = view.findViewById(R.id.tv_listing_description_first);
-        listingSecond = view.findViewById(R.id.tv_listing_description_second);
-        listingThird = view.findViewById(R.id.tv_listing_description_third);
-        listingFourth = view.findViewById(R.id.tv_listing_description_fourth);
+        notOnShelvesQuantity = view.findViewById(R.id.tv_not_on_shelves_quantity);
+        notOnShelvesUnit = view.findViewById(R.id.tv_not_on_shelves_unit);
+        onShelveQuantity = view.findViewById(R.id.tv_on_shelve_quantity);
+        OnShelvesUnit = view.findViewById(R.id.tv_on_shelves_unit);
+        onShelvesMainQuantity = view.findViewById(R.id.tv_on_shelves_main_quantity);
+        mainUnit = view.findViewById(R.id.sp_main_unit);
+        onShelvesAuxiliayQuantity = view.findViewById(R.id.tv_on_shelves_auxiliay_quantity);
+        auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
+
+        materialCoding.setText(shelving.getMaterialNumber());
+        materialName.setText(shelving.getMaterialDescription());
+        batchNumber.setText(shelving.getBatchNumber());
+        specification.setText(shelving.getSpecifications());
+        supplierBatch.setText(shelving.getSupplierBatchNumber());
+        notOnShelvesUnit.setText(shelving.getBaseUnitTxt());
+        OnShelvesUnit.setText(shelving.getBaseUnitTxt());
+        notOnShelvesQuantity.setText(String.valueOf(shelving.getBasicQuantity()));
+
     }
 }

@@ -132,13 +132,13 @@
             tools:text="KG" />
 
         <TextView
-            android:id="@+id/tv_lot_number_description"
+            android:id="@+id/tv_batch_number_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
-            android:text="@string/lot_number"
+            android:text="@string/batch_number"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -146,15 +146,15 @@
             app:layout_constraintTop_toBottomOf="@id/tv_basic_order_description" />
 
         <TextView
-            android:id="@+id/tv_lot_number"
+            android:id="@+id/tv_batch_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_lot_number_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_lot_number_description"
-            app:layout_constraintTop_toTopOf="@id/tv_lot_number_description"
+            app:layout_constraintStart_toEndOf="@id/tv_batch_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_batch_number_description"
             tools:text="O119000000" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
