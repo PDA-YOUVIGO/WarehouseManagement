@@ -8,23 +8,23 @@ public class MaterialUnit {
 	 * 单位数量
 	 */
 	@SerializedName("UMREN")
-	public String umren;
+	private String umren;
 
 	/** 单位编码 */
 	@SerializedName("MEINH")
-	public String meinh;
+	private String meinh;
 
 	/**
 	 * 单位中文名称
 	 */
 	@SerializedName("MSEH3")
-	public String mseh3;
+	private String mseh3;
 
 	/**
 	 * 基本单位换算数量
 	 */
 	@SerializedName("UMREZ")
-	public String umrez;
+	private String umrez;
 
 	public String getUmren() {
 		return umren;
@@ -66,5 +66,10 @@ public class MaterialUnit {
 		this.meinh = meinh;
 		this.mseh3 = mseh3;
 		this.umrez = umrez;
+	}
+
+	@Override
+	public String toString() {
+		return mseh3;
 	}
 }

@@ -103,7 +103,7 @@ public class OutOfStockDetailDialogFragment extends DialogFragment {
     @NotNull
     private AlertDialog buildDialog(View view) {
         return new AlertDialog.Builder(context)
-                .setTitle(R.string.detail)
+                .setTitle(R.string.on_shelving_detail)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {

@@ -1,6 +1,5 @@
 package com.youvigo.wms.data.backend;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
@@ -31,10 +30,10 @@ public class RetrofitClient {
 		private static RetrofitClient INSTANCE = new RetrofitClient();
 	}
 
-	public static RetrofitClient getInstance(Context context) {
-		if (context != null) {
-			Timber.d("Init RetrofitClient.");
-		}
+	public static RetrofitClient getInstance() {
+
+		Timber.d("Init RetrofitClient.");
+
 		return SingletonHolder.INSTANCE;
 	}
 

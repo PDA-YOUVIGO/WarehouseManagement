@@ -23,10 +23,58 @@ import com.google.gson.annotations.SerializedName;
  * @param <T>
  */
 public class ApiResponse<T> {
+
+	@SerializedName("code")
 	private int code;
+
+	@SerializedName("success")
 	private boolean success;
+
+	@SerializedName("data")
 	private T data;
 
 	@SerializedName("msg")
 	private String message;
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	public T getData() {
+		return data;
+	}
+
+	public void setData(T data) {
+		this.data = data;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public ApiResponse() {
+	}
+
+	public ApiResponse(int code, boolean success, T data, String message) {
+		this.code = code;
+		this.success = success;
+		this.data = data;
+		this.message = message;
+	}
 }

@@ -3,7 +3,6 @@ package com.youvigo.wms.search;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.youvigo.wms.BaseApplication;
 import com.youvigo.wms.base.BaseViewModel;
 import com.youvigo.wms.common.ResultState;
 import com.youvigo.wms.data.backend.RetrofitClient;
@@ -51,7 +50,7 @@ public class SearchViewModel extends BaseViewModel {
 	void query(String year,String startDate, String endDate, String materialDocument) {
 		_isLoading.setValue(true);
 
-		RetrofitClient retrofitClient = RetrofitClient.getInstance(BaseApplication.getContext());
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
 		SapService sapService = retrofitClient.getSapService();
 

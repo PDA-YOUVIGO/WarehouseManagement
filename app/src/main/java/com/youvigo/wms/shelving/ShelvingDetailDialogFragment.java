@@ -34,6 +34,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.BackendApi;
+import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
 import com.youvigo.wms.data.entities.Shelving;
 
@@ -41,6 +45,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShelvingDetailDialogFragment extends DialogFragment {
     private static final String TAG = "ShelvingDetailDialogFragment";
@@ -66,18 +74,16 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     private EditText onShelvesMainQuantity, onShelvesAuxiliayQuantity;
 
     // 单位
-    private Spinner mainUnit, auxiliaryUnit;
+    private Spinner auxiliaryUnit;
+    private TextView mainUnit;
 
     private Context context;
 
     private Shelving shelving;
 
     // MaterialUnit中的单位名称
-    private List<String> mainUnits = new ArrayList<>();
-    private List<String> auxiliaryUnits = new ArrayList<>();
-
-    private ArrayAdapter<String> mainUnitsAdapter;
-    private ArrayAdapter<String> auxiliaryUnitsAdapter;
+    private List<MaterialUnit> auxiliaryUnits = new ArrayList<>();
+    private ArrayAdapter<MaterialUnit> auxiliaryUnitsAdapter;
 
     /**
      * 展示详情页面
@@ -109,18 +115,46 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
             shelving = getArguments().getParcelable(KEY_SHELVING);
         }
 
-        initUnits();
+        initUnits(shelving.getMaterialNumber());
     }
 
-    private void initUnits() {
-        mainUnits.add("个");
-        mainUnits.add("单");
-        mainUnits.add("辆");
+    /**
+     * 获取物料档案
+     * @param materialCode 物料编码
+     */
+    private void initUnits(String materialCode) {
 
-        auxiliaryUnits.add("个");
-        auxiliaryUnits.add("单");
-        auxiliaryUnits.add("辆");
-        auxiliaryUnits.add("张");
+        BackendApi backendApi = RetrofitClient.getInstance().getBackendApi();
+        Call<ApiResponse<List<Material>>> call = backendApi.getMaterial(materialCode);
+
+        call.enqueue(new Callback<ApiResponse<List<Material>>>() {
+            @Override
+            public void onResponse(@NotNull Call<ApiResponse<List<Material>>> call, @NotNull Response<ApiResponse<List<Material>>> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse<List<Material>> result = response.body();
+                    List<Material> materials = result.getData();
+
+                    if (materials != null && materials.size() > 0) {
+                        Material material = materials.get(0);
+                        List<MaterialUnit> units = material.getUnits();
+                        if (units.isEmpty()) {
+                            MaterialUnit materialUnit = new MaterialUnit();
+                            materialUnit.setMseh3(shelving.getAuxiliaryUnitTxt());
+                            auxiliaryUnits.add(materialUnit);
+                        } else {
+                            auxiliaryUnits.addAll(units);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<List<Material>>> call, @NotNull Throwable t) {
+
+            }
+        });
+
     }
 
     @NonNull
@@ -136,7 +170,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     @NotNull
     private AlertDialog buildDialog(View view) {
         return new AlertDialog.Builder(context)
-                .setTitle(R.string.detail)
+                .setTitle(R.string.on_shelving_detail)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
@@ -170,6 +204,18 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         onShelvesAuxiliayQuantity = view.findViewById(R.id.tv_on_shelves_auxiliay_quantity);
         auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
 
+        //auxiliaryUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //    @Override
+        //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //
+        //    }
+        //
+        //    @Override
+        //    public void onNothingSelected(AdapterView<?> parent) {
+        //
+        //    }
+        //});
+
         materialCoding.setText(shelving.getMaterialNumber());
         materialName.setText(shelving.getMaterialDescription());
         batchNumber.setText(shelving.getBatchNumber());
@@ -177,16 +223,16 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         supplierBatch.setText(shelving.getSupplierBatchNumber());
         notOnShelvesUnit.setText(shelving.getBaseUnitTxt());
         OnShelvesUnit.setText(shelving.getBaseUnitTxt());
+        mainUnit.setText(shelving.getBaseUnitTxt());
         notOnShelvesQuantity.setText(String.valueOf(shelving.getBasicQuantity()));
 
-        mainUnit = view.findViewById(R.id.sp_main_unit);
-        auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
+        //mainUnitsAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, mainUnits);
+        //mainUnitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //mainUnit.setAdapter(mainUnitsAdapter);
 
-        mainUnitsAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, mainUnits);
-        mainUnitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mainUnit.setAdapter(mainUnitsAdapter);
-
-        auxiliaryUnitsAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, auxiliaryUnits);
+        auxiliaryUnitsAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, auxiliaryUnits);
         auxiliaryUnit.setAdapter(auxiliaryUnitsAdapter);
+        auxiliaryUnit.setPrompt("请选择辅计量单位");
+        auxiliaryUnit.setSelection(0, true);
     }
 }

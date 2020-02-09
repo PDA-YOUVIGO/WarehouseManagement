@@ -18,7 +18,9 @@ package com.youvigo.wms.data.backend.api;
 
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocationResponse;
-import com.youvigo.wms.data.dto.response.MaterialResponse;
+import com.youvigo.wms.data.dto.response.Material;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -41,6 +43,6 @@ public interface BackendApi {
 	 * 获取物料单位
 	 * @param matnr 物料编码
 	 */
-	@GET("blade-data/api/material/detail?matnr={1}")
-	Call<ApiResponse<MaterialResponse>> getMaterial(@Query("matnr") String matnr);
+	@GET("blade-data/api/material/detail")
+	Call<ApiResponse<List<Material>>> getMaterial(@Query("matnr") String matnr);
 }
