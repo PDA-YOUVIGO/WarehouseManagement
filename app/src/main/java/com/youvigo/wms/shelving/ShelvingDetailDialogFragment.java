@@ -120,6 +120,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
 
     /**
      * 获取物料档案
+     *
      * @param materialCode 物料编码
      */
     private void initUnits(String materialCode) {
@@ -144,8 +145,8 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
                         } else {
                             auxiliaryUnits.addAll(units);
                         }
-
                     }
+                    auxiliaryUnitsAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -230,7 +231,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         //mainUnitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //mainUnit.setAdapter(mainUnitsAdapter);
 
-        auxiliaryUnitsAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, auxiliaryUnits);
+        auxiliaryUnitsAdapter = new ArrayAdapter<>(context, R.layout.item_spinner, auxiliaryUnits);
         auxiliaryUnit.setAdapter(auxiliaryUnitsAdapter);
         auxiliaryUnit.setPrompt("请选择辅计量单位");
         auxiliaryUnit.setSelection(0, true);
