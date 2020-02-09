@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,9 +34,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.data.dto.response.MaterialUnit;
 import com.youvigo.wms.data.entities.Shelving;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShelvingDetailDialogFragment extends DialogFragment {
     private static final String TAG = "ShelvingDetailDialogFragment";
@@ -67,6 +72,13 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
 
     private Shelving shelving;
 
+    // MaterialUnit中的单位名称
+    private List<String> mainUnits = new ArrayList<>();
+    private List<String> auxiliaryUnits = new ArrayList<>();
+
+    private ArrayAdapter<String> mainUnitsAdapter;
+    private ArrayAdapter<String> auxiliaryUnitsAdapter;
+
     /**
      * 展示详情页面
      *
@@ -96,6 +108,19 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         if (getArguments() != null) {
             shelving = getArguments().getParcelable(KEY_SHELVING);
         }
+
+        initUnits();
+    }
+
+    private void initUnits() {
+        mainUnits.add("个");
+        mainUnits.add("单");
+        mainUnits.add("辆");
+
+        auxiliaryUnits.add("个");
+        auxiliaryUnits.add("单");
+        auxiliaryUnits.add("辆");
+        auxiliaryUnits.add("张");
     }
 
     @NonNull
@@ -154,5 +179,14 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         OnShelvesUnit.setText(shelving.getBaseUnitTxt());
         notOnShelvesQuantity.setText(String.valueOf(shelving.getBasicQuantity()));
 
+        mainUnit = view.findViewById(R.id.sp_main_unit);
+        auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
+
+        mainUnitsAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, mainUnits);
+        mainUnitsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mainUnit.setAdapter(mainUnitsAdapter);
+
+        auxiliaryUnitsAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, auxiliaryUnits);
+        auxiliaryUnit.setAdapter(auxiliaryUnitsAdapter);
     }
 }

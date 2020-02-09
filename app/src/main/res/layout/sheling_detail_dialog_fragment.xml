@@ -64,8 +64,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_2"
         android:maxLines="2"
-        android:text="气泡袋气泡袋气泡袋气泡"
         android:singleLine="true"
+        android:text="气泡袋气泡袋气泡袋气泡"
         android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_material_name"
         app:layout_constraintEnd_toEndOf="parent"
@@ -260,13 +260,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_2"
         android:layout_marginEnd="@dimen/dp_2"
-        android:hint="@string/main_quantity"
+        android:background="@drawable/bg_rectangle"
         android:digits="1234567890"
+        android:hint="@string/main_quantity"
         android:inputType="number"
+        android:paddingStart="@dimen/dp_2"
         android:singleLine="true"
         android:textSize="@dimen/dp_14"
-        android:background="@drawable/bg_rectangle"
-        android:paddingStart="@dimen/dp_2"
         app:layout_constraintBottom_toBottomOf="@id/tv_listing"
         app:layout_constraintEnd_toStartOf="@id/sp_main_unit"
         app:layout_constraintStart_toEndOf="@id/tv_listing"
@@ -274,15 +274,12 @@
 
     <Spinner
         android:id="@+id/sp_main_unit"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_2"
-        android:layout_marginEnd="@dimen/dp_2"
-        android:background="@drawable/bg_rectangle"
-        android:paddingStart="@dimen/dp_2"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="@id/tv_listing"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_on_shelves_main_quantity"
         app:layout_constraintTop_toTopOf="@id/tv_listing" />
 
     <EditText
@@ -292,12 +289,12 @@
         android:layout_marginStart="@dimen/dp_2"
         android:layout_marginTop="@dimen/dp_2"
         android:layout_marginEnd="@dimen/dp_2"
-        android:textSize="@dimen/dp_14"
+        android:background="@drawable/bg_rectangle"
         android:hint="@string/auxiliary_quantity"
         android:inputType="numberDecimal"
-        android:singleLine="true"
-        android:background="@drawable/bg_rectangle"
         android:paddingStart="@dimen/dp_2"
+        android:singleLine="true"
+        android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sp_auxiliary_unit"
         app:layout_constraintStart_toEndOf="@id/tv_listing"
@@ -305,16 +302,12 @@
 
     <Spinner
         android:id="@+id/sp_auxiliary_unit"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_2"
-        android:layout_marginEnd="@dimen/dp_2"
-        android:background="@drawable/bg_rectangle"
-        android:paddingStart="@dimen/dp_2"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
         app:layout_constraintBottom_toBottomOf="@id/tv_on_shelves_auxiliay_quantity"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_on_shelves_auxiliay_quantity"
         app:layout_constraintTop_toTopOf="@id/tv_on_shelves_auxiliay_quantity" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
