@@ -25,7 +25,7 @@ public class LocalDataSource {
 	}
 
 	public String getFactoryCode() {
-		return mSharedPreferences.getString(Constants.FACTORY, null);
+		return mSharedPreferences.getString(Constants.FACTORYCODE, null);
 	}
 
 	public String getStockLocationCode() {

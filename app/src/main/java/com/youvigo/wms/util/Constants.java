@@ -18,15 +18,22 @@ package com.youvigo.wms.util;
 
 public class Constants {
 
+    // 扫描广播
+    public static final String BROADCAST_ENABLE = "enable_disable_barcode";
+    public static final String BROADCAST_RESULT = "nlscan.action.SCANNER_RESULT";
+
     public static final String SAP_URL = "http://52.82.87.90:50000/";
     public static final String PDA_URL = "http://52.83.32.16:8081/";
     public static final String SAP_USERNAME = "zengzx";
     public static final String SAP_PASSWORD = "abcd1234";
+    public static final String ACCOUNT = "account";
+    public static final String USERNAME = "username";
 
-    public static final String DATE_TIME_PATTERN = "yyyyMMdd";
+    public static final String DATE_PATTERN = "yyyyMMdd";
+    public static final String DATETIME_PATTERN = "yyyy-MM-dd hh:mm:ss";
     public static final String SAP_ADDRESS = "sap_address";
     public static final String PDA_ADDRESS = "pda_address";
-    public static final String FACTORY = "factory_code";
+    public static final String FACTORYCODE = "factory_code";
     public static final String STOCKLOCATION = "stocklocation";
     public static final String WAREHOUSE_NUMBER = "warehouseNumber";
     public static final int TIME_OUT = 60;

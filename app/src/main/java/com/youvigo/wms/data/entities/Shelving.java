@@ -30,13 +30,13 @@ public class Shelving implements Parcelable {
      * 仓库号
      */
     @SerializedName("LGNUM")
-    public String warehouseNumber;
+    private String warehouseNumber;
 
     /**
      * 移动类型
      */
     @SerializedName("BWLVS")
-    public String moveType;
+    private String moveType;
 
     /**
      * 单据号（物料凭证号）
@@ -48,159 +48,176 @@ public class Shelving implements Parcelable {
      * 物料凭证行项目编号（行号）
      */
     @SerializedName("ZEILE")
-    public String voucherLineNumber;
+    private String voucherLineNumber;
 
     /**
      * 物料编号
      */
     @SerializedName("MATNR")
-    public String materialNumber;
+    private String materialNumber;
 
     /**
      * 物料描述
      */
     @SerializedName("MAKTX")
-    public String materialDescription;
+    private String materialDescription;
 
     /**
      * 工厂
      */
     @SerializedName("WERKS")
-    public String factoryCode;
+    private String factoryCode;
 
     /**
      * 批号
      */
     @SerializedName("CHARG")
-    public String batchNumber;
+    private String batchNumber;
 
     /**
      * 基本单位
      */
     @SerializedName("MEINS")
-    public String baseUnit;
+    private String baseUnit;
 
     /**
      * 基本单位中文值
      */
     @SerializedName("MEINS_TXT")
-    public String baseUnitTxt;
+    private String baseUnitTxt;
 
     /**
      * 基本单位数量
      */
     @SerializedName("OFMEA")
-    public double basicQuantity;
+    private double basicQuantity;
 
     /**
      * 辅助单位
      */
     @SerializedName("ALTME")
-    public String auxiliaryUnit;
+    private String auxiliaryUnit;
 
     /**
      * 辅助单位中文值
      */
     @SerializedName("ALTME_TXT")
-    public String auxiliaryUnitTxt;
+    private String auxiliaryUnitTxt;
 
     /**
      * 辅助单位数量
      */
     @SerializedName("VSOLA")
-    public double auxiliaryQuantity;
+    private double auxiliaryQuantity;
 
     /**
      * 转移要求号
      */
     @SerializedName("TBNUM")
-    public String tbnum;
+    private String tbnum;
 
     /**
      * 转储需求项目
      */
     @SerializedName("TBPOS")
-    public String tbpos;
-
-    /**
-     * 附加字段
-     */
-    @SerializedName("ADDITIONAL")
-    public Additional additional;
+    private String tbpos;
 
     /**
      * 创建人
      */
     @SerializedName("USNAM")
-    public String creator;
+    private String creator;
 
     /**
      * 凭证日期
      */
     @SerializedName("BLDAT")
-    public String voucherDate;
+    private String voucherDate;
 
     /**
      * 规格
      */
     @SerializedName("ZZDRUGSPEC")
-    public String specifications;
+    private String specifications;
 
     /**
      * 通用名称
      */
     @SerializedName("ZZCOMMONNAME")
-    public String commonName;
+    private String commonName;
 
     /**
      * 供应商名称
      */
     @SerializedName("VENDORNAME")
-    public String supplierName;
+    private String supplierName;
 
     /**
      * 供应商批次
      */
     @SerializedName("LICHA")
     @Deprecated
-    public String supplierBatchNumber;
+    private String supplierBatchNumber;
 
     /**
      * 供应商批次
      */
     @SerializedName("ZZLICHA")
-    public String supplierBatchCode;
+    private String supplierBatchCode;
 
     /**
      * 是否合箱
      */
     @SerializedName("ZZPACKAGING")
-    public String packaging;
+    private String packaging;
 
     /**
      * 主批次
      */
     @SerializedName("ZZLICHA_MAIN")
-    public String mainBatchNumber;
+    private String mainBatchNumber;
 
     /**
      * 主批次数量
      */
     @SerializedName("ZZMENGE_MAIN")
-    public String mainBatchNumberQuantity;
+    private String mainBatchNumberQuantity;
 
     /**
      * 辅批次
      */
     @SerializedName("ZZLICHA_AUXILIARY")
-    public String auxiliaryBatchNumber;
+    private String auxiliaryBatchNumber;
 
     /**
      * 辅批次数量
      */
     @SerializedName("ZZMENGE_AUXILIARY")
-    public String auxiliaryBatchNumberQuantity;
+    private String auxiliaryBatchNumberQuantity;
 
+    /**
+     * 未上架数量
+     */
+    private double notOnShelvesQuantity;
+
+    /**
+     * 已上架数量
+     */
+    private double OnshelvesQuantity;
+
+    /**
+     * 附加字段
+     */
+    @SerializedName("ADDITIONAL")
+    private Additional additional;
+
+    public double getOnshelvesQuantity() {
+        return OnshelvesQuantity;
+    }
+
+    public void setOnshelvesQuantity(double onshelvesQuantity) {
+        OnshelvesQuantity = onshelvesQuantity;
+    }
 
     public Shelving() {
     }
@@ -226,13 +243,16 @@ public class Shelving implements Parcelable {
         voucherDate = in.readString();
         specifications = in.readString();
         commonName = in.readString();
-        supplierBatchCode = in.readString();
+        supplierName = in.readString();
+        supplierBatchNumber = in.readString();
         supplierBatchCode = in.readString();
         packaging = in.readString();
         mainBatchNumber = in.readString();
         mainBatchNumberQuantity = in.readString();
         auxiliaryBatchNumber = in.readString();
         auxiliaryBatchNumberQuantity = in.readString();
+        OnshelvesQuantity = in.readDouble();
+        notOnShelvesQuantity = in.readDouble();
     }
 
     @Override
@@ -265,6 +285,8 @@ public class Shelving implements Parcelable {
         dest.writeString(mainBatchNumberQuantity);
         dest.writeString(auxiliaryBatchNumber);
         dest.writeString(auxiliaryBatchNumberQuantity);
+        dest.writeDouble(OnshelvesQuantity);
+        dest.writeDouble(notOnShelvesQuantity);
     }
 
     @Override
@@ -520,5 +542,13 @@ public class Shelving implements Parcelable {
 
     public void setAuxiliaryBatchNumberQuantity(String auxiliaryBatchNumberQuantity) {
         this.auxiliaryBatchNumberQuantity = auxiliaryBatchNumberQuantity;
+    }
+
+    public double getNotOnShelvesQuantity() {
+        return notOnShelvesQuantity;
+    }
+
+    public void setNotOnShelvesQuantity(double notOnShelvesQuantity) {
+        this.notOnShelvesQuantity = notOnShelvesQuantity;
     }
 }

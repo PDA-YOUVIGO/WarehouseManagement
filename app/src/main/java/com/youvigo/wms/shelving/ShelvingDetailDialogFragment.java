@@ -17,8 +17,11 @@
 package com.youvigo.wms.shelving;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,23 +40,38 @@ import androidx.fragment.app.FragmentManager;
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
+import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.dto.base.ControlInfo;
+import com.youvigo.wms.data.dto.request.OnShevingDetails;
+import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
+import com.youvigo.wms.data.dto.response.OnShevlingResponse;
+import com.youvigo.wms.data.dto.response.OnShevlingResponseDetails;
 import com.youvigo.wms.data.entities.Shelving;
+import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.ScanManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class ShelvingDetailDialogFragment extends DialogFragment {
     private static final String TAG = "ShelvingDetailDialogFragment";
     private static final String KEY_SHELVING = "key_shelving";
+
+    private BroadcastReceiver mReceiver;
+    private IntentFilter mFilter;
+    private ScanManager mManager;
 
     // 物料编码
     private TextView materialCoding;
@@ -116,6 +135,27 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         }
 
         initUnits(shelving.getMaterialNumber());
+
+        mManager = new ScanManager(context);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Timber.i("recive");
+
+                // 让其他广播注册者无法获取广播信息
+                this.abortBroadcast();
+
+                final String scanResult = intent.getStringExtra("value");
+                Timber.d("ScanResult ==> " + scanResult);
+                cargoCode.setText(scanResult);
+            }
+        };
+
+        if (mManager.getScannerEnable()) {
+            context.sendBroadcast(new Intent("android.intent.action.SIMSCAN"));
+        } else {
+            showMessage("请开启扫描");
+        }
     }
 
     /**
@@ -175,18 +215,119 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
-                        // 点击取消时回调
+
                     }
                 })
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
-                        // 点击确定时回调
-
+                        submit();
                     }
                 })
                 .setView(view)
                 .create();
+    }
+
+    /**
+     * 数据校验
+     */
+    private boolean verify() {
+
+        if (onShelvesMainQuantity.getText().toString().isEmpty()) {
+            showMessage("请输入上架数量。");
+            return false;
+        } else if (cargoCode.getText().toString().isEmpty()) {
+            showMessage("请维护上架货位");
+            return false;
+        } else if (Double.parseDouble(onShelvesMainQuantity.getText().toString()) > shelving.getBasicQuantity()) {
+            showMessage("上架数量不能大于未上架数量。");
+            return false;
+        } else if (shelving.getPackaging().equalsIgnoreCase("X") && Double.parseDouble(onShelvesMainQuantity.getText().toString()) != shelving.getBasicQuantity()) {
+            showMessage("合箱不允许拆分上架");
+            return false;
+        }
+
+        // TODO 混批检查
+
+        return true;
+    }
+
+    /**
+     * 提交到SAP
+     */
+    private void submit() {
+
+        if (!verify()) {
+            return;
+        }
+
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        SapService sapService = retrofitClient.getSapService();
+
+        OnShevingRequest request = new OnShevingRequest();
+        request.setControlInfo(new ControlInfo());
+        OnShevingDetails requestItem = new OnShevingDetails();
+
+        requestItem.setLGNUM(retrofitClient.getWarehouseNumber());
+        requestItem.setWERKS(retrofitClient.getFactoryCode());
+        requestItem.setZOPERC(retrofitClient.getAccount());
+        requestItem.setZOPERN(retrofitClient.getUserName());
+        requestItem.setZOPERT(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
+
+        requestItem.setBWLVS(shelving.getMoveType());
+        requestItem.setMBLNR(shelving.getMaterialVoucherCode());
+        requestItem.setZEILE(shelving.getVoucherLineNumber());
+        requestItem.setMATNR(shelving.getMaterialNumber());
+        requestItem.setMAKTX(shelving.getMaterialDescription());
+        requestItem.setCHARG(shelving.getBatchNumber());
+        requestItem.setMEINS(shelving.getBaseUnit());
+        // 基本单位数量
+        requestItem.setOFMEA(shelving.getBasicQuantity());
+        requestItem.setTBNUM(shelving.getTbnum());
+        requestItem.setTBPOS(shelving.getTbpos());
+        // 货位
+        requestItem.setNLPLA(cargoCode.getText().toString());
+        requestItem.setZZLICHA_MAIN(shelving.getMainBatchNumber());
+        requestItem.setZZMENGE_MAIN(shelving.getMainBatchNumberQuantity());
+        requestItem.setZZLICHA_AUXILIARY(shelving.getAuxiliaryBatchNumber());
+        requestItem.setZZMENGE_AUXILIARY(shelving.getAuxiliaryBatchNumberQuantity());
+        requestItem.setZZPACKAGING(shelving.getPackaging());
+        request.setDetails(requestItem);
+
+        Call<OnShevlingResponse> onShevlingResponseCall = sapService.OnSheving(request);
+        onShevlingResponseCall.enqueue(new Callback<OnShevlingResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<OnShevlingResponse> call, @NotNull Response<OnShevlingResponse> response) {
+                if (response.isSuccessful()) {
+                    OnShevlingResponse onShevlingResponse = response.body();
+                    OnShevlingResponseDetails responseDetails = onShevlingResponse.getResponseDetails();
+
+                    double basicQuantity = shelving.getBasicQuantity();
+                    Double currentOnShelveQuantity = Double.valueOf(onShelvesMainQuantity.getText().toString());
+
+                    if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
+                        showMessage(responseDetails.getMSGTXT());
+                    } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
+                        double currentNotOnshlveQuantity = basicQuantity - currentOnShelveQuantity;
+                        shelving.setNotOnShelvesQuantity(currentNotOnshlveQuantity);
+                        notOnShelvesQuantity.setText(String.valueOf(currentNotOnshlveQuantity));
+                        onShelveQuantity.setText(onShelveQuantity.getText());
+
+                        showMessage(responseDetails.getMSGTXT());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call<OnShevlingResponse> call, @NotNull Throwable t) {
+                showMessage(t.getMessage());
+            }
+        });
+
+    }
+
+    private void showMessage(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     private void initViews(View view) {
@@ -236,4 +377,36 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         auxiliaryUnit.setPrompt("请选择辅计量单位");
         auxiliaryUnit.setSelection(0, true);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mFilter = new IntentFilter("android.intent.action.SCAN_RESULT");
+
+        // 在用户自行获取数据时，将广播的优先级调整到最高
+        mFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+
+        // 注册广播来获取扫描结果
+        context.registerReceiver(mReceiver, mFilter);
+    }
+
+    @Override
+    public void onPause() {
+
+        Timber.d("注销获取扫描结果的广播");
+
+        // 注销获取扫描结果的广播
+        context.unregisterReceiver(mReceiver);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mReceiver = null;
+        mFilter = null;
+        super.onDestroy();
+    }
+
 }

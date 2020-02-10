@@ -291,6 +291,7 @@
         android:background="@drawable/bg_rectangle"
         android:hint="@string/auxiliary_quantity"
         android:inputType="numberDecimal"
+        android:paddingStart="@dimen/dp_2"
         android:singleLine="true"
         android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="parent"

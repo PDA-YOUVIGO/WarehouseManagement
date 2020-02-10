@@ -121,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
             hideKeyboard();
             editText.clearFocus();
 
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_PATTERN);
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);
             LocalDate localDateStart = LocalDate.parse(this.startDate.getText().toString());
             LocalDate localDateEnd = LocalDate.parse(this.endDate.getText().toString());
             String year = String.valueOf(localDateStart.getYear());

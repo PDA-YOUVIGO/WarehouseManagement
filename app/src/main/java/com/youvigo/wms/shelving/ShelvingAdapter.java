@@ -68,9 +68,9 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
         }
 
         void bind(Shelving shelving) {
-            itemNumber.setText(shelving.getMaterialVoucherCode());
-            commonName.setText(shelving.commonName);
-            batchNumber.setText(shelving.batchNumber);
+            itemNumber.setText(shelving.getMaterialNumber());
+            commonName.setText(shelving.getCommonName());
+            batchNumber.setText(shelving.getBatchNumber());
             quantity.setText(String.valueOf(shelving.getBasicQuantity()));
             unit.setText(shelving.getBaseUnitTxt());
         }
@@ -93,8 +93,8 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
 
         @Override
         public boolean areContentsTheSame(@NonNull Shelving oldItem, @NonNull Shelving newItem) {
-            return oldItem.commonName.equals(newItem.commonName)
-                    && oldItem.batchNumber.equals(newItem.batchNumber);
+            return oldItem.getCommonName().equals(newItem.getCommonName())
+                    && oldItem.getBatchNumber().equals(newItem.getBatchNumber());
         }
     }
 }

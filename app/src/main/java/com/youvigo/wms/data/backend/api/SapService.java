@@ -16,7 +16,9 @@
 
 package com.youvigo.wms.data.backend.api;
 
+import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
+import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 
 import retrofit2.Call;
@@ -33,5 +35,11 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender")
 	Call<ShelvingResult> getShelvings(@Body ShelvingQueryRequest request);
+
+	/**
+	 * 入库上架
+	 */
+	@POST("RESTAdapter/PDA/On_The_Shelf")
+	Call<OnShevlingResponse> OnSheving(@Body OnShevingRequest request);
 
 }

@@ -16,12 +16,16 @@
 
 package com.youvigo.wms.product;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
@@ -37,6 +41,7 @@ import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.shelving.ShelvingAdapter;
 import com.youvigo.wms.shelving.ShelvingViewModel;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.ScanManager;
 
 import java.util.List;
 
@@ -48,6 +53,10 @@ import timber.log.Timber;
 public class FinishedProductsActivity extends BaseActivity {
     public static final String MATERIAL_CODING = "material_coding";
     public static final String BATCH_NUMBER = "batch_number";
+
+    private BroadcastReceiver mReceiver;
+    private IntentFilter mFilter;
+    private ScanManager mManager;
 
     private EditText materialCoding, batchNumber;
 
@@ -62,8 +71,40 @@ public class FinishedProductsActivity extends BaseActivity {
 
         initViews();
 
+        mManager = new ScanManager(this);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Timber.i("recicve");
+
+                // 让其他广播注册者无法获取广播信息
+                this.abortBroadcast();
+
+                final String scanResult = intent.getStringExtra("value");
+                Timber.d("ScanResult ==> " + scanResult);
+
+                if (!scanResult.isEmpty()) {
+                    String[] split = scanResult.split("-");
+                    materialCoding.setText(split[0]);
+                    batchNumber.setText(split[1]);
+                    onMenuSearchClicked();
+                }
+            }
+        };
+
+        if (mManager.getScannerEnable()) {
+            this.sendBroadcast(new Intent("android.intent.action.SIMSCAN"));
+        } else {
+            showMessage("请开启扫描");
+        }
+
         observeData();
     }
+
+    private void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
 
     private void initViews() {
         materialCoding = findViewById(R.id.et_material_coding);
@@ -124,5 +165,36 @@ public class FinishedProductsActivity extends BaseActivity {
         intent.putExtra(MATERIAL_CODING, code);
         intent.putExtra(BATCH_NUMBER, number);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mFilter = new IntentFilter(Constants.BROADCAST_RESULT);
+
+        // 在用户自行获取数据时，将广播的优先级调整到最高
+        mFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+
+        // 注册广播来获取扫描结果
+        this.registerReceiver(mReceiver, mFilter);
+    }
+
+    @Override
+    public void onPause() {
+
+        Timber.d("注销获取扫描结果的广播");
+
+        // 注销获取扫描结果的广播
+        this.unregisterReceiver(mReceiver);
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mReceiver = null;
+        mFilter = null;
+        super.onDestroy();
     }
 }
