@@ -16,7 +16,10 @@
 
 package com.youvigo.wms.product;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.util.Constants;
 
 import timber.log.Timber;
 
@@ -39,8 +43,6 @@ import timber.log.Timber;
  * 成品上架页面
  */
 public class FinishedProductsActivity extends BaseActivity {
-    public static final String MATERIAL_CODING = "material_coding";
-    public static final String BATCH_NUMBER = "batch_number";
 
     private EditText materialCoding, batchNumber;
 
@@ -49,9 +51,43 @@ public class FinishedProductsActivity extends BaseActivity {
     private FinishedProductsAdapter adapter;
     private FinishedProductsViewModel viewModel;
 
+    // 扫描程序
+    private BroadcastReceiver mReceiver;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 扫描获取数据
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                this.abortBroadcast();
+
+                final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
+                final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
+                final String scanStatus = intent.getStringExtra("SCAN_STATE");
+
+                if ("ok".equals(scanStatus)) {
+
+                    if (scanResult.contains("-")) {
+                        String[] split = scanResult.split("-");
+                        materialCoding.setText(split[0]);
+                        batchNumber.setText(split[1]);
+
+                        if (!progressBar.isAnimating()) {
+                            onMenuSearchClicked();
+                        }
+
+                    } else {
+                        materialCoding.setText(scanResult);
+                    }
+                } else {
+                    showMessage("获取扫描数据失败");
+                }
+            }
+        };
 
         initViews();
 
@@ -92,17 +128,6 @@ public class FinishedProductsActivity extends BaseActivity {
         } );
     }
 
-    //@Override
-    //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    //    super.onActivityResult(requestCode, resultCode, data);
-    //
-    //    Timber.d("onActivityResult");
-    //
-    //    if (searchResult != null) {
-    //        viewModel.handleData(searchResult);
-    //    }
-    //}
-
     @Override
     protected int getLayoutId() {
         return R.layout.finished_products_activity;
@@ -122,16 +147,6 @@ public class FinishedProductsActivity extends BaseActivity {
         }
 
         viewModel.query(code, number);
-        //String code = materialCoding.getText().toString();
-        //String number = batchNumber.getText().toString();
-        //if (TextUtils.isEmpty(code) || TextUtils.isEmpty(number)) {
-        //    return;
-        //}
-        //Intent intent = new Intent(this, SearchActivity.class);
-        //intent.putExtra(Constants.CATEGORY, Constants.TYPE_PRODUCT);
-        //intent.putExtra(MATERIAL_CODING, code);
-        //intent.putExtra(BATCH_NUMBER, number);
-        //startActivityForResult(intent, REQUEST_CODE);
     }
 
     @Override
@@ -139,5 +154,38 @@ public class FinishedProductsActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Timber.d("FinishedProducts onActivityResult");
+    }
+
+    private void registerReceiver()
+    {
+        IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
+        registerReceiver(mReceiver, mFilter);
+    }
+
+    private void unRegisterReceiver()
+    {
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            showMessage(e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unRegisterReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mReceiver = null;
+        super.onDestroy();
     }
 }

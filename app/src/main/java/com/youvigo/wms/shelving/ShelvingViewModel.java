@@ -19,10 +19,8 @@ import io.reactivex.subscribers.DisposableSubscriber;
 
 public class ShelvingViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
-
-    private MutableLiveData<MaterialVoucher> _material = new MutableLiveData<MaterialVoucher>();
-
-    private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<List<Shelving>>();
+    private MutableLiveData<MaterialVoucher> _material = new MutableLiveData<>();
+    private MutableLiveData<List<Shelving>> _shelvings = new MutableLiveData<>();
 
     public void handleData(MaterialVoucher materialVoucher) {
         _isLoading.setValue(true);

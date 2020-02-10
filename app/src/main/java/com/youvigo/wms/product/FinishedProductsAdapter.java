@@ -38,6 +38,12 @@ public class FinishedProductsAdapter extends ListAdapter<Shelving, FinishedProdu
 		super(new ShelvingDiffCallback());
 	}
 
+	@Override
+	protected Shelving getItem(int position) {
+		return super.getItem(position);
+	}
+
+
 	@NonNull
 	@Override
 	public FinishedProductsVM onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -85,6 +91,7 @@ public class FinishedProductsAdapter extends ListAdapter<Shelving, FinishedProdu
 				Shelving shelving = getItem(getAdapterPosition());
 				FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
 				ShelvingDetailDialogFragment.show(fragmentManager, shelving);
+
 			}
 		}
 	}

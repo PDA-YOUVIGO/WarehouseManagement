@@ -76,6 +76,7 @@ public class ShelvingActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShelvingAdapter();
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void observeData() {
@@ -119,5 +120,11 @@ public class ShelvingActivity extends BaseActivity {
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(Constants.CATEGORY, Constants.TYPE_SHELVING);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        adapter.notifyDataSetChanged();
     }
 }

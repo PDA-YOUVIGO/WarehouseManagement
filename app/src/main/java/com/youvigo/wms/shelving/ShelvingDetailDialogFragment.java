@@ -43,15 +43,14 @@ import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.dto.request.OnShevingRequestDetails;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
+import com.youvigo.wms.data.dto.request.OnShevingRequestDetails;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.OnShevlingResponseDetails;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.util.Constants;
-import com.youvigo.wms.util.ScanManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,15 +62,12 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 public class ShelvingDetailDialogFragment extends DialogFragment {
     private static final String TAG = "ShelvingDetailDialogFragment";
     private static final String KEY_SHELVING = "key_shelving";
 
     private BroadcastReceiver mReceiver;
-    private IntentFilter mFilter;
-    private ScanManager mManager;
 
     // 物料编码
     private TextView materialCoding;
@@ -136,26 +132,22 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
 
         initUnits(shelving.getMaterialNumber());
 
-        mManager = new ScanManager(context);
+        // 扫描获取数据
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Timber.i("recive");
-
-                // 让其他广播注册者无法获取广播信息
                 this.abortBroadcast();
+                final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
+                final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
+                final String scanStatus = intent.getStringExtra("SCAN_STATE");
 
-                final String scanResult = intent.getStringExtra("value");
-                Timber.d("ScanResult ==> " + scanResult);
-                cargoCode.setText(scanResult);
+                if ("ok".equals(scanStatus)) {
+                    cargoCode.setText(scanResult);
+                } else {
+                    showMessage("获取扫描数据失败");
+                }
             }
         };
-
-        if (mManager.getScannerEnable()) {
-            context.sendBroadcast(new Intent("android.intent.action.SIMSCAN"));
-        } else {
-            showMessage("请开启扫描");
-        }
     }
 
     /**
@@ -346,18 +338,6 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         onShelvesAuxiliayQuantity = view.findViewById(R.id.tv_on_shelves_auxiliay_quantity);
         auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
 
-        //auxiliaryUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        //    @Override
-        //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //
-        //    }
-        //
-        //    @Override
-        //    public void onNothingSelected(AdapterView<?> parent) {
-        //
-        //    }
-        //});
-
         materialCoding.setText(shelving.getMaterialNumber());
         materialName.setText(shelving.getMaterialDescription());
         batchNumber.setText(shelving.getBatchNumber());
@@ -378,35 +358,20 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         auxiliaryUnit.setSelection(0, true);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mFilter = new IntentFilter("android.intent.action.SCAN_RESULT");
-
-        // 在用户自行获取数据时，将广播的优先级调整到最高
-        mFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
-
-        // 注册广播来获取扫描结果
+    private void registerReceiver()
+    {
+        IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
         context.registerReceiver(mReceiver, mFilter);
     }
 
-    @Override
-    public void onPause() {
-
-        Timber.d("注销获取扫描结果的广播");
-
-        // 注销获取扫描结果的广播
-        context.unregisterReceiver(mReceiver);
-
-        super.onPause();
+    private void unRegisterReceiver()
+    {
+        try {
+            context.unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            showMessage(e.getMessage());
+        }
     }
 
-    @Override
-    public void onDestroy() {
-        mReceiver = null;
-        mFilter = null;
-        super.onDestroy();
-    }
 
 }

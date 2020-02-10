@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
-import com.youvigo.wms.product.FinishedProductsActivity;
 import com.youvigo.wms.util.Constants;
 
 import java.time.LocalDate;
@@ -60,9 +59,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private SearchViewModel viewModel;
 
-    // 从成品上架主页传过来的物料编码和批次号
-    private String materialCoding, batchNumber;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +78,8 @@ public class SearchActivity extends AppCompatActivity {
             if (category == null) {
                 return;
             }
-            if (category.equals(Constants.TYPE_PRODUCT)) {
-                materialCoding = getIntent().getStringExtra(FinishedProductsActivity.MATERIAL_CODING);
-                batchNumber = getIntent().getStringExtra(FinishedProductsActivity.BATCH_NUMBER);
-            } else if (category.equals(Constants.TYPE_TAKE_OFF)) {
+
+            if (category.equals(Constants.TYPE_TAKE_OFF)) {
 
             } else if (category.equals(Constants.TYPE_OUT_OF_STOCK)) {
 
