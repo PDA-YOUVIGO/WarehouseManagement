@@ -2,7 +2,7 @@ package com.youvigo.wms.data.dto.request;
 
 import com.youvigo.wms.data.dto.base.Additional;
 
-public class OnShevingDetails {
+public class OnShevingRequestDetails {
 
 	// 仓库号
 	private String LGNUM;
@@ -246,7 +246,7 @@ public class OnShevingDetails {
 		this.ZZMENGE_AUXILIARY = ZZMENGE_AUXILIARY;
 	}
 
-	public OnShevingDetails(String LGNUM, String BWLVS, String MBLNR, String ZEILE, String MATNR, String MAKTX, String WERKS, String CHARG, String MEINS, double OFMEA, String TBNUM, String TBPOS, String NLPLA, String ZOPERC, String ZOPERN, String ZOPERT, Additional ADDITIONAL, String ZZPACKAGING, String ZZLICHA_MAIN, String ZZMENGE_MAIN, String ZZLICHA_AUXILIARY, String ZZMENGE_AUXILIARY) {
+	public OnShevingRequestDetails(String LGNUM, String BWLVS, String MBLNR, String ZEILE, String MATNR, String MAKTX, String WERKS, String CHARG, String MEINS, double OFMEA, String TBNUM, String TBPOS, String NLPLA, String ZOPERC, String ZOPERN, String ZOPERT, Additional ADDITIONAL, String ZZPACKAGING, String ZZLICHA_MAIN, String ZZMENGE_MAIN, String ZZLICHA_AUXILIARY, String ZZMENGE_AUXILIARY) {
 		this.LGNUM = LGNUM;
 		this.BWLVS = BWLVS;
 		this.MBLNR = MBLNR;
@@ -271,6 +271,6 @@ public class OnShevingDetails {
 		this.ZZMENGE_AUXILIARY = ZZMENGE_AUXILIARY;
 	}
 
-	public OnShevingDetails() {
+	public OnShevingRequestDetails() {
 	}
 }

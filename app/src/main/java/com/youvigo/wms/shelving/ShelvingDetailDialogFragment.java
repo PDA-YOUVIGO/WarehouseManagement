@@ -43,7 +43,7 @@ import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.dto.request.OnShevingDetails;
+import com.youvigo.wms.data.dto.request.OnShevingRequestDetails;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
@@ -266,7 +266,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
 
         OnShevingRequest request = new OnShevingRequest();
         request.setControlInfo(new ControlInfo());
-        OnShevingDetails requestItem = new OnShevingDetails();
+        OnShevingRequestDetails requestItem = new OnShevingRequestDetails();
 
         requestItem.setLGNUM(retrofitClient.getWarehouseNumber());
         requestItem.setWERKS(retrofitClient.getFactoryCode());
@@ -294,7 +294,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         requestItem.setZZPACKAGING(shelving.getPackaging());
         request.setDetails(requestItem);
 
-        Call<OnShevlingResponse> onShevlingResponseCall = sapService.OnSheving(request);
+        Call<OnShevlingResponse> onShevlingResponseCall = sapService.submitOnSheving(request);
         onShevlingResponseCall.enqueue(new Callback<OnShevlingResponse>() {
             @Override
             public void onResponse(@NotNull Call<OnShevlingResponse> call, @NotNull Response<OnShevlingResponse> response) {

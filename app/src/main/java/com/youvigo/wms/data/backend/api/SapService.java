@@ -16,8 +16,10 @@
 
 package com.youvigo.wms.data.backend.api;
 
+import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
+import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 
@@ -34,12 +36,17 @@ public interface SapService {
 	 * 获取SAP入库上架单据
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender")
-	Call<ShelvingResult> getShelvings(@Body ShelvingQueryRequest request);
+	Call<ShelvingResult> queryOnShelvings(@Body ShelvingQueryRequest request);
 
 	/**
 	 * 入库上架
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf")
-	Call<OnShevlingResponse> OnSheving(@Body OnShevingRequest request);
+	Call<OnShevlingResponse> submitOnSheving(@Body OnShevingRequest request);
 
+	/**
+	 * 获取SAP成品上架单据信息
+	 */
+	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender2")
+	Call<FinishedProductsQueryResponse> queryFinishedProducts(@Body FinishedProductsQueryRequest request);
 }

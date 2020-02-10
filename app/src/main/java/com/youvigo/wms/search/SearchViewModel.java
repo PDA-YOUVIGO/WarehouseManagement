@@ -67,7 +67,7 @@ public class SearchViewModel extends BaseViewModel {
 
 		shelvingQueryRequest.setRequestDetails(shelvingQueryRequestDetails);
 
-		Call<ShelvingResult> shelvings = sapService.getShelvings(shelvingQueryRequest);
+		Call<ShelvingResult> shelvings = sapService.queryOnShelvings(shelvingQueryRequest);
 		shelvings.enqueue(new Callback<ShelvingResult>() {
 			@Override
 			public void onResponse(@NotNull Call<ShelvingResult> call, @NotNull Response<ShelvingResult> response) {
@@ -102,7 +102,9 @@ public class SearchViewModel extends BaseViewModel {
 
 						emitter.onNext(mockData);
 						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io())
+							.observeOn(AndroidSchedulers.mainThread())
+							.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
 						@Override
 						public void onNext(List<MaterialVoucher> materials) {
 							_materials.setValue(materials);

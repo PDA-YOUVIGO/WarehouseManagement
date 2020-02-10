@@ -19,13 +19,13 @@ package com.youvigo.wms.data.dto.request;
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 
-public class OnShevingRequest {
+public class FinishedProductsQueryRequest {
 
 	@SerializedName("ControlInfo")
 	private ControlInfo controlInfo;
 
-	@SerializedName("ITEM")
-	private OnShevingRequestDetails details;
+	@SerializedName("HEAD")
+	private FinishedProductsQueryRequestDetails details;
 
 	public ControlInfo getControlInfo() {
 		return controlInfo;
@@ -35,19 +35,19 @@ public class OnShevingRequest {
 		this.controlInfo = controlInfo;
 	}
 
-	public OnShevingRequestDetails getDetails() {
+	public FinishedProductsQueryRequestDetails getDetails() {
 		return details;
 	}
 
-	public void setDetails(OnShevingRequestDetails details) {
+	public void setDetails(FinishedProductsQueryRequestDetails details) {
 		this.details = details;
 	}
 
-	public OnShevingRequest() {
-	}
-
-	public OnShevingRequest(ControlInfo controlInfo, OnShevingRequestDetails details) {
+	public FinishedProductsQueryRequest(ControlInfo controlInfo, FinishedProductsQueryRequestDetails details) {
 		this.controlInfo = controlInfo;
 		this.details = details;
+	}
+
+	public FinishedProductsQueryRequest() {
 	}
 }
