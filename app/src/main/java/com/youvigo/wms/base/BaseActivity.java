@@ -29,7 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
 import timber.log.Timber;

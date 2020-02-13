@@ -21,7 +21,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * SAP业务返回报文执行结果信息
  */
-public class SapResult {
+public class SapResponseMessage {
 
 	/**
 	 * 结果字段
@@ -106,7 +106,7 @@ public class SapResult {
 		this.year = year;
 	}
 
-	public SapResult(String success, String message, String warehouseNumber, String transferOrderNumber, String materialVoucherCode, String year) {
+	public SapResponseMessage(String success, String message, String warehouseNumber, String transferOrderNumber, String materialVoucherCode, String year) {
 		this.success = success;
 		this.message = message;
 		this.warehouseNumber = warehouseNumber;
@@ -115,6 +115,6 @@ public class SapResult {
 		this.year = year;
 	}
 
-	public SapResult() {
+	public SapResponseMessage() {
 	}
 }

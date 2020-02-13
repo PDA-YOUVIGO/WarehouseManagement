@@ -16,9 +16,13 @@
 
 package com.youvigo.wms.data.backend.api;
 
+import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
+import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
+import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
+import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
@@ -49,4 +53,16 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender2")
 	Call<FinishedProductsQueryResponse> queryFinishedProducts(@Body FinishedProductsQueryRequest request);
+
+	/**
+	 * 获取SAP出库下架任务单
+	 */
+	@POST("RESTAdapter/PDA/Shelf_Task_Query")
+	Call<DeliverQueryResponse> queryDeliver(@Body DeliverQueryRequest request);
+
+	/**
+	 * 提交出库下架到SAP
+	 */
+	@POST("RESTAdapter/PDA/Off_The_Shelf")
+	Call<DeliverResponse> submitDeliver(@Body DeliverRequest request);
 }

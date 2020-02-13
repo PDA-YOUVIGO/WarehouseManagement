@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_4"
-            android:text="@string/material_document"
+            android:text="@string/order_number"
             android:textSize="@dimen/dp_14"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"

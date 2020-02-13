@@ -67,11 +67,11 @@ public class OutOfStockAdapter extends ListAdapter<OutOfStock, OutOfStockAdapter
 
             itemView.setOnClickListener(this);
 
-            itemNumber = itemView.findViewById(R.id.tv_item_number);
-            materialName = itemView.findViewById(R.id.tv_material_name);
-            basicOrder = itemView.findViewById(R.id.tv_basic_order);
-            specification = itemView.findViewById(R.id.tv_specification);
-            lotNumber = itemView.findViewById(R.id.tv_batch_number);
+            itemNumber = itemView.findViewById(R.id.tv_item_material_code);
+            materialName = itemView.findViewById(R.id.tv_material_name_description);
+            basicOrder = itemView.findViewById(R.id.tv_quantity);
+            specification = itemView.findViewById(R.id.tv_specification_description);
+            lotNumber = itemView.findViewById(R.id.tv_batch_number_description);
         }
 
         void bind(InventoryCheck inventoryCheck) {

@@ -118,11 +118,11 @@ public class NoReservedOutboundDetailDialogFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
-        materialCoding = view.findViewById(R.id.tv_material_coding_description);
-        materialName = view.findViewById(R.id.tv_material_name_description);
-        specification = view.findViewById(R.id.tv_specification_description);
+        materialCoding = view.findViewById(R.id.tv_material_code);
+        materialName = view.findViewById(R.id.tv_material_name);
+        specification = view.findViewById(R.id.tv_specification);
         batchNumber = view.findViewById(R.id.et_batch_number);
-        supplierBatch = view.findViewById(R.id.tv_supplier_batch_description);
+        supplierBatch = view.findViewById(R.id.tv_supplier_batch);
         query = view.findViewById(R.id.mb_query);
         query.setOnClickListener(new View.OnClickListener() {
             @Override

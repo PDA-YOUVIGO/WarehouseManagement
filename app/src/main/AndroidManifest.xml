@@ -56,7 +56,7 @@
             android:label="@string/finished_products" />
 
         <activity
-            android:name=".off.TakeOffActivity"
+            android:name=".deliver.DeliverActivity"
             android:label="@string/take_off" />
 
         <activity

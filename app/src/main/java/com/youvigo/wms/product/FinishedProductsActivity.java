@@ -62,9 +62,6 @@ public class FinishedProductsActivity extends BaseActivity {
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
-                this.abortBroadcast();
-
                 final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
                 final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
                 final String scanStatus = intent.getStringExtra("SCAN_STATE");

@@ -111,7 +111,7 @@ public class RetrofitClient {
 
 	public String getStockLocationCode() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
-		return sharedPreferences.getString(Constants.STOCKLOCATION, "FZ01");
+		return sharedPreferences.getString(Constants.STOCKLOCATION, "WL01");
 	}
 
 	public String getWarehouseNumber() {

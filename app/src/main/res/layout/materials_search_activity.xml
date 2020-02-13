@@ -37,7 +37,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
-            android:id="@+id/tv_material_coding"
+            android:id="@+id/tv_material_code_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,13 +63,13 @@
             android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_coding"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_code_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toTopOf="@id/tv_material_coding" />
+            app:layout_constraintStart_toEndOf="@id/tv_material_code_description"
+            app:layout_constraintTop_toTopOf="@id/tv_material_code_description" />
 
         <TextView
-            android:id="@+id/tv_batch_number"
+            android:id="@+id/tv_batch_number_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -80,8 +80,8 @@
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/batch_number"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toBottomOf="@id/tv_material_coding" />
+            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_code_description" />
 
         <EditText
             android:id="@+id/et_batch_number"
@@ -97,10 +97,10 @@
             android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number"
+            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_batch_number"
-            app:layout_constraintTop_toTopOf="@id/tv_batch_number" />
+            app:layout_constraintStart_toEndOf="@id/tv_batch_number_description"
+            app:layout_constraintTop_toTopOf="@id/tv_batch_number_description" />
 
         <TextView
             android:id="@+id/tv_item_description"
@@ -114,8 +114,8 @@
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/item_description"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toBottomOf="@id/tv_batch_number" />
+            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_batch_number_description" />
 
         <EditText
             android:id="@+id/et_item"
@@ -148,7 +148,7 @@
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/common_name"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
             app:layout_constraintTop_toBottomOf="@id/tv_item_description" />
 
         <EditText
@@ -171,7 +171,7 @@
             app:layout_constraintTop_toTopOf="@id/tv_common_name" />
 
         <TextView
-            android:id="@+id/tv_specification"
+            android:id="@+id/tv_specification_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/specification"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
             app:layout_constraintTop_toBottomOf="@id/tv_common_name" />
 
         <EditText
@@ -199,10 +199,10 @@
             android:paddingEnd="@dimen/dp_8"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="@id/tv_specification"
+            app:layout_constraintBottom_toBottomOf="@id/tv_specification_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_specification"
-            app:layout_constraintTop_toTopOf="@id/tv_specification" />
+            app:layout_constraintStart_toEndOf="@id/tv_specification_description"
+            app:layout_constraintTop_toTopOf="@id/tv_specification_description" />
 
         <TextView
             android:id="@+id/tv_position"
@@ -216,8 +216,8 @@
             android:paddingBottom="@dimen/dp_8"
             android:text="@string/position"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding"
-            app:layout_constraintTop_toBottomOf="@id/tv_specification" />
+            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_specification_description" />
 
         <EditText
             android:id="@+id/et_position"

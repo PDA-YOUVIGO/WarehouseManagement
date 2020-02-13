@@ -60,9 +60,9 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
 
             itemView.setOnClickListener(this);
 
-            itemNumber = itemView.findViewById(R.id.tv_item_number);
+            itemNumber = itemView.findViewById(R.id.tv_item_material_code);
             commonName = itemView.findViewById(R.id.tv_common_name);
-            batchNumber = itemView.findViewById(R.id.tv_batch_number);
+            batchNumber = itemView.findViewById(R.id.tv_batch_number_description);
             quantity = itemView.findViewById(R.id.tv_quantity);
             unit = itemView.findViewById(R.id.tv_unit);
         }

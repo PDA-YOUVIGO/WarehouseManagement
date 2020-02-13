@@ -46,7 +46,7 @@
     <string name="employee_search">员工查询</string>
     <string name="internal_order_search">内部订单查询</string>
     <!--shelving-->
-    <string name="material_document">物料凭证</string>
+    <string name="order_number">单据号</string>
     <string name="query">查询</string>
     <string name="material_document_hint">请输入物料凭证</string>
     <string name="source_unit_hint">请输入来源单位</string>
@@ -127,4 +127,7 @@
     <string name="shelving_quantity">上架数量</string>
     <string name="main_quantity">主数量</string>
     <string name="auxiliary_quantity">辅数量</string>
+
+    <string name="deliver_quantity">下架数量</string>
+    <string name="on_deliver_detail">下架详情</string>
 </resources>

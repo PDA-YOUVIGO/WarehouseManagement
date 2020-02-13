@@ -136,7 +136,6 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                this.abortBroadcast();
                 final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
                 final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
                 final String scanStatus = intent.getStringExtra("SCAN_STATE");
@@ -196,6 +195,8 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         View view = LayoutInflater.from(context).inflate(R.layout.sheling_detail_dialog_fragment, null);
 
         initViews(view);
+
+        registerReceiver();
 
         return buildDialog(view);
     }
@@ -323,12 +324,12 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
-        materialCoding = view.findViewById(R.id.tv_material_coding_description);
-        materialName = view.findViewById(R.id.tv_material_name_description);
-        batchNumber = view.findViewById(R.id.tv_batch_number_description);
-        specification = view.findViewById(R.id.tv_specification_description);
-        supplierBatch = view.findViewById(R.id.tv_supplier_batch_description);
-        cargoCode = view.findViewById(R.id.tv_cargo_code_description);
+        materialCoding = view.findViewById(R.id.tv_material_code);
+        materialName = view.findViewById(R.id.tv_material_name);
+        batchNumber = view.findViewById(R.id.tv_batch_number);
+        specification = view.findViewById(R.id.tv_specification);
+        supplierBatch = view.findViewById(R.id.tv_supplier_batch);
+        cargoCode = view.findViewById(R.id.tv_cargo_code_input);
         notOnShelvesQuantity = view.findViewById(R.id.tv_not_on_shelves_quantity);
         notOnShelvesUnit = view.findViewById(R.id.tv_not_on_shelves_unit);
         onShelveQuantity = view.findViewById(R.id.tv_on_shelve_quantity);
@@ -361,17 +362,21 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     private void registerReceiver()
     {
         IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
-        context.registerReceiver(mReceiver, mFilter);
+        getContext().registerReceiver(mReceiver, mFilter);
     }
 
     private void unRegisterReceiver()
     {
         try {
-            context.unregisterReceiver(mReceiver);
+            getContext().unregisterReceiver(mReceiver);
         } catch (Exception e) {
             showMessage(e.getMessage());
         }
     }
 
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        unRegisterReceiver();
+    }
 }
