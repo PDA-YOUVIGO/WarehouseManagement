@@ -40,8 +40,10 @@ import timber.log.Timber;
  * 入库上架页面
  */
 public class ShelvingActivity extends BaseActivity {
+    public static final String ORDER_NUMBER = "order_number";
+
     private ProgressBar progressBar;
-    private TextView materialDocument;
+    private TextView orderNumber;
     private TextView sourceUnit;
     private TextView date;
     private ShelvingAdapter adapter;
@@ -68,7 +70,7 @@ public class ShelvingActivity extends BaseActivity {
 
         sourceUnit = findViewById(R.id.tv_source_unit_description);
         date = findViewById(R.id.tv_date_description);
-        materialDocument = findViewById(R.id.tv_materials_description);
+        orderNumber = findViewById(R.id.tv_materials_description);
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -84,7 +86,7 @@ public class ShelvingActivity extends BaseActivity {
 
         viewModel.material().observe(this, materialVoucher -> {
             if (materialVoucher != null) {
-                materialDocument.setText(materialVoucher.orderNumber);
+                orderNumber.setText(materialVoucher.orderNumber);
                 sourceUnit.setText(materialVoucher.supplierName);
                 date.setText(materialVoucher.date);
             }
@@ -117,8 +119,12 @@ public class ShelvingActivity extends BaseActivity {
 
     @Override
     protected void onMenuSearchClicked() {
+
+        String orderNumber = this.orderNumber.getText().toString();
+
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(Constants.CATEGORY, Constants.TYPE_SHELVING);
+        intent.putExtra(ORDER_NUMBER, orderNumber);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

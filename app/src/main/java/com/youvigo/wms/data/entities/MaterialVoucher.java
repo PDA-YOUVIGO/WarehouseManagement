@@ -38,6 +38,8 @@ public class MaterialVoucher implements Parcelable {
     // 出库下架搜索结果
     public List<TakeOff> takeOffs;
 
+    public List<ReservedOutbound> reservedOutbounds;
+
     public MaterialVoucher() {
     }
 
@@ -48,6 +50,7 @@ public class MaterialVoucher implements Parcelable {
         supplierName = in.readString();
         shelvings = in.createTypedArrayList(Shelving.CREATOR);
         takeOffs = in.createTypedArrayList(TakeOff.CREATOR);
+        reservedOutbounds = in.createTypedArrayList(ReservedOutbound.CREATOR);
     }
 
     @Override
@@ -58,6 +61,7 @@ public class MaterialVoucher implements Parcelable {
         dest.writeString(supplierName);
         dest.writeTypedList(shelvings);
         dest.writeTypedList(takeOffs);
+        dest.writeTypedList(reservedOutbounds);
     }
 
     @Override

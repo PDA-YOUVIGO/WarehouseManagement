@@ -24,10 +24,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.deliver.DeliverActivity;
+import com.youvigo.wms.outstock.ReservedOutBoundActivity;
+import com.youvigo.wms.shelving.ShelvingActivity;
 import com.youvigo.wms.util.Constants;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -42,6 +45,7 @@ public class SearchActivity extends AppCompatActivity {
 	private TextView startDate;
 	private TextView endDate;
 
+	private ArrayList filter_movetypes;
 	private SearchViewModel viewModel;
 
 	@Override
@@ -62,27 +66,45 @@ public class SearchActivity extends AppCompatActivity {
 		if (getIntent() != null) {
 
 			String category = getIntent().getStringExtra(Constants.CATEGORY);
-			String orderNumber = getIntent().getStringExtra(DeliverActivity.TASK_NUMBER);
+			String orderNumber;
+			//List<String> moveTypeCodes = getIntent().getStringArrayListExtra();
+
 			if (category == null) {
 				return;
 			}
 
 			switch (category) {
+
 				case Constants.TYPE_SHELVING:
 					getSupportActionBar().setTitle("上架查询");
+					orderNumber = getIntent().getStringExtra(ShelvingActivity.ORDER_NUMBER);
+
+					if (!orderNumber.isEmpty()) {
+						orderNumnerTxt.setText(orderNumber);
+					}
+
 					break;
 				case Constants.TYPE_DELIVER:
 					getSupportActionBar().setTitle("下架查询");
+					orderNumber = getIntent().getStringExtra(DeliverActivity.ORDER_NUMBER);
+
+					if (!orderNumber.isEmpty()) {
+						orderNumnerTxt.setText(orderNumber);
+					}
 					break;
 				case Constants.TYPE_RESERVED_OUT_BOUND:
 					getSupportActionBar().setTitle("预留查询");
-					break;
-				default:
-					orderNumnerTxt.setText(orderNumber);
+					orderNumber = getIntent().getStringExtra(ReservedOutBoundActivity.ORDER_NUMBER);
+					filter_movetypes = getIntent().getStringArrayListExtra(ReservedOutBoundActivity.FILTER_MOVETYPES);
+
 					// 如果传递进来单据号则直接查询
 					if (!orderNumber.isEmpty()) {
-						query(category);
+						orderNumnerTxt.setText(orderNumber);
 					}
+					break;
+				default:
+					query(category);
+
 			}
 		}
 	}
@@ -149,7 +171,7 @@ public class SearchActivity extends AppCompatActivity {
 				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
 				break;
 			case Constants.TYPE_RESERVED_OUT_BOUND:
-				getSupportActionBar().setTitle("预留查询");
+				viewModel.reservedOutBoundQuery(orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(), localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), filter_movetypes);
 				break;
 		}
 	}

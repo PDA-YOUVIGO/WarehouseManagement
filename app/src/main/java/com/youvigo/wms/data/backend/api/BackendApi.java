@@ -19,7 +19,7 @@ package com.youvigo.wms.data.backend.api;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.dto.response.Material;
-import com.youvigo.wms.data.dto.response.MoveType;
+import com.youvigo.wms.data.entities.MoveType;
 
 import java.util.List;
 

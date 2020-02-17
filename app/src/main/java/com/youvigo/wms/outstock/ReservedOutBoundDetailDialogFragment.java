@@ -64,7 +64,7 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
     /**
      * 展示详情页面
      */
-    public static void show(FragmentManager fragmentManager/*, OutOfStock outOfStock*/) {
+    public static void show(FragmentManager fragmentManager/*, ReservedOutbound outOfStock*/) {
         ReservedOutBoundDetailDialogFragment dialogFragment = new ReservedOutBoundDetailDialogFragment();
         Bundle bundle = new Bundle();
         //  bundle.putParcelable(KEY_OUT_OF_STOCK, outOfStock);

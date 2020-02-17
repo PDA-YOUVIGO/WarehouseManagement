@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.dto.response;
+package com.youvigo.wms.data.entities;
+
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * 移动类型
  */
-public class MoveType {
+public class MoveType implements Parcelable {
 
 	/// 移动类型名称
 	private String moveName;
@@ -118,4 +121,36 @@ public class MoveType {
 	public String toString() {
 		return String.format("%s - %s", moveCode, moveName);
 	}
+
+	@Override
+	public int describeContents() { return 0; }
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.moveName);
+		dest.writeString(this.moveCode);
+		dest.writeString(this.gmcode);
+		dest.writeString(this.factoryCode);
+		dest.writeString(this.factoryName);
+		dest.writeByte(this.innerOrderNo ? (byte) 1 : (byte) 0);
+		dest.writeByte(this.costCenter ? (byte) 1 : (byte) 0);
+	}
+
+	protected MoveType(Parcel in) {
+		this.moveName = in.readString();
+		this.moveCode = in.readString();
+		this.gmcode = in.readString();
+		this.factoryCode = in.readString();
+		this.factoryName = in.readString();
+		this.innerOrderNo = in.readByte() != 0;
+		this.costCenter = in.readByte() != 0;
+	}
+
+	public static final Creator<MoveType> CREATOR = new Creator<MoveType>() {
+		@Override
+		public MoveType createFromParcel(Parcel source) {return new MoveType(source);}
+
+		@Override
+		public MoveType[] newArray(int size) {return new MoveType[size];}
+	};
 }

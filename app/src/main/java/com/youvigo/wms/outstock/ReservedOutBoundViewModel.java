@@ -20,18 +20,50 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
+import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.data.entities.ReservedOutbound;
 
 import java.util.List;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 
 public class ReservedOutBoundViewModel extends BaseViewModel {
 
 	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
-	private MutableLiveData<?> _order = new MutableLiveData<>();
-	private MutableLiveData<List<?>>_items = new MutableLiveData<>();
+	private MutableLiveData<MaterialVoucher> _order = new MutableLiveData<>();
+	private MutableLiveData<List<ReservedOutbound>> _items = new MutableLiveData<>();
 
-	public void handleDate() {
+	public void handleDate(MaterialVoucher materialVoucher) {
 
 		_isLoading.setValue(true);
+		_order.setValue(materialVoucher);
+
+		Disposable disposable = Flowable.create((FlowableOnSubscribe<List<ReservedOutbound>>) emitter -> {
+			emitter.onNext(materialVoucher.reservedOutbounds);
+			emitter.onComplete();
+		}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<ReservedOutbound>>() {
+			@Override
+			public void onNext(List<ReservedOutbound> result) {
+				_items.setValue(result);
+			}
+
+			@Override
+			public void onError(Throwable t) {
+				_isLoading.setValue(false);
+			}
+
+			@Override
+			public void onComplete() {
+				_isLoading.setValue(false);
+			}
+		});
+		addSubscription(disposable);
 
 	}
 
@@ -39,11 +71,11 @@ public class ReservedOutBoundViewModel extends BaseViewModel {
 		return _isLoading;
 	}
 
-	public LiveData<?> getOrder() {
+	public LiveData<MaterialVoucher> getMaterialVoucher() {
 		return _order;
 	}
 
-	public LiveData<List<?>> getItems() {
+	public LiveData<List<ReservedOutbound>> getMaterialVoucherItems() {
 		return _items;
 	}
 }

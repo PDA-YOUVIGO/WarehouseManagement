@@ -31,12 +31,9 @@ public class MaterialQueryResponse {
     private List<Material> data;
 
     @SerializedName("RETURN")
-    private SapResponseMessage result;
+    private SapResponseMessage message;
 
-    public MaterialQueryResponse(ControlInfo controlInfo, List<Material> data, SapResponseMessage result) {
-        this.controlInfo = controlInfo;
-        this.data = data;
-        this.result = result;
+    public MaterialQueryResponse() {
     }
 
     public ControlInfo getControlInfo() {
@@ -55,11 +52,17 @@ public class MaterialQueryResponse {
         this.data = data;
     }
 
-    public SapResponseMessage getResult() {
-        return result;
+    public SapResponseMessage getMessage() {
+        return message;
     }
 
-    public void setResult(SapResponseMessage result) {
-        this.result = result;
+    public void setMessage(SapResponseMessage message) {
+        this.message = message;
+    }
+
+    public MaterialQueryResponse(ControlInfo controlInfo, List<Material> data, SapResponseMessage message) {
+        this.controlInfo = controlInfo;
+        this.data = data;
+        this.message = message;
     }
 }

@@ -40,7 +40,7 @@ import timber.log.Timber;
  * 出库下架架页面
  */
 public class DeliverActivity extends BaseActivity {
-    public static final String TASK_NUMBER = "task_number";
+    public static final String ORDER_NUMBER = "order_number";
 
     private EditText taskNumber;
     private TextView department;
@@ -110,11 +110,11 @@ public class DeliverActivity extends BaseActivity {
 
     @Override
     protected void onMenuSearchClicked() {
-        String task = taskNumber.getText().toString();
+        String orderNumber = taskNumber.getText().toString();
 
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(Constants.CATEGORY, Constants.TYPE_DELIVER);
-        intent.putExtra(TASK_NUMBER, task);
+        intent.putExtra(ORDER_NUMBER, orderNumber);
         startActivityForResult(intent, REQUEST_CODE);
     }
 }
