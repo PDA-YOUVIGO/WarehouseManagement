@@ -26,11 +26,15 @@ import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
 import com.youvigo.wms.data.dto.request.DeliverQueryRequestDetails;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequest;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequestDetails;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequestDetails;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
+import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.data.entities.ReservedOutbound;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.util.Constants;
@@ -215,14 +219,13 @@ public class SearchViewModel extends BaseViewModel {
 							materialVoucher.takeOffs = v;
 							materialVoucher.supplierName = v.get(0).getORGTX();
 
-
-
 							mockData.add(materialVoucher);
 						});
 
 						emitter.onNext(mockData);
 						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+							.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
 						@Override
 						public void onNext(List<MaterialVoucher> materialVouchers) {
 							_materials.setValue(materialVouchers);
@@ -250,12 +253,100 @@ public class SearchViewModel extends BaseViewModel {
 		});
 	}
 
+
 	/**
 	 * 查询预留单
-	 * @param orderNumber 预留单号
+	 * @param orderNumber 预留单据号
+	 * @param startDate 开始时间
+	 * @param endDate 结束时间
+	 * @param moveTypes 允许的移动类型
 	 */
-	void reservedOutBoundQuery(String orderNumber) {
+	void reservedOutBoundQuery(String orderNumber, String startDate, String endDate, ArrayList moveTypes) {
 		_isLoading.setValue(true);
+
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		SapService sapService = retrofitClient.getSapService();
+
+		ReservedOutBoundQueryRequest request = new ReservedOutBoundQueryRequest();
+		request.setControlInfo(new ControlInfo());
+
+		ReservedOutBoundQueryRequestDetails requestDetails = new ReservedOutBoundQueryRequestDetails();
+		requestDetails.setWERKS(retrofitClient.getFactoryCode());
+		requestDetails.setSBDTER(orderNumber.isEmpty() ? startDate : "");
+		requestDetails.setEBDTER(orderNumber.isEmpty() ? endDate : "");
+		requestDetails.setLGORT("");
+		requestDetails.setADDITIONAL1("");
+		requestDetails.setADDITIONAL2("");
+		requestDetails.setRSNUM(orderNumber);
+		request.setDetails(requestDetails);
+
+		Call<ReservedOutBoundQueryResponse> call = sapService.queryReservedOutBound(request);
+		call.enqueue(new Callback<ReservedOutBoundQueryResponse>() {
+			@Override
+			public void onResponse(@NotNull Call<ReservedOutBoundQueryResponse> call, @NotNull Response<ReservedOutBoundQueryResponse> response) {
+				if (response.isSuccessful()) {
+					ReservedOutBoundQueryResponse queryResponse = response.body();
+					if (!queryResponse.getDetails().getMessage().getSuccess().equalsIgnoreCase("S")) {
+						queryState.setValue(new ResultState(false, queryResponse.getDetails().getMessage().getMessage()));
+						_isLoading.setValue(false);
+						return;
+					}
+
+					if (queryResponse.getDetails().getData().isEmpty()) {
+						queryState.setValue(new ResultState(false, queryResponse.getDetails().getMessage().getMessage()));
+						_isLoading.setValue(false);
+						return;
+					}
+
+					//移除非可用移动类型的数据
+					if (moveTypes != null && !moveTypes.isEmpty()) {
+						queryResponse.getDetails().getData().removeIf(s -> moveTypes.contains(s.getBWART()));
+					}
+
+					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
+						List<MaterialVoucher> mockData = new ArrayList<>();
+						List<ReservedOutbound> reservedOutbounds = queryResponse.getDetails().getData();
+
+						Map<String, List<ReservedOutbound>> group = reservedOutbounds.stream().collect(Collectors.groupingBy(ReservedOutbound::getRSNUM));
+						group.forEach((k, v) -> {
+							MaterialVoucher materialVoucher = new MaterialVoucher();
+							materialVoucher.orderNumber = v.get(0).getRSNUM();
+							materialVoucher.date = LocalDate.parse(v.get(0).getBDTER(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+							materialVoucher.creator = v.get(0).getUSNAM();
+							materialVoucher.reservedOutbounds = v;
+
+							mockData.add(materialVoucher);
+						});
+
+						emitter.onNext(mockData);
+						emitter.onComplete();
+					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+						@Override
+						public void onNext(List<MaterialVoucher> materialVouchers) {
+							_materials.setValue(materialVouchers);
+						}
+
+						@Override
+						public void onError(Throwable t) {
+							_isLoading.setValue(false);
+						}
+
+						@Override
+						public void onComplete() {
+							_isLoading.setValue(false);
+						}
+					});
+					addSubscription(disposable);
+				}
+
+			}
+
+			@Override
+			public void onFailure(@NotNull Call<ReservedOutBoundQueryResponse> call, @NotNull Throwable t) {
+				queryState.setValue(new ResultState(false, t.getMessage()));
+				Timber.e(t);
+			}
+		});
 	}
 
 

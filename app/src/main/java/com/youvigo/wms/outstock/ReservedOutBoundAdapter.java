@@ -30,9 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.InventoryCheck;
-import com.youvigo.wms.data.entities.OutOfStock;
+import com.youvigo.wms.data.entities.ReservedOutbound;
 
-public class ReservedOutBoundAdapter extends ListAdapter<OutOfStock, ReservedOutBoundAdapter.OutOfStockVH> {
+public class ReservedOutBoundAdapter extends ListAdapter<ReservedOutbound, ReservedOutBoundAdapter.OutOfStockVH> {
     public ReservedOutBoundAdapter() {
         super(new OutOfStockDiffCallback());
     }
@@ -85,25 +85,25 @@ public class ReservedOutBoundAdapter extends ListAdapter<OutOfStock, ReservedOut
         @Override
         public void onClick(View v) {
             if (itemView.getContext() instanceof AppCompatActivity) {
-                //  OutOfStock outOfStock = getItem(getAdapterPosition());
+                //  ReservedOutbound outOfStock = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
                 ReservedOutBoundDetailDialogFragment.show(fragmentManager);
             }
         }
     }
 
-    static class OutOfStockDiffCallback extends DiffUtil.ItemCallback<OutOfStock> {
+    static class OutOfStockDiffCallback extends DiffUtil.ItemCallback<ReservedOutbound> {
         @Override
-        public boolean areItemsTheSame(@NonNull OutOfStock oldItem, @NonNull OutOfStock newItem) {
-            return oldItem.itemNumber.equals(newItem.itemNumber);
+        public boolean areItemsTheSame(@NonNull ReservedOutbound oldItem, @NonNull ReservedOutbound newItem) {
+            return oldItem.getMaterialCode().equals(newItem.getMaterialCode());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull OutOfStock oldItem, @NonNull OutOfStock newItem) {
-            return oldItem.materialName.equals(newItem.materialName)
-                    && oldItem.basicOrder.equals(newItem.basicOrder)
-                    && oldItem.lotNumber.equals(newItem.lotNumber)
-                    && oldItem.specification.equals(newItem.specification);
+        public boolean areContentsTheSame(@NonNull ReservedOutbound oldItem, @NonNull ReservedOutbound newItem) {
+            return oldItem.getMaterialName().equals(newItem.getMaterialName())
+                    && oldItem.getRSNUM().equals(newItem.getRSNUM())
+                    && oldItem.getBatchNumber().equals(newItem.getBatchNumber())
+                    && oldItem.getSpecification().equals(newItem.getSpecification());
         }
     }
 }

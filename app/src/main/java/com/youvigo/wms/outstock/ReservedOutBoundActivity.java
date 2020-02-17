@@ -18,6 +18,7 @@ package com.youvigo.wms.outstock;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,7 +36,7 @@ import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
-import com.youvigo.wms.data.dto.response.MoveType;
+import com.youvigo.wms.data.entities.MoveType;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
@@ -43,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +56,7 @@ import timber.log.Timber;
  */
 public class ReservedOutBoundActivity extends BaseActivity {
     public static final String ORDER_NUMBER = "order_number";
+    public static final String FILTER_MOVETYPES = "filter_movetypes";
 
     private EditText orderNumber, remark;
 
@@ -112,27 +115,41 @@ public class ReservedOutBoundActivity extends BaseActivity {
      */
     private void observeData() {
         viewModel = new ViewModelProvider.NewInstanceFactory().create(ReservedOutBoundViewModel.class);
+
+        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+
+        //viewModel.getMaterials().observe(this, materialVoucher -> {
+        //    department.setText(materialVoucher.supplierName);
+        //    orderDate.setText(materialVoucher.date);
+        //});
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (searchResult != null) {
+            viewModel.handleDate(searchResult);
+        }
+
         Timber.d("onActivityResult");
     }
 
     @Override
     protected int getLayoutId() {
-        return R.layout.out_of_stock_activity;
+        return R.layout.reserved_outbound_activity;
     }
 
     @Override
     protected void onMenuSearchClicked() {
 
         String number = orderNumber.getText().toString();
+        List<String> filter_movetypes = moveTypes.stream().map(MoveType::getMoveCode).collect(Collectors.toList());
 
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(Constants.CATEGORY, Constants.TYPE_RESERVED_OUT_BOUND);
         intent.putExtra(ORDER_NUMBER, number);
+        intent.putExtra(FILTER_MOVETYPES, new ArrayList<>(filter_movetypes));
         startActivityForResult(intent, REQUEST_CODE);
     }
 

@@ -86,7 +86,7 @@ public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearc
 //        @Override
 //        public void onClick(View v) {
 //            if (itemView.getContext() instanceof AppCompatActivity) {
-//                //  OutOfStock outOfStock = getItem(getAdapterPosition());
+//                //  ReservedOutbound outOfStock = getItem(getAdapterPosition());
 //                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
 //                OutOfStockDetailDialogFragment.show(fragmentManager);
 //            }
