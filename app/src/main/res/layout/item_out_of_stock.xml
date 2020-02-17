@@ -106,31 +106,6 @@
             app:layout_constraintTop_toTopOf="@id/tv_specification" />
 
         <TextView
-            android:id="@+id/tv_unit_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
-            android:gravity="start|center"
-            android:text="@string/unit"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
-            app:layout_constraintTop_toBottomOf="@id/tv_specification" />
-
-        <TextView
-            android:id="@+id/tv_unit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:text="ThoughtWorks"
-            app:layout_constraintBottom_toBottomOf="@id/tv_unit_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_unit_description"
-            app:layout_constraintTop_toTopOf="@id/tv_unit_description" />
-
-        <TextView
             android:id="@+id/tv_batch_number"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
@@ -141,7 +116,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code"
-            app:layout_constraintTop_toBottomOf="@id/tv_unit_description" />
+            app:layout_constraintTop_toBottomOf="@id/tv_specification" />
 
         <TextView
             android:id="@+id/tv_batch_number_description"
@@ -176,9 +151,20 @@
             android:gravity="start|center"
             android:text="100"
             app:layout_constraintBottom_toBottomOf="@id/tv_demand_description"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_demand_description"
             app:layout_constraintTop_toTopOf="@id/tv_demand_description" />
+
+        <TextView
+            android:id="@+id/tv_demand_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="瓶"
+            app:layout_constraintBottom_toBottomOf="@id/tv_demand"
+            app:layout_constraintStart_toEndOf="@id/tv_demand"
+            app:layout_constraintTop_toTopOf="@id/tv_demand"
+            app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
             android:id="@+id/tv_picked_description"
@@ -187,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
-            android:text="@string/picked"
+            android:text="@string/picked_quantity"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code"
@@ -201,9 +187,20 @@
             android:gravity="start|center"
             android:text="10"
             app:layout_constraintBottom_toBottomOf="@id/tv_picked_description"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_picked_description"
             app:layout_constraintTop_toTopOf="@id/tv_picked_description" />
+
+        <TextView
+            android:id="@+id/tv_picked_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:gravity="start|center"
+            android:text="瓶"
+            app:layout_constraintBottom_toBottomOf="@id/tv_picked"
+            app:layout_constraintStart_toEndOf="@id/tv_picked"
+            app:layout_constraintTop_toTopOf="@id/tv_picked"
+            app:layout_constraintVertical_bias="0.0"/>
 
         <TextView
             android:id="@+id/tv_cargo_space_description"
@@ -229,32 +226,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_cargo_space_description"
             app:layout_constraintTop_toTopOf="@id/tv_cargo_space_description" />
-
-        <TextView
-            android:id="@+id/tv_department_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
-            android:gravity="start"
-            android:text="@string/unit"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
-            app:layout_constraintTop_toBottomOf="@id/tv_cargo_space_description" />
-
-        <TextView
-            android:id="@+id/tv_department"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:text="ThoughtWorks"
-            app:layout_constraintBottom_toBottomOf="@id/tv_department_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_department_description"
-            app:layout_constraintTop_toTopOf="@id/tv_department_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

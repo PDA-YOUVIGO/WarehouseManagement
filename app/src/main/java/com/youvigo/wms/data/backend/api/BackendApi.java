@@ -19,6 +19,7 @@ package com.youvigo.wms.data.backend.api;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocationResponse;
 import com.youvigo.wms.data.dto.response.Material;
+import com.youvigo.wms.data.dto.response.MoveType;
 
 import java.util.List;
 
@@ -45,4 +46,11 @@ public interface BackendApi {
 	 */
 	@GET("blade-data/api/material/detail")
 	Call<ApiResponse<List<Material>>> getMaterial(@Query("matnr") String matnr);
+
+	/**
+	 * 获取库存地参照
+	 * @param factoryCode 工厂编码
+	 */
+	@GET("blade-data/api/movetype/list")
+	Call<ApiResponse<List<MoveType>>> getMoveTypes(@Query("factoryCode") String factoryCode);
 }

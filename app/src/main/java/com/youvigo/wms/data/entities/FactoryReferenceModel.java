@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.model;
+package com.youvigo.wms.data.entities;
 
 import java.io.Serializable;
 import java.util.List;

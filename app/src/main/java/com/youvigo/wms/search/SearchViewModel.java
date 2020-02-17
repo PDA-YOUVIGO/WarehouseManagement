@@ -250,6 +250,14 @@ public class SearchViewModel extends BaseViewModel {
 		});
 	}
 
+	/**
+	 * 查询预留单
+	 * @param orderNumber 预留单号
+	 */
+	void reservedOutBoundQuery(String orderNumber) {
+		_isLoading.setValue(true);
+	}
+
 
 	LiveData<Boolean> isLoading() {
 		return _isLoading;

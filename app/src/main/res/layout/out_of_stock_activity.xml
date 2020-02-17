@@ -56,8 +56,9 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
-            android:hint="请输入单据编号..."
-            android:maxLines="1"
+            android:hint="预留单号..."
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/tv_document_number"
@@ -78,8 +79,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_document_number" />
 
-        <TextView
-            android:id="@+id/tv_movement_type_description"
+        <Spinner
+            android:id="@+id/sp_move_type_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
@@ -87,39 +88,13 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="Fast"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_2"
             app:layout_constraintBottom_toBottomOf="@id/tv_movement_type"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_movement_type"
             app:layout_constraintTop_toTopOf="@id/tv_movement_type" />
 
-        <TextView
-            android:id="@+id/tv_cost_center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginBottom="@dimen/dp_4"
-            android:gravity="start"
-            android:text="@string/cost_center"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
-            app:layout_constraintTop_toBottomOf="@id/tv_movement_type" />
-
-        <TextView
-            android:id="@+id/tv_cost_center_description"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:gravity="start|center"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="0sad1111"
-            app:layout_constraintBottom_toBottomOf="@id/tv_cost_center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_cost_center"
-            app:layout_constraintTop_toTopOf="@id/tv_cost_center" />
 
         <TextView
             android:id="@+id/tv_internal_order"
@@ -132,7 +107,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
-            app:layout_constraintTop_toBottomOf="@id/tv_cost_center" />
+            app:layout_constraintTop_toBottomOf="@id/tv_movement_type" />
 
         <TextView
             android:id="@+id/tv_internal_order_description"
@@ -143,7 +118,8 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="O11wsadsad11111111"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             app:layout_constraintBottom_toBottomOf="@id/tv_internal_order"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_internal_order"
@@ -171,7 +147,8 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="田家成"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             app:layout_constraintBottom_toBottomOf="@id/tv_employer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_employer"
@@ -199,39 +176,12 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="IT部门"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             app:layout_constraintBottom_toBottomOf="@id/tv_department_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_department_description"
             app:layout_constraintTop_toTopOf="@id/tv_department_description" />
-
-        <TextView
-            android:id="@+id/tv_harvest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginBottom="@dimen/dp_4"
-            android:gravity="start"
-            android:text="@string/harvest"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
-            app:layout_constraintTop_toBottomOf="@id/tv_department_description" />
-
-        <TextView
-            android:id="@+id/tv_harvest_description"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:gravity="start|center"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="成都"
-            app:layout_constraintBottom_toBottomOf="@id/tv_harvest"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_harvest"
-            app:layout_constraintTop_toTopOf="@id/tv_harvest" />
 
         <TextView
             android:id="@+id/tv_remark"
@@ -244,17 +194,19 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
-            app:layout_constraintTop_toBottomOf="@id/tv_harvest" />
+            app:layout_constraintTop_toBottomOf="@id/tv_department_description" />
 
         <EditText
             android:id="@+id/et_remark"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
-            android:hint="我其实不该领啊..."
+            android:hint="备注"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             android:maxLines="1"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"

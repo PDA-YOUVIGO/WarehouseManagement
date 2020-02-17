@@ -16,7 +16,34 @@
 
 package com.youvigo.wms.outstock;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.youvigo.wms.base.BaseViewModel;
 
-public class OutOfStockViewModel extends BaseViewModel {
+import java.util.List;
+
+public class ReservedOutBoundViewModel extends BaseViewModel {
+
+	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
+	private MutableLiveData<?> _order = new MutableLiveData<>();
+	private MutableLiveData<List<?>>_items = new MutableLiveData<>();
+
+	public void handleDate() {
+
+		_isLoading.setValue(true);
+
+	}
+
+	public LiveData<Boolean> isLoading() {
+		return _isLoading;
+	}
+
+	public LiveData<?> getOrder() {
+		return _order;
+	}
+
+	public LiveData<List<?>> getItems() {
+		return _items;
+	}
 }

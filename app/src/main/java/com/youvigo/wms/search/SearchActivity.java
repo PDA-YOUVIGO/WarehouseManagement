@@ -36,169 +36,168 @@ import timber.log.Timber;
  */
 public class SearchActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
-    private AppCompatEditText orderNumnerTxt;
-    private SearchAdapter adapter;
-    private TextView startDate;
-    private TextView endDate;
+	private ProgressBar progressBar;
+	private AppCompatEditText orderNumnerTxt;
+	private SearchAdapter adapter;
+	private TextView startDate;
+	private TextView endDate;
 
-    private SearchViewModel viewModel;
+	private SearchViewModel viewModel;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.search_activity);
+		setContentView(R.layout.search_activity);
 
-        initViews();
+		initViews();
 
-        observeData();
+		observeData();
 
-        initIntent();
+		initIntent();
 
-    }
+	}
 
-    private void initIntent() {
-        if (getIntent() != null) {
+	private void initIntent() {
+		if (getIntent() != null) {
 
-            String category = getIntent().getStringExtra(Constants.CATEGORY);
-            String orderNumber = getIntent().getStringExtra(DeliverActivity.TASK_NUMBER);
-            if (category == null) {
-                return;
-            }
+			String category = getIntent().getStringExtra(Constants.CATEGORY);
+			String orderNumber = getIntent().getStringExtra(DeliverActivity.TASK_NUMBER);
+			if (category == null) {
+				return;
+			}
 
-            switch (category) {
-                case Constants.TYPE_SHELVING:
-                    getSupportActionBar().setTitle("上架查询");
-                    break;
-                case Constants.TYPE_TAKE_OFF:
-                    getSupportActionBar().setTitle("下架查询");
-                    orderNumnerTxt.setText(orderNumber);
+			switch (category) {
+				case Constants.TYPE_SHELVING:
+					getSupportActionBar().setTitle("上架查询");
+					break;
+				case Constants.TYPE_DELIVER:
+					getSupportActionBar().setTitle("下架查询");
+					break;
+				case Constants.TYPE_RESERVED_OUT_BOUND:
+					getSupportActionBar().setTitle("预留查询");
+					break;
+				default:
+					orderNumnerTxt.setText(orderNumber);
+					// 如果传递进来单据号则直接查询
+					if (!orderNumber.isEmpty()) {
+						query(category);
+					}
+			}
+		}
+	}
 
-                    // 如果传递进来单据号则直接查询
-                    if (!orderNumber.isEmpty()) {
-                        query(category);
-                    }
+	private void initViews() {
+		Toolbar toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
-                    break;
-                case Constants.TYPE_OUT_OF_STOCK:
-                    getSupportActionBar().setTitle("预留查询");
-                    break;
-            }
-        }
-    }
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
-    private void initViews() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+		String category = getIntent().getStringExtra(Constants.CATEGORY);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+		LocalDate localDate = LocalDate.now();
 
-        String category = getIntent().getStringExtra(Constants.CATEGORY);
+		startDate = findViewById(R.id.tv_start);
+		startDate.setText(localDate.toString());
 
-        LocalDate localDate = LocalDate.now();
+		startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
+			startDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
+		}, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
 
-        startDate = findViewById(R.id.tv_start);
-        startDate.setText(localDate.toString());
+		endDate = findViewById(R.id.tv_end);
+		endDate.setText(localDate.toString());
+		endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
+			endDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
+		}, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
 
-        startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-            startDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
-        }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
+		// 查询
+		MaterialButton materialButton = findViewById(R.id.mbt_query);
+		materialButton.setOnClickListener(v -> {
+			query(category);
 
-        endDate = findViewById(R.id.tv_end);
-        endDate.setText(localDate.toString());
-        endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-            endDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
-        }, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
+		});
 
-        // 查询
-        MaterialButton materialButton = findViewById(R.id.mbt_query);
-        materialButton.setOnClickListener(v -> {
-            query(category);
+		orderNumnerTxt = findViewById(R.id.edit_text);
+		progressBar = findViewById(R.id.progress_bar);
+		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		recyclerView.setHasFixedSize(true);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		adapter = new SearchAdapter();
+		recyclerView.setAdapter(adapter);
+	}
 
-        });
+	/**
+	 * 查询
+	 */
+	private void query(String category) {
+		hideKeyboard();
+		orderNumnerTxt.clearFocus();
 
-        orderNumnerTxt = findViewById(R.id.edit_text);
-        progressBar = findViewById(R.id.progress_bar);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SearchAdapter();
-        recyclerView.setAdapter(adapter);
-    }
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);
+		LocalDate localDateStart = LocalDate.parse(this.startDate.getText().toString());
+		LocalDate localDateEnd = LocalDate.parse(this.endDate.getText().toString());
+		String year = String.valueOf(localDateStart.getYear());
 
-    /**
-     * 查询
-     */
-    private void query(String category) {
-        hideKeyboard();
-        orderNumnerTxt.clearFocus();
+		switch (category) {
+			case Constants.TYPE_SHELVING:
+				viewModel.shelvingQuery(year, localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				break;
+			case Constants.TYPE_DELIVER:
+				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				break;
+			case Constants.TYPE_RESERVED_OUT_BOUND:
+				getSupportActionBar().setTitle("预留查询");
+				break;
+		}
+	}
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);
-        LocalDate localDateStart = LocalDate.parse(this.startDate.getText().toString());
-        LocalDate localDateEnd = LocalDate.parse(this.endDate.getText().toString());
-        String year = String.valueOf(localDateStart.getYear());
+	/**
+	 * 观察数据变化
+	 */
+	private void observeData() {
+		viewModel = new ViewModelProvider.NewInstanceFactory().create(SearchViewModel.class);
 
-        switch (category) {
-            case Constants.TYPE_SHELVING:
-                viewModel.shelvingQuery(year,localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
-                break;
-            case Constants.TYPE_TAKE_OFF:
-                viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
-                break;
-            case Constants.TYPE_OUT_OF_STOCK:
-                getSupportActionBar().setTitle("预留查询");
-                break;
-        }
-    }
+		//viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
-    /**
-     * 观察数据变化
-     */
-    private void observeData() {
-        viewModel = new ViewModelProvider.NewInstanceFactory().create(SearchViewModel.class);
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+		viewModel.materials().observe(this, materials -> {
+			adapter.submitList(materials);
+			adapter.notifyDataSetChanged();
+		});
 
-        //viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+		// 显示查询结果信息
+		viewModel.getQueryState().observe(this, queryState -> {
+			if (queryState == null) return;
+			if (!queryState.isSuccess()) {
+				Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
+	}
 
-        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
-        viewModel.materials().observe(this, materials -> {
-            adapter.submitList(materials);
-            adapter.notifyDataSetChanged();
-        });
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
-        // 显示查询结果信息
-        viewModel.getQueryState().observe(this, queryState -> {
-            if (queryState == null) return;
-            if (!queryState.isSuccess()) {
-                Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+		setResult(Activity.RESULT_CANCELED);
+		Timber.d("onBackPressed");
+	}
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        setResult(Activity.RESULT_CANCELED);
-        Timber.d("onBackPressed");
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (inputMethodManager != null) {
-            inputMethodManager.hideSoftInputFromWindow(orderNumnerTxt.getWindowToken(), 0);
-        }
-    }
+	private void hideKeyboard() {
+		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		if (inputMethodManager != null) {
+			inputMethodManager.hideSoftInputFromWindow(orderNumnerTxt.getWindowToken(), 0);
+		}
+	}
 }

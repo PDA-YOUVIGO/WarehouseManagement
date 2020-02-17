@@ -32,15 +32,15 @@ import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.InventoryCheck;
 import com.youvigo.wms.data.entities.OutOfStock;
 
-public class OutOfStockAdapter extends ListAdapter<OutOfStock, OutOfStockAdapter.OutOfStockVH> {
-    public OutOfStockAdapter() {
+public class ReservedOutBoundAdapter extends ListAdapter<OutOfStock, ReservedOutBoundAdapter.OutOfStockVH> {
+    public ReservedOutBoundAdapter() {
         super(new OutOfStockDiffCallback());
     }
 
     @NonNull
     @Override
     public OutOfStockVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_materials_search, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_out_of_stock, parent, false);
         return new OutOfStockVH(view);
     }
 
@@ -87,7 +87,7 @@ public class OutOfStockAdapter extends ListAdapter<OutOfStock, OutOfStockAdapter
             if (itemView.getContext() instanceof AppCompatActivity) {
                 //  OutOfStock outOfStock = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                OutOfStockDetailDialogFragment.show(fragmentManager);
+                ReservedOutBoundDetailDialogFragment.show(fragmentManager);
             }
         }
     }

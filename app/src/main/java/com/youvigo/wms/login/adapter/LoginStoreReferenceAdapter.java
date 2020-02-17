@@ -24,7 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.model.StoreReferenceModel;
+import com.youvigo.wms.data.entities.StoreReferenceModel;
 
 import java.util.List;
 

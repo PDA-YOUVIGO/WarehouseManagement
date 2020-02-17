@@ -39,9 +39,9 @@ import com.youvigo.wms.search.MaterialsSearchActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-public class OutOfStockDetailDialogFragment extends DialogFragment {
+public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
     public static final int REQUEST_CODE = 101;
-    private static final String TAG = "OutOfStockDetailDialogFragment";
+    private static final String TAG = "ReservedOutBoundDetailDialogFragment";
     private static final String KEY_OUT_OF_STOCK = "key_out_of_stock";
 
     // 物料编码
@@ -65,7 +65,7 @@ public class OutOfStockDetailDialogFragment extends DialogFragment {
      * 展示详情页面
      */
     public static void show(FragmentManager fragmentManager/*, OutOfStock outOfStock*/) {
-        OutOfStockDetailDialogFragment dialogFragment = new OutOfStockDetailDialogFragment();
+        ReservedOutBoundDetailDialogFragment dialogFragment = new ReservedOutBoundDetailDialogFragment();
         Bundle bundle = new Bundle();
         //  bundle.putParcelable(KEY_OUT_OF_STOCK, outOfStock);
         dialogFragment.setArguments(bundle);

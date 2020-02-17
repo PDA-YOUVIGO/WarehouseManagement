@@ -187,7 +187,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
-            android:text="@string/picked"
+            android:text="@string/picked_quantity"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code"

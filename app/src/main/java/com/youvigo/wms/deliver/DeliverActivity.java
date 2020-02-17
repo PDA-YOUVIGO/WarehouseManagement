@@ -113,7 +113,7 @@ public class DeliverActivity extends BaseActivity {
         String task = taskNumber.getText().toString();
 
         Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(Constants.CATEGORY, Constants.TYPE_TAKE_OFF);
+        intent.putExtra(Constants.CATEGORY, Constants.TYPE_DELIVER);
         intent.putExtra(TASK_NUMBER, task);
         startActivityForResult(intent, REQUEST_CODE);
     }

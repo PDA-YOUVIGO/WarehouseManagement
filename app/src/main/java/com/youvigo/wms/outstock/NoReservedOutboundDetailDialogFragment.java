@@ -66,7 +66,7 @@ public class NoReservedOutboundDetailDialogFragment extends DialogFragment {
      * 展示详情页面
      */
     public static void show(FragmentManager fragmentManager) {
-        OutOfStockDetailDialogFragment dialogFragment = new OutOfStockDetailDialogFragment();
+        ReservedOutBoundDetailDialogFragment dialogFragment = new ReservedOutBoundDetailDialogFragment();
         Bundle bundle = new Bundle();
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fragmentManager, TAG);

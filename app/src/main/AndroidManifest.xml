@@ -60,7 +60,7 @@
             android:label="@string/take_off" />
 
         <activity
-            android:name=".outstock.OutOfStockActivity"
+            android:name=".outstock.ReservedOutBoundActivity"
             android:label="@string/out_of_stock" />
 
         <activity

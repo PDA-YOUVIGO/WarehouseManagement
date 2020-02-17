@@ -29,7 +29,7 @@ import com.youvigo.wms.base.BaseFragment;
 import com.youvigo.wms.inventory.SwitchStockLocationActivity;
 import com.youvigo.wms.deliver.DeliverActivity;
 import com.youvigo.wms.outstock.NoReservedOutboundActivity;
-import com.youvigo.wms.outstock.OutOfStockActivity;
+import com.youvigo.wms.outstock.ReservedOutBoundActivity;
 import com.youvigo.wms.product.FinishedProductsActivity;
 import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.shelving.ShelvingActivity;
@@ -125,7 +125,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void launchOutOfStockActivity() {
-        Intent intent = new Intent(context, OutOfStockActivity.class);
+        Intent intent = new Intent(context, ReservedOutBoundActivity.class);
         startActivity(intent);
     }
 

@@ -108,7 +108,7 @@
     <string name="material_name">物料名称</string>
     <string name="demand">需求量</string>
     <string name="unit">单位</string>
-    <string name="picked">已拣</string>
+    <string name="picked_quantity">已拣数量</string>
     <string name="cargo_space">货位</string>
 
     <string name="item_description">物料描述</string>

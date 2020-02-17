@@ -60,7 +60,7 @@ public class NoReservedOutboundActivity extends BaseActivity {
     }
 
     private void initViews() {
-        movementType = findViewById(R.id.tv_movement_type_description);
+        movementType = findViewById(R.id.sp_move_type_description);
         internalOrder = findViewById(R.id.tv_internal_order_description);
         orderInput = findViewById(R.id.et_internal_order);
         query = findViewById(R.id.mb_query);
@@ -79,7 +79,7 @@ public class NoReservedOutboundActivity extends BaseActivity {
         });
         employer = findViewById(R.id.tv_employer_description);
         receivingDepartment = findViewById(R.id.tv_receiving_department_description);
-        harvest = findViewById(R.id.tv_harvest_description);
+        harvest = findViewById(R.id.sp_place_of_receipt_description);
         remark = findViewById(R.id.et_remark);
 
         progressBar = findViewById(R.id.progress_bar);

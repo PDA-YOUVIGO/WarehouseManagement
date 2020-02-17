@@ -50,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_movement_type_description"
+            android:id="@+id/sp_move_type_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
@@ -183,7 +183,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_department_description" />
 
         <TextView
-            android:id="@+id/tv_harvest_description"
+            android:id="@+id/sp_place_of_receipt_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"

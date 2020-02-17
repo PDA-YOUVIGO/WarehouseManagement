@@ -43,8 +43,8 @@ import com.youvigo.wms.R;
 import com.youvigo.wms.SettingsActivity;
 import com.youvigo.wms.login.adapter.LoginFactoryReferenceAdapter;
 import com.youvigo.wms.login.adapter.LoginStoreReferenceAdapter;
-import com.youvigo.wms.data.model.FactoryReferenceModel;
-import com.youvigo.wms.data.model.StoreReferenceModel;
+import com.youvigo.wms.data.entities.FactoryReferenceModel;
+import com.youvigo.wms.data.entities.StoreReferenceModel;
 import com.youvigo.wms.data.dto.login.StoreEntity;
 import com.youvigo.wms.data.dto.login.StoreResponseEntity;
 
