@@ -18,6 +18,9 @@ package com.youvigo.wms.data.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * SAP现存量
+ */
 public class Material implements Parcelable {
 
     /// 仓库号

@@ -19,32 +19,35 @@ package com.youvigo.wms.data.dto.request;
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 
-import java.util.List;
-
-/***
- * 仓位移动请求报文
- */
-public class PositionMovementRequest {
+public class WarehouseInventoryRequest {
 
     @SerializedName("ControlInfo")
     private ControlInfo controlInfo;
 
     @SerializedName("ITEM")
-    private List<PositionMovementRequestDetails> Data;
+    private WarehouseInventoryRequestDetails requestDetails;
 
-    public PositionMovementRequest() {
+    public WarehouseInventoryRequest() {
     }
 
-    public PositionMovementRequest(ControlInfo controlInfo, List<PositionMovementRequestDetails> data) {
+    public WarehouseInventoryRequest(ControlInfo controlInfo, WarehouseInventoryRequestDetails requestDetails) {
         this.controlInfo = controlInfo;
-        Data = data;
+        this.requestDetails = requestDetails;
+    }
+
+    public ControlInfo getControlInfo() {
+        return controlInfo;
     }
 
     public void setControlInfo(ControlInfo controlInfo) {
         this.controlInfo = controlInfo;
     }
 
-    public void setData(List<PositionMovementRequestDetails> data) {
-        Data = data;
+    public WarehouseInventoryRequestDetails getRequestDetails() {
+        return requestDetails;
+    }
+
+    public void setRequestDetails(WarehouseInventoryRequestDetails requestDetails) {
+        this.requestDetails = requestDetails;
     }
 }

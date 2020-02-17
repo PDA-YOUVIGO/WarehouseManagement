@@ -141,4 +141,7 @@
 
     <!--Material-->
     <string name="material_detail">请输入查询参数</string>
+
+    <!--盘点-->
+    <string name="warehouse_number">盘点记录号</string>
 </resources>

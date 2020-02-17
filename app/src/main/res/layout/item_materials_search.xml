@@ -90,7 +90,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_14"
             android:gravity="start|center"
             android:text="@string/specification"
             android:textColor="@color/colorPrimary"
@@ -140,8 +140,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:gravity="start|center"
+            android:gravity="center|start"
             android:text="箱"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_number"
             app:layout_constraintTop_toTopOf="@+id/tv_number" />
 

@@ -17,34 +17,53 @@
 package com.youvigo.wms.data.dto.request;
 
 import com.google.gson.annotations.SerializedName;
+import com.youvigo.wms.data.dto.base.Additional;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 
-import java.util.List;
-
-/***
- * 仓位移动请求报文
+/**
+ * 仓库盘点
  */
-public class PositionMovementRequest {
+public class WarehouseInventoryQueryRequest {
 
     @SerializedName("ControlInfo")
     private ControlInfo controlInfo;
 
-    @SerializedName("ITEM")
-    private List<PositionMovementRequestDetails> Data;
+    /// 附加字段
+    private Additional ADDITIONAL;
 
-    public PositionMovementRequest() {
+    @SerializedName("HEAD")
+    public WarehouseInventoryQueryRequestDetails data;
+
+    public WarehouseInventoryQueryRequest() {
     }
 
-    public PositionMovementRequest(ControlInfo controlInfo, List<PositionMovementRequestDetails> data) {
+    public WarehouseInventoryQueryRequest(ControlInfo controlInfo, Additional ADDITIONAL, WarehouseInventoryQueryRequestDetails data) {
         this.controlInfo = controlInfo;
-        Data = data;
+        this.ADDITIONAL = ADDITIONAL;
+        this.data = data;
+    }
+
+    public ControlInfo getControlInfo() {
+        return controlInfo;
     }
 
     public void setControlInfo(ControlInfo controlInfo) {
         this.controlInfo = controlInfo;
     }
 
-    public void setData(List<PositionMovementRequestDetails> data) {
-        Data = data;
+    public Additional getADDITIONAL() {
+        return ADDITIONAL;
+    }
+
+    public void setADDITIONAL(Additional ADDITIONAL) {
+        this.ADDITIONAL = ADDITIONAL;
+    }
+
+    public WarehouseInventoryQueryRequestDetails getData() {
+        return data;
+    }
+
+    public void setData(WarehouseInventoryQueryRequestDetails data) {
+        this.data = data;
     }
 }
