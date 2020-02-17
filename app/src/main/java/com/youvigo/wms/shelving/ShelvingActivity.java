@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,7 +80,7 @@ public class ShelvingActivity extends BaseActivity {
     }
 
     private void observeData() {
-        viewModel = ViewModelProviders.of(this).get(ShelvingViewModel.class);
+        viewModel = new ViewModelProvider.NewInstanceFactory().create(ShelvingViewModel.class);
 
         viewModel.material().observe(this, materialVoucher -> {
             if (materialVoucher != null) {

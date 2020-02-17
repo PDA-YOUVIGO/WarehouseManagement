@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.off;
+package com.youvigo.wms.deliver;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.TakeOff;
 
-public class TakeOffAdapter extends ListAdapter<TakeOff, TakeOffAdapter.TakeOffVH> {
-    public TakeOffAdapter() {
+public class DeliverAdapter extends ListAdapter<TakeOff, DeliverAdapter.TakeOffVH> {
+    public DeliverAdapter() {
         super(new TakeOffDiffCallback());
     }
 
@@ -49,30 +49,33 @@ public class TakeOffAdapter extends ListAdapter<TakeOff, TakeOffAdapter.TakeOffV
     }
 
     class TakeOffVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView itemNumber;
+        private final TextView materialCode;
         private final TextView materialName;
-        private final TextView basicOrder;
+        private final TextView quantity;
+        private final TextView unit;
         private final TextView specification;
-        private final TextView lotNumber;
+        private final TextView batchNumber;
 
         TakeOffVH(@NonNull View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
 
-            itemNumber = itemView.findViewById(R.id.tv_item_number);
-            materialName = itemView.findViewById(R.id.tv_material_name);
-            basicOrder = itemView.findViewById(R.id.tv_basic_order);
-            specification = itemView.findViewById(R.id.tv_specification);
-            lotNumber = itemView.findViewById(R.id.tv_batch_number);
+            materialCode = itemView.findViewById(R.id.tv_item_material_code);
+            materialName = itemView.findViewById(R.id.tv_material_name_description);
+            quantity = itemView.findViewById(R.id.tv_quantity);
+            unit = itemView.findViewById(R.id.tv_unit);
+            specification = itemView.findViewById(R.id.tv_specification_description);
+            batchNumber = itemView.findViewById(R.id.tv_batch_number_description);
         }
 
         void bind(TakeOff takeOff) {
-            itemNumber.setText(takeOff.itemNumber);
-            materialName.setText(takeOff.materialName);
-            basicOrder.setText(takeOff.basicOrder);
-            specification.setText(takeOff.specification);
-            lotNumber.setText(takeOff.lotNumber);
+            materialCode.setText(takeOff.getMaterialCode());
+            materialName.setText(takeOff.getMaterialName());
+            quantity.setText(String.valueOf(takeOff.getQuantity()));
+            unit.setText(takeOff.getBaseUnitDescription());
+            specification.setText(takeOff.getSpecification());
+            batchNumber.setText(takeOff.getBatchNumber());
         }
 
         @Override
@@ -80,7 +83,7 @@ public class TakeOffAdapter extends ListAdapter<TakeOff, TakeOffAdapter.TakeOffV
             if (itemView.getContext() instanceof AppCompatActivity) {
                 TakeOff takeOff = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                TakeOffDetailDialogFragment.show(fragmentManager, takeOff);
+                DeliverDetailDialogFragment.show(fragmentManager, takeOff);
             }
         }
     }
@@ -88,15 +91,15 @@ public class TakeOffAdapter extends ListAdapter<TakeOff, TakeOffAdapter.TakeOffV
     static class TakeOffDiffCallback extends DiffUtil.ItemCallback<TakeOff> {
         @Override
         public boolean areItemsTheSame(@NonNull TakeOff oldItem, @NonNull TakeOff newItem) {
-            return oldItem.itemNumber.equals(newItem.itemNumber);
+            return oldItem.getMaterialCode().equals(newItem.getMaterialCode());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull TakeOff oldItem, @NonNull TakeOff newItem) {
-            return oldItem.materialName.equals(newItem.materialName)
-                    && oldItem.basicOrder.equals(newItem.basicOrder)
-                    && oldItem.lotNumber.equals(newItem.lotNumber)
-                    && oldItem.specification.equals(newItem.specification);
+            return oldItem.getMaterialName().equals(newItem.getMaterialName())
+                    && oldItem.getOrderNumber().equals(newItem.getOrderNumber())
+                    && oldItem.getBatchNumber().equals(newItem.getBatchNumber())
+                    && oldItem.getSpecification().equals(newItem.getSpecification());
         }
     }
 }

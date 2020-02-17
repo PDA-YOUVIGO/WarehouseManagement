@@ -14,46 +14,42 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.off;
+package com.youvigo.wms.deliver;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
-import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
-
-import java.util.List;
 
 import timber.log.Timber;
 
 /**
  * 出库下架架页面
  */
-public class TakeOffActivity extends BaseActivity {
+public class DeliverActivity extends BaseActivity {
     public static final String TASK_NUMBER = "task_number";
-    public static final String RECEIVING_DEPARTMENT = "receiving_department";
-    public static final String DOCUMENT_DATE = "document_date";
 
-    private EditText taskNumber, receivingDepartment, documentDate;
+    private EditText taskNumber;
+    private TextView department;
+    private TextView orderDate;
 
     private ProgressBar progressBar;
-    private TakeOffAdapter adapter;
+    private DeliverAdapter adapter;
 
-    private TakeOffViewModel viewModel;
+    private DeliverViewModel viewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,31 +62,32 @@ public class TakeOffActivity extends BaseActivity {
 
     private void initViews() {
         taskNumber = findViewById(R.id.et_task_number);
-        receivingDepartment = findViewById(R.id.et_receiving_department);
-        documentDate = findViewById(R.id.et_document_date);
+        department = findViewById(R.id.tv_department);
+        orderDate = findViewById(R.id.tv_order_data);
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TakeOffAdapter();
+        adapter = new DeliverAdapter();
         recyclerView.setAdapter(adapter);
     }
 
     private void observeData() {
-        viewModel = ViewModelProviders.of(this).get(TakeOffViewModel.class);
-        viewModel.isLoading().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isActive) {
-                progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE);
-            }
+        viewModel = new ViewModelProvider.NewInstanceFactory().create(DeliverViewModel.class);
+
+        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+
+        // 设置单据信息
+        viewModel.getMaterials().observe(this, materialVoucher -> {
+            department.setText(materialVoucher.supplierName);
+            orderDate.setText(materialVoucher.date);
         });
-        viewModel.takeOffs().observe(this, new Observer<List<TakeOff>>() {
-            @Override
-            public void onChanged(List<TakeOff> takeOffs) {
-                if (takeOffs != null && !takeOffs.isEmpty()) {
-                    adapter.submitList(takeOffs);
-                }
+
+        // 观察明细变化
+        viewModel.takeOffs().observe(this, takeOffs -> {
+            if (takeOffs != null && !takeOffs.isEmpty()) {
+                adapter.submitList(takeOffs);
             }
         });
     }
@@ -114,16 +111,10 @@ public class TakeOffActivity extends BaseActivity {
     @Override
     protected void onMenuSearchClicked() {
         String task = taskNumber.getText().toString();
-        String department = receivingDepartment.getText().toString();
-        String date = documentDate.getText().toString();
-        if (TextUtils.isEmpty(task) || TextUtils.isEmpty(department) || TextUtils.isEmpty(date)) {
-            return;
-        }
+
         Intent intent = new Intent(this, SearchActivity.class);
         intent.putExtra(Constants.CATEGORY, Constants.TYPE_TAKE_OFF);
         intent.putExtra(TASK_NUMBER, task);
-        intent.putExtra(RECEIVING_DEPARTMENT, department);
-        intent.putExtra(DOCUMENT_DATE, date);
         startActivityForResult(intent, REQUEST_CODE);
     }
 }

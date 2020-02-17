@@ -142,7 +142,7 @@
             tools:text="田家成" />
 
         <TextView
-            android:id="@+id/tv_receiving_department"
+            android:id="@+id/tv_department_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
@@ -163,10 +163,10 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/tv_receiving_department"
+            app:layout_constraintBottom_toBottomOf="@id/tv_department_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_receiving_department"
-            app:layout_constraintTop_toTopOf="@id/tv_receiving_department"
+            app:layout_constraintStart_toEndOf="@id/tv_department_description"
+            app:layout_constraintTop_toTopOf="@id/tv_department_description"
             tools:text="IT部门" />
 
         <TextView
@@ -180,7 +180,7 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_movement_type"
-            app:layout_constraintTop_toBottomOf="@id/tv_receiving_department" />
+            app:layout_constraintTop_toBottomOf="@id/tv_department_description" />
 
         <TextView
             android:id="@+id/tv_harvest_description"

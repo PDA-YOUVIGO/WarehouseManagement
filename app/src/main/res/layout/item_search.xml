@@ -37,7 +37,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/material_document"
+            android:text="@string/order_number"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -50,6 +50,7 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@id/tv_material_document_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_material_document_description"
@@ -61,7 +62,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/creator"
             android:textSize="@dimen/dp_14"
@@ -79,18 +80,21 @@
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_creator_description"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/tv_creator_description"
             app:layout_constraintTop_toTopOf="@id/tv_creator_description"
-            tools:text="田家成" />
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="吴长俊" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            app:layout_constraintBottom_toBottomOf="@id/tv_creator_description"
+            android:gravity="start|center"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintLeft_toRightOf="@id/tv_creator"
+            app:layout_constraintBottom_toBottomOf="@id/tv_creator"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_material_document_description"
             tools:text="2019-01-02" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -34,7 +34,7 @@
         android:paddingBottom="@dimen/dp_4">
 
         <TextView
-            android:id="@+id/tv_item_number_description"
+            android:id="@+id/tv_item_material_code_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -45,44 +45,46 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_item_number"
+            android:id="@+id/tv_item_material_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_number_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_material_code_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_item_number_description"
-            app:layout_constraintTop_toTopOf="@id/tv_item_number_description"
+            app:layout_constraintStart_toEndOf="@id/tv_item_material_code_description"
+            app:layout_constraintTop_toTopOf="@id/tv_item_material_code_description"
             tools:text="000001232323" />
 
         <TextView
-            android:id="@+id/tv_material_name_description"
+            android:id="@+id/tv_material_name"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start|center"
             android:text="@string/common_name"
+            android:singleLine="true"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_number_description" />
+            app:layout_constraintTop_toBottomOf="@id/tv_item_material_code_description" />
 
         <TextView
-            android:id="@+id/tv_material_name"
+            android:id="@+id/tv_material_name_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_name_description"
+            android:singleLine="true"
+            app:layout_constraintBottom_toBottomOf="@id/tv_material_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_material_name_description"
-            app:layout_constraintTop_toTopOf="@id/tv_material_name_description"
+            app:layout_constraintStart_toEndOf="@id/tv_material_name"
+            app:layout_constraintTop_toTopOf="@id/tv_material_name"
             tools:text="吸氧剂" />
 
         <TextView
-            android:id="@+id/tv_specification_description"
+            android:id="@+id/tv_specification"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -91,48 +93,60 @@
             android:text="@string/specification"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_material_name_description" />
+            app:layout_constraintEnd_toEndOf="@id/tv_item_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_material_name" />
 
         <TextView
-            android:id="@+id/tv_specification"
+            android:id="@+id/tv_specification_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_specification_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_specification"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_specification_description"
-            app:layout_constraintTop_toTopOf="@id/tv_specification_description"
+            app:layout_constraintStart_toEndOf="@id/tv_specification"
+            app:layout_constraintTop_toTopOf="@id/tv_specification"
             tools:text="药用级" />
 
         <TextView
-            android:id="@+id/tv_basic_order_description"
+            android:id="@+id/tv_quantity_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start|center"
-            android:text="@string/basic_order"
+            android:text="@string/deliver_quantity"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_specification_description" />
+            app:layout_constraintEnd_toEndOf="@id/tv_item_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_specification" />
 
         <TextView
-            android:id="@+id/tv_basic_order"
-            android:layout_width="0dp"
+            android:id="@+id/tv_quantity"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_basic_order_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_basic_order_description"
-            app:layout_constraintTop_toTopOf="@id/tv_basic_order_description"
-            tools:text="KG" />
+            app:layout_constraintBottom_toBottomOf="@id/tv_quantity_description"
+            app:layout_constraintStart_toEndOf="@id/tv_quantity_description"
+            app:layout_constraintTop_toTopOf="@id/tv_quantity_description"
+            tools:text="121" />
 
         <TextView
-            android:id="@+id/tv_batch_number_description"
+            android:id="@+id/tv_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:textColor="@color/colorAccent"
+            android:gravity="start|center"
+            app:layout_constraintBottom_toBottomOf="@id/tv_quantity"
+            app:layout_constraintStart_toEndOf="@id/tv_quantity"
+            app:layout_constraintTop_toTopOf="@id/tv_quantity"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="瓶" />
+
+        <TextView
+            android:id="@+id/tv_batch_number"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -142,19 +156,19 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_item_number_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_basic_order_description" />
+            app:layout_constraintEnd_toEndOf="@id/tv_item_material_code_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_quantity_description" />
 
         <TextView
-            android:id="@+id/tv_batch_number"
+            android:id="@+id/tv_batch_number_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
-            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_batch_number"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_batch_number_description"
-            app:layout_constraintTop_toTopOf="@id/tv_batch_number_description"
+            app:layout_constraintStart_toEndOf="@id/tv_batch_number"
+            app:layout_constraintTop_toTopOf="@id/tv_batch_number"
             tools:text="O119000000" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

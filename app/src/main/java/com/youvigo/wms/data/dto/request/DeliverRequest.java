@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.dto.response;
+package com.youvigo.wms.data.dto.request;
 
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.entities.Shelving;
 
-import java.util.List;
-
-public class ShelvingQueryResponse {
+public class DeliverRequest {
 
 	@SerializedName("ControlInfo")
 	private ControlInfo controlInfo;
 
-	@SerializedName("ITEM")
-	private List<Shelving> data;
+	@SerializedName("HEAD")
+	private DeliverRequestHead requestHead;
 
-	@SerializedName("RETURN")
-	private SapResponseMessage result;
+	@SerializedName("ITEM")
+	private DeliverRequestItem requestItem;
 
 	public ControlInfo getControlInfo() {
 		return controlInfo;
@@ -41,28 +38,28 @@ public class ShelvingQueryResponse {
 		this.controlInfo = controlInfo;
 	}
 
-	public List<Shelving> getData() {
-		return data;
+	public DeliverRequestHead getRequestHead() {
+		return requestHead;
 	}
 
-	public void setData(List<Shelving> data) {
-		this.data = data;
+	public void setRequestHead(DeliverRequestHead requestHead) {
+		this.requestHead = requestHead;
 	}
 
-	public SapResponseMessage getResult() {
-		return result;
+	public DeliverRequestItem getRequestItem() {
+		return requestItem;
 	}
 
-	public void setResult(SapResponseMessage result) {
-		this.result = result;
+	public void setRequestItem(DeliverRequestItem requestItem) {
+		this.requestItem = requestItem;
 	}
 
-	public ShelvingQueryResponse(ControlInfo controlInfo, List<Shelving> data, SapResponseMessage result) {
+	public DeliverRequest(ControlInfo controlInfo, DeliverRequestHead requestHead, DeliverRequestItem requestItem) {
 		this.controlInfo = controlInfo;
-		this.data = data;
-		this.result = result;
+		this.requestHead = requestHead;
+		this.requestItem = requestItem;
 	}
 
-	public ShelvingQueryResponse() {
+	public DeliverRequest() {
 	}
 }

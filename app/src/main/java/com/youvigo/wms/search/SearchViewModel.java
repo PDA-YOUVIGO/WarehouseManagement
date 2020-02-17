@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2020. komamj
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.youvigo.wms.search;
 
 import androidx.lifecycle.LiveData;
@@ -8,15 +24,21 @@ import com.youvigo.wms.common.ResultState;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.ControlInfo;
+import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
+import com.youvigo.wms.data.dto.request.DeliverQueryRequestDetails;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequestDetails;
+import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.data.entities.TakeOff;
+import com.youvigo.wms.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,16 +60,17 @@ public class SearchViewModel extends BaseViewModel {
 
 	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
 	private MutableLiveData<ResultState> queryState = new MutableLiveData<>();
-	private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<List<MaterialVoucher>>();
+	private MutableLiveData<List<MaterialVoucher>> _materials = new MutableLiveData<>();
+	private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);
 
 	/**
-	 * 查询数据
+	 * 入库上架查询数据
 	 *
 	 * @param startDate        开始日期
 	 * @param endDate          结束日期
-	 * @param materialDocument 物料编号
+	 * @param orderNumber 物料编号
 	 */
-	void query(String year,String startDate, String endDate, String materialDocument) {
+	void shelvingQuery(String year, String startDate, String endDate, String orderNumber) {
 		_isLoading.setValue(true);
 
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
@@ -58,9 +81,9 @@ public class SearchViewModel extends BaseViewModel {
 		shelvingQueryRequest.setControlInfo(new ControlInfo());
 
 		ShelvingQueryRequestDetails shelvingQueryRequestDetails = new ShelvingQueryRequestDetails();
-		shelvingQueryRequestDetails.setMaterialVoucherCode(materialDocument);
-		shelvingQueryRequestDetails.setStartDate(materialDocument.isEmpty() ? "" : startDate);
-		shelvingQueryRequestDetails.setEndDate(materialDocument.isEmpty() ? "" : endDate);
+		shelvingQueryRequestDetails.setMaterialVoucherCode(orderNumber);
+		shelvingQueryRequestDetails.setStartDate(orderNumber.isEmpty() ? startDate : "");
+		shelvingQueryRequestDetails.setEndDate(orderNumber.isEmpty() ? endDate : "");
 		shelvingQueryRequestDetails.setYear(year);
 		shelvingQueryRequestDetails.setStockLocationCode(retrofitClient.getStockLocationCode());
 		shelvingQueryRequestDetails.setWarehouseNumber(retrofitClient.getWarehouseNumber());
@@ -93,7 +116,7 @@ public class SearchViewModel extends BaseViewModel {
 						group.forEach((k,v) -> {
 							MaterialVoucher materialVoucher = new MaterialVoucher();
 							materialVoucher.orderNumber = v.get(0).getMaterialVoucherCode();
-							materialVoucher.date = v.get(0).getVoucherDate();
+							materialVoucher.date = LocalDate.parse(v.get(0).getVoucherDate(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 							materialVoucher.creator = v.get(0).getCreator();
 							materialVoucher.supplierName = v.get(0).getSupplierName();
 							materialVoucher.shelvings = v;
@@ -131,23 +154,102 @@ public class SearchViewModel extends BaseViewModel {
 			}
 		});
 
-
 	}
 
-	@NotNull
-	private List<TakeOff> produceTakeOffs(int i) {
-		List<TakeOff> takeOffs = new ArrayList<>();
-		for (int j = 0; j <= i; j++) {
-			TakeOff takeOff = new TakeOff();
-			takeOff.itemNumber = "1010201111100000" + j;
-			takeOff.materialName = "吸氧剂";
-			takeOff.basicOrder = "KG";
-			takeOff.specification = "药用级";
-			takeOff.lotNumber = "O12340000" + j;
-			takeOffs.add(takeOff);
-		}
-		return takeOffs;
+
+	/**
+	 * 出库下架查询
+	 * @param startDate 开始时间
+	 * @param endDate 截止时间
+	 * @param orderNumber 单据号
+	 */
+	void tackOffQuery(String startDate, String endDate, String orderNumber) {
+		_isLoading.setValue(true);
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+
+		SapService sapService = retrofitClient.getSapService();
+
+		DeliverQueryRequest request = new DeliverQueryRequest();
+		request.setControlInfo(new ControlInfo());
+
+		DeliverQueryRequestDetails requestDetails = new DeliverQueryRequestDetails();
+		requestDetails.setWarehouseNumber(retrofitClient.getWarehouseNumber());
+		requestDetails.setStockLocationCode(retrofitClient.getStockLocationCode());
+		requestDetails.setOrderNumber(orderNumber);
+		requestDetails.setStartDate(orderNumber.isEmpty() ? startDate : "");
+		requestDetails.setEndDate(orderNumber.isEmpty() ? endDate : "");
+		request.setDetails(requestDetails);
+
+		Call<DeliverQueryResponse> call = sapService.queryDeliver(request);
+
+		call.enqueue(new Callback<DeliverQueryResponse>() {
+			@Override
+			public void onResponse(@NotNull Call<DeliverQueryResponse> call, @NotNull Response<DeliverQueryResponse> response) {
+				if (response.isSuccessful()) {
+					DeliverQueryResponse deliverResult = response.body();
+
+					if (!deliverResult.getResponseDetails().getMessage().getSuccess().equalsIgnoreCase("S")) {
+						queryState.setValue(new ResultState(false, deliverResult.getResponseDetails().getMessage().getMessage()));
+						_isLoading.setValue(false);
+						return;
+					}
+
+					if (deliverResult.getResponseDetails().getDetails().isEmpty()) {
+						queryState.setValue(new ResultState(false, "未查询到可用的转储单."));
+						_isLoading.setValue(false);
+						return;
+					}
+
+					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
+						List<MaterialVoucher> mockData = new ArrayList<>();
+						List<TakeOff> takeOffs = deliverResult.getResponseDetails().getDetails();
+
+						// 按单据号分组数据
+						Map<String, List<TakeOff>> group = takeOffs.stream().collect(Collectors.groupingBy(TakeOff::getOrderNumber));
+
+						group.forEach((k, v) -> {
+							MaterialVoucher materialVoucher = new MaterialVoucher();
+							materialVoucher.orderNumber = v.get(0).getOrderNumber();
+							materialVoucher.date = LocalDate.parse(v.get(0).getBDATU(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+							materialVoucher.creator = v.get(0).getUSNAM();
+							materialVoucher.takeOffs = v;
+							materialVoucher.supplierName = v.get(0).getORGTX();
+
+
+
+							mockData.add(materialVoucher);
+						});
+
+						emitter.onNext(mockData);
+						emitter.onComplete();
+					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+						@Override
+						public void onNext(List<MaterialVoucher> materialVouchers) {
+							_materials.setValue(materialVouchers);
+						}
+
+						@Override
+						public void onError(Throwable t) {
+							_isLoading.setValue(false);
+						}
+
+						@Override
+						public void onComplete() {
+							_isLoading.setValue(false);
+						}
+					});
+					addSubscription(disposable);
+				}
+			}
+
+			@Override
+			public void onFailure(@NotNull Call<DeliverQueryResponse> call, @NotNull Throwable t) {
+				queryState.setValue(new ResultState(false, t.getMessage()));
+				Timber.e(t);
+			}
+		});
 	}
+
 
 	LiveData<Boolean> isLoading() {
 		return _isLoading;

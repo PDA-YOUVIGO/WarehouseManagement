@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.off;
+package com.youvigo.wms.deliver;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -24,33 +24,30 @@ import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.TakeOff;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
-public class TakeOffViewModel extends BaseViewModel {
+public class DeliverViewModel extends BaseViewModel {
     private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
-
+    private MutableLiveData<MaterialVoucher> _materials = new MutableLiveData<>();
     private MutableLiveData<List<TakeOff>> _takeOffs = new MutableLiveData<List<TakeOff>>();
 
     public void handleData(MaterialVoucher material) {
         _isLoading.setValue(true);
 
-        Disposable disposable = Flowable.create(new FlowableOnSubscribe<List<TakeOff>>() {
-            @Override
-            public void subscribe(FlowableEmitter<List<TakeOff>> emitter) {
-                emitter.onNext(material.takeOffs);
-                emitter.onComplete();
-            }
+        _materials.setValue(material);
+
+        Disposable disposable = Flowable.create((FlowableOnSubscribe<List<TakeOff>>) emitter -> {
+            emitter.onNext(material.takeOffs);
+            emitter.onComplete();
         }, BackpressureStrategy.LATEST)
-                .delay(3, TimeUnit.SECONDS)
+                //.delay(3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<List<TakeOff>>() {
@@ -78,5 +75,9 @@ public class TakeOffViewModel extends BaseViewModel {
 
     public LiveData<List<TakeOff>> takeOffs() {
         return _takeOffs;
+    }
+
+    public LiveData<MaterialVoucher> getMaterials() {
+        return _materials;
     }
 }
