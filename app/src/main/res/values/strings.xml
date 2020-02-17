@@ -130,4 +130,15 @@
 
     <string name="deliver_quantity">下架数量</string>
     <string name="on_deliver_detail">下架详情</string>
+
+    <string name="Material_number">数量</string>
+    <string name="supplier_name">供应商</string>
+
+    <string name="supplier_batch">供应商批次</string>
+    <string name="sold_position">下架仓位</string>
+    <string name="put_position">上架仓位</string>
+    <string name="position_submit">提交</string>
+
+    <!--Material-->
+    <string name="material_detail">请输入查询参数</string>
 </resources>

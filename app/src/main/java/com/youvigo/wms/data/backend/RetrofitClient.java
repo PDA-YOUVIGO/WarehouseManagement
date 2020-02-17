@@ -104,26 +104,46 @@ public class RetrofitClient {
 		return backendApi;
 	}
 
+	/**
+	 * 工厂
+	 * @return
+	 */
 	public String getFactoryCode() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 		return sharedPreferences.getString(Constants.FACTORYCODE, "1010");
 	}
 
+	/**
+	 * 库存地
+	 * @return
+	 */
 	public String getStockLocationCode() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 		return sharedPreferences.getString(Constants.STOCKLOCATION, "WL01");
 	}
 
+	/**
+	 * 仓库
+	 * @return
+	 */
 	public String getWarehouseNumber() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 		return sharedPreferences.getString(Constants.WAREHOUSE_NUMBER, "X01");
 	}
 
+	/**
+	 * 用户
+	 * @return
+	 */
 	public String getAccount() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 		return sharedPreferences.getString(Constants.ACCOUNT, "unknow");
 	}
 
+	/**
+	 * 用户名称
+	 * @return
+	 */
 	public String getUserName() {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 		return sharedPreferences.getString(Constants.USERNAME, "unknow");

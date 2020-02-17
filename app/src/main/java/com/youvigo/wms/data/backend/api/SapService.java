@@ -19,11 +19,13 @@ package com.youvigo.wms.data.backend.api;
 import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
 import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
+import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
+import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 
@@ -65,4 +67,10 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Off_The_Shelf")
 	Call<DeliverResponse> submitDeliver(@Body DeliverRequest request);
+
+	/**
+	 * 获取物料信息
+	 */
+	@POST("RESTAdapter/PDA/Stock_Query")
+	Call<MaterialQueryResult> materialQuery(@Body MaterialQueryRequest request);
 }

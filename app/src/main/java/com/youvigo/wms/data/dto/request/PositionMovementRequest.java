@@ -14,9 +14,22 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.inventory;
+package com.youvigo.wms.data.dto.request;
 
-import com.youvigo.wms.base.BaseViewModel;
+import com.google.gson.annotations.SerializedName;
+import com.youvigo.wms.data.dto.base.ControlInfo;
 
-public class InventoryCheckViewModel extends BaseViewModel {
+import java.util.List;
+
+/***
+ * 仓位移动请求报文
+ */
+public class PositionMovementRequest {
+
+    @SerializedName("ControlInfo")
+    private ControlInfo controlInfo;
+
+    @SerializedName("HEAD")
+    private List<PositionMovementRequestDetails> Data;
+
 }
