@@ -32,4 +32,19 @@ public class PositionMovementRequest {
     @SerializedName("HEAD")
     private List<PositionMovementRequestDetails> Data;
 
+    public PositionMovementRequest() {
+    }
+
+    public PositionMovementRequest(ControlInfo controlInfo, List<PositionMovementRequestDetails> data) {
+        this.controlInfo = controlInfo;
+        Data = data;
+    }
+
+    public void setControlInfo(ControlInfo controlInfo) {
+        this.controlInfo = controlInfo;
+    }
+
+    public void setData(List<PositionMovementRequestDetails> data) {
+        Data = data;
+    }
 }

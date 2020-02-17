@@ -33,10 +33,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.BackendApi;
+import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.entities.PositionMovementModelView;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PositionMovementDialogFragment extends DialogFragment {
     private static final String TAG = "PositionMovementDialogFragment";
@@ -68,6 +79,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
     private Context context;
     private PositionMovementModelView position;
     private OnPositionInforCompleted mOnPositionInforCompleted;
+    private MaterialButton mb_query;
 
 
     public interface OnPositionInforCompleted {
@@ -130,6 +142,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
                         verify();
+                        if(!verify()){return;}
                         submit();
                         mOnPositionInforCompleted.inputPositionInforCompleted(localtion);
                         dismiss();
@@ -206,5 +219,42 @@ public class PositionMovementDialogFragment extends DialogFragment {
         tv_put_position_type.setText(position.getNLTYP());
         tv_put_position_main_qty.setText(position.getVSOLM());
         tv_unit.setText(position.getMEINS());
+
+        tv_put_position_number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // 此处为得到焦点时的处理内容
+                } else {
+                    getCargoLocation();
+                }
+            }
+        });
+    }
+
+    private void getCargoLocation(){
+        // 仓位类型查询
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        BackendApi backendApi = retrofitClient.getBackendApi();
+        Call<ApiResponse<List<CargoLocation>>> cargoResponse = backendApi.verificationCargo(retrofitClient.getWarehouseNumber(),tv_put_position_number.getText().toString());
+        cargoResponse.enqueue(new Callback<ApiResponse<List<CargoLocation>>>() {
+            @Override
+            public void onResponse(@NotNull Call<ApiResponse<List<CargoLocation>>> call, @NotNull Response<ApiResponse<List<CargoLocation>>> response) {
+                if (response.isSuccessful()) {
+                    ApiResponse<List<CargoLocation>> onPositionResponse = response.body();
+                    List<CargoLocation> responseDetails = onPositionResponse.getData();
+                    if (responseDetails.size()>0) {
+                        tv_put_position_type.setText(responseDetails.get(0).getLgtyp());
+                    } else {
+                        tv_put_position_number.setText("");
+                        showMessage("未能正确获取仓位信息");
+                    }
+                }
+            }
+            @Override
+            public void onFailure(@NotNull Call<ApiResponse<List<CargoLocation>>> call, @NotNull Throwable t) {
+                showMessage(t.getMessage());
+            }
+        });
     }
 }

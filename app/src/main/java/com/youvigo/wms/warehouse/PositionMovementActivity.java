@@ -33,9 +33,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.SapService;
+import com.youvigo.wms.data.dto.base.Additional;
+import com.youvigo.wms.data.dto.base.ControlInfo;
+import com.youvigo.wms.data.dto.request.PositionMovementRequest;
+import com.youvigo.wms.data.dto.request.PositionMovementRequestDetails;
+import com.youvigo.wms.data.dto.response.PositionMovementResponse;
+import com.youvigo.wms.data.dto.response.PositionMovementResponseDetails;
 import com.youvigo.wms.data.entities.PositionMovementModelView;
+import com.youvigo.wms.util.Constants;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * 仓位移动
@@ -113,9 +131,121 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
      * 提交数据
      */
     protected  void onMenuSubmitClicked(){
-        showMessage("我被点击了");
         if(!verify()){ return; }
+        positionSubmitBatchData();
     }
+
+    /**
+     * 批量提交数据
+     */
+    private void positionSubmitBatchData(){
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        SapService sapService = retrofitClient.getSapService();
+        List<PositionMovementModelView> list = viewModel.positions().getValue();
+        PositionMovementRequest request = new  PositionMovementRequest();
+        request.setControlInfo(new ControlInfo());
+        List<PositionMovementRequestDetails> details_list = new ArrayList<>();
+        for (PositionMovementModelView p : list) {
+            details_list.add(ProData(p,retrofitClient));
+        }
+        request.setData(details_list);
+        Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
+        onPOsitionResponseCall.enqueue(new Callback<PositionMovementResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<PositionMovementResponse> call, @NotNull Response<PositionMovementResponse> response) {
+                if (response.isSuccessful()) {
+                    PositionMovementResponse onPositinResponse = response.body();
+                    PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
+                    if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
+                        showMessage(responseDetails.getMSGTXT());
+                    } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
+                        showMessage(responseDetails.getMSGTXT());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
+                showMessage(t.getMessage());
+            }
+        });
+    }
+
+    /**
+     * 循环提交数据
+     */
+    private void positionSubmitData()
+    {
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        SapService sapService = retrofitClient.getSapService();
+        List<PositionMovementModelView> list = viewModel.positions().getValue();
+        for (PositionMovementModelView p : list) {
+            PositionMovementRequest request = new  PositionMovementRequest();
+            request.setControlInfo(new ControlInfo());
+            List<PositionMovementRequestDetails> details_list = new ArrayList<>();
+            details_list.add(ProData(p,retrofitClient));
+            request.setData(details_list);
+            Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
+            onPOsitionResponseCall.enqueue(new Callback<PositionMovementResponse>() {
+                @Override
+                public void onResponse(@NotNull Call<PositionMovementResponse> call, @NotNull Response<PositionMovementResponse> response) {
+                    if (response.isSuccessful()) {
+                        PositionMovementResponse onPositinResponse = response.body();
+                        PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
+                        if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
+                            showMessage(responseDetails.getMSGTXT());
+                        } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
+                            showMessage(responseDetails.getMSGTXT());
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
+                    showMessage(t.getMessage());
+                }
+            });
+        }
+    }
+
+    private PositionMovementRequestDetails ProData(PositionMovementModelView p,RetrofitClient retrofitClient)
+    {
+        PositionMovementRequestDetails details = new PositionMovementRequestDetails();
+        details.setLGNUM(p.getLGNUM()); ;// 仓库号
+        details.setTAPOS(p.getTAPOS());// 项目行号
+        details.setMATNR(p.getMATNR());  // 物料编号
+        details.setMAKTX(p.getMAKTX());  // 物料描述
+        details.setWERKS(p.getWERKS());// 工厂
+        details.setLGORT(retrofitClient.getStockLocationCode()); // 库存地点
+        details.setCHARG(p.getCHARG()); // 批号
+        details.setMEINS(p.getMEINS()); //基本单位
+        details.setVSOLM(p.getVSOLM()); //基本单位数量
+        details.setALTME(""); //辅助单位query.currentRow.ALTME
+        details.setVSOLA(""); //辅助单位数量query.currentRow.VSOLA
+        details.setVLTYP(p.getVLTYP()); //下架仓储类型query.currentRow.VLTYP
+        details.setNLTYP(p.getNLTYP());// 上架仓储类型query.currentRow.NLTYP
+        details.setNLPLA(p.getNLPLA()); //上架仓位
+        details.setVLPLA(p.getVLPLA()); // 下架仓位
+        details.setBESTQ(p.getBESTQ());
+        details.setZZPACKAGING(p.getZZPACKAGING());// 是否合箱
+        details.setZZLICHA_MAIN(p.getZZLICHA_MAIN()); // 主批次
+        details.setZZMENGE_MAIN(p.getZZMENGE_MAIN()); // 主批次数量
+        details.setZZLICHA_AUXILIARY(p.getZZLICHA_AUXILIARY()); // 辅批次
+        details.setZZMENGE_AUXILIARY(p.getZZMENGE_AUXILIARY()); // 辅批次数量
+
+        details.setZOPERC(retrofitClient.getAccount()); //用户
+        details.setZOPERN(retrofitClient.getUserName()) ; //用户名称
+        details.setZOPERT(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
+        //备用字段
+        Additional addotonal = new Additional();
+        addotonal.setAddit1("");
+        addotonal.setAddit2("");
+        addotonal.setAddit3("");
+        addotonal.setAddit4("");
+        addotonal.setAddit5("");
+        details.setADDITIONAL(addotonal) ;
+        return details;
+    }
+
+
 
     /**
      * 数据校验
@@ -126,7 +256,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
             showMessage("无数据提交");
             return false;
         }
-        for (int i= 0; i <= list.size();i++){
+        for (int i= 0; i < list.size();i++){
             if (list.get(i).VSOLM.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架数量再提交"); return false;}
             if (list.get(i).NLPLA.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架货位再提交");return false;}
             if (list.get(i).NLTYP.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架货位类型再提交");return false;}

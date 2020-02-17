@@ -27,7 +27,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="169dp"
+        android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"
         android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_4"
@@ -36,8 +36,8 @@
 
         <TextView
             android:id="@+id/tv_material_coding_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="57dp"
+            android:layout_height="14dp"
             android:gravity="start"
             android:text="@string/material_coding"
             android:textColor="@color/colorPrimary"
@@ -63,11 +63,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start|center"
             android:text="@string/material_name"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_coding_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_coding_description" />
 
@@ -90,12 +91,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_12"
             android:gravity="start|center"
             android:text="@string/batch_number"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_coding_description"
             app:layout_constraintTop_toBottomOf="@id/tv_material_name_description" />
 
         <TextView
@@ -110,59 +111,24 @@
             app:layout_constraintStart_toEndOf="@id/tv_batch_number_name"
             app:layout_constraintTop_toTopOf="@id/tv_batch_number_name" />
 
-        <TextView
-            android:id="@+id/tv_unit_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:gravity="start|center"
-            android:text="@string/Material_number"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_batch_number_name" />
-
-        <TextView
-            android:id="@+id/tv_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start|center"
-            android:text="1000"
-            app:layout_constraintBottom_toBottomOf="@id/tv_unit_description"
-            app:layout_constraintStart_toEndOf="@+id/tv_unit_description"
-            app:layout_constraintTop_toTopOf="@id/tv_unit_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/tv_unit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start|center"
-            android:text="箱"
-            app:layout_constraintStart_toEndOf="@+id/tv_number"
-            app:layout_constraintTop_toTopOf="@+id/tv_number" />
 
         <TextView
             android:id="@+id/tv_supplier_batch_number_name"
             style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:layout_marginEnd="4dp"
+            android:layout_width="52dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
             android:text="@string/supplier_batch"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_unit_description" />
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_batch_number_name" />
 
         <TextView
             android:id="@+id/tv_supplier_batch_number"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="33dp"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
             android:text="O119000000"
@@ -177,7 +143,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
             android:text="@string/sold_position"
             android:textColor="@color/colorPrimary"
@@ -205,12 +171,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_8"
             android:gravity="start"
             android:text="@string/put_position"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_sold_position_description"
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_coding_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_sold_position_description" />
 
@@ -218,6 +184,7 @@
             android:id="@+id/tv_put_position_number"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:gravity="start|center"
             android:text="B-156156156"
             app:layout_constraintBottom_toBottomOf="@+id/tv_put_position_description"
@@ -225,6 +192,48 @@
             app:layout_constraintStart_toEndOf="@+id/tv_put_position_description"
             app:layout_constraintTop_toTopOf="@+id/tv_put_position_description"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_unit_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:gravity="start|center"
+            android:text="@string/Material_number"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_material_coding_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_put_position_description" />
+
+        <TextView
+            android:id="@+id/tv_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_rectangle"
+            android:digits="1234567890"
+            android:gravity="start|center"
+            android:paddingStart="@dimen/dp_2"
+            android:singleLine="true"
+            android:text="1000"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_unit_description"
+            app:layout_constraintStart_toEndOf="@+id/tv_unit_description"
+            app:layout_constraintTop_toTopOf="@id/tv_unit_description"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/tv_unit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="箱"
+            app:layout_constraintBottom_toBottomOf="@id/tv_unit_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_number"
+            app:layout_constraintTop_toTopOf="@id/tv_unit_description" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

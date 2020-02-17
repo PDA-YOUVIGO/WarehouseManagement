@@ -21,12 +21,14 @@ import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
+import com.youvigo.wms.data.dto.request.PositionMovementRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
+import com.youvigo.wms.data.dto.response.PositionMovementResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 
 import retrofit2.Call;
@@ -73,4 +75,10 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Stock_Query")
 	Call<MaterialQueryResult> materialQuery(@Body MaterialQueryRequest request);
+
+	/**
+	 * 仓位移动
+	 */
+	@POST("RESTAdapter/PDA/Stock_Transfer")
+	Call<PositionMovementResponse> submitPositionTransfer(@Body PositionMovementRequest request);
 }

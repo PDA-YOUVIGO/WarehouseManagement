@@ -31,9 +31,9 @@ public class MaterialQueryResponse {
     private List<Material> data;
 
     @SerializedName("RETURN")
-    private SapResult result;
+    private SapResponseMessage result;
 
-    public MaterialQueryResponse(ControlInfo controlInfo, List<Material> data, SapResult result) {
+    public MaterialQueryResponse(ControlInfo controlInfo, List<Material> data, SapResponseMessage result) {
         this.controlInfo = controlInfo;
         this.data = data;
         this.result = result;
@@ -55,11 +55,11 @@ public class MaterialQueryResponse {
         this.data = data;
     }
 
-    public SapResult getResult() {
+    public SapResponseMessage getResult() {
         return result;
     }
 
-    public void setResult(SapResult result) {
+    public void setResult(SapResponseMessage result) {
         this.result = result;
     }
 }
