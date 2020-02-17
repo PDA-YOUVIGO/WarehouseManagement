@@ -27,74 +27,81 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.InventoryCheck;
+import com.youvigo.wms.data.entities.Material;
 
-public class MaterialsSearchAdapter extends ListAdapter<InventoryCheck, MaterialsSearchAdapter.InventoryCheckVH> {
+public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearchAdapter.MaterialCheckVH> {
     public MaterialsSearchAdapter() {
-        super(new InventoryCheckDiffCallback());
+        super(new MaterialCheckDiffCallback());
     }
 
     @NonNull
     @Override
-    public InventoryCheckVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MaterialCheckVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_materials_search, parent, false);
-        return new InventoryCheckVH(view);
+        return new MaterialCheckVH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InventoryCheckVH holder, int position) {
+    public void onBindViewHolder(@NonNull MaterialCheckVH holder, int position) {
         // 绑定数据在UI上显示
-        // holder.bind(getItem(position));
+         holder.bind(getItem(position));
     }
 
     /**
      * 列表item的数量
-     *
-     * @return
      */
-    @Override
-    public int getItemCount() {
-        return 20;
-    }
+    class MaterialCheckVH extends RecyclerView.ViewHolder {
+        private final TextView tv_material_coding; // 物料编码
+        private final TextView tv_material_name; // 物料名称
+        private final TextView tv_specification; // 规格
+        private final TextView tv_number; // 数量
+        private final TextView tv_unit; // 单位
+        private final TextView tv_batch_number; //批号
+        private final TextView tv_cargo_space; // 货位
+        private final TextView tv_supplier; //供应商
 
-    class InventoryCheckVH extends RecyclerView.ViewHolder {
-        private final TextView itemNumber;
-        private final TextView materialName;
-        private final TextView basicOrder;
-        private final TextView specification;
-        private final TextView lotNumber;
-
-        InventoryCheckVH(@NonNull View itemView) {
+        MaterialCheckVH(@NonNull View itemView) {
             super(itemView);
+            tv_material_coding = itemView.findViewById(R.id.tv_material_coding);
+            tv_material_name = itemView.findViewById(R.id.tv_material_name);
+            tv_specification = itemView.findViewById(R.id.tv_specification);
+            tv_number = itemView.findViewById(R.id.tv_number);
+            tv_unit = itemView.findViewById(R.id.tv_unit);
+            tv_batch_number = itemView.findViewById(R.id.tv_batch_number);
+            tv_cargo_space = itemView.findViewById(R.id.tv_cargo_space);
+            tv_supplier = itemView.findViewById(R.id.tv_supplier);
 
-            itemNumber = itemView.findViewById(R.id.tv_item_number);
-            materialName = itemView.findViewById(R.id.tv_material_name);
-            basicOrder = itemView.findViewById(R.id.tv_basic_order);
-            specification = itemView.findViewById(R.id.tv_specification);
-            lotNumber = itemView.findViewById(R.id.tv_batch_number);
         }
-
-        void bind(InventoryCheck inventoryCheck) {
-            itemNumber.setText(inventoryCheck.itemNumber);
-            materialName.setText(inventoryCheck.materialName);
-            basicOrder.setText(inventoryCheck.basicOrder);
-            specification.setText(inventoryCheck.specification);
-            lotNumber.setText(inventoryCheck.lotNumber);
+        void bind(Material Material) {
+            tv_material_coding.setText(Material.getMATNR());
+            tv_material_name.setText(Material.getMAKTX());
+            tv_specification.setText(Material.getZZDRUGSPEC());
+            tv_number.setText(Material.getZZMENGE_MAIN());
+            tv_unit.setText(Material.getMEINS());
+            tv_batch_number.setText(Material.getZZLICHA_MAIN());
+            tv_cargo_space.setText(Material.getLGPLA());
+            tv_supplier.setText(Material.getZZSUPP_NAME());
         }
+        // 查看详情
+//        @Override
+//        public void onClick(View v) {
+//            if (itemView.getContext() instanceof AppCompatActivity) {
+//                //  OutOfStock outOfStock = getItem(getAdapterPosition());
+//                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
+//                OutOfStockDetailDialogFragment.show(fragmentManager);
+//            }
+//        }
     }
 
-    static class InventoryCheckDiffCallback extends DiffUtil.ItemCallback<InventoryCheck> {
+    static class MaterialCheckDiffCallback extends DiffUtil.ItemCallback<Material> {
         @Override
-        public boolean areItemsTheSame(@NonNull InventoryCheck oldItem, @NonNull InventoryCheck newItem) {
-            return oldItem.itemNumber.equals(newItem.itemNumber);
+        public boolean areItemsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
+            return oldItem.getMATNR().equals(newItem.getMATNR());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull InventoryCheck oldItem, @NonNull InventoryCheck newItem) {
-            return oldItem.materialName.equals(newItem.materialName)
-                    && oldItem.basicOrder.equals(newItem.basicOrder)
-                    && oldItem.lotNumber.equals(newItem.lotNumber)
-                    && oldItem.specification.equals(newItem.specification);
+        public boolean areContentsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
+            return oldItem.getCHARG().equals(newItem.getCHARG());
         }
     }
 }

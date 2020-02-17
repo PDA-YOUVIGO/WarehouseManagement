@@ -76,10 +76,6 @@
             android:label="@string/position_movement" />
 
         <activity
-            android:name=".inventory.InventoryCheckActivity"
-            android:label="@string/inventory_check" />
-
-        <activity
             android:name=".inventory.SwitchStockLocationActivity"
             android:label="@string/switch_stock_locations" />
     </application>
