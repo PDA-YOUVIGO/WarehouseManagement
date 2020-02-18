@@ -83,7 +83,7 @@ public class DeliverAdapter extends ListAdapter<TakeOff, DeliverAdapter.TakeOffV
             if (itemView.getContext() instanceof AppCompatActivity) {
                 TakeOff takeOff = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                DeliverDetailDialogFragment.show(fragmentManager, takeOff);
+                DeliverDetailDialogFragment.show(fragmentManager, takeOff,getAdapterPosition());
             }
         }
     }

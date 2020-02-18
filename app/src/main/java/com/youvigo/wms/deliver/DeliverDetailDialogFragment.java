@@ -34,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.backend.RetrofitClient;
@@ -55,10 +56,12 @@ import java.time.format.DateTimeFormatter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 public class DeliverDetailDialogFragment extends DialogFragment {
     private static final String TAG = "DeliverDetailDialogFragment";
     private static final String KEY_TAKE_OFF = "key_take_off";
+    private static final String KEY_POSITION = "key_position";
 
     private BroadcastReceiver mReceiver;
 
@@ -87,14 +90,19 @@ public class DeliverDetailDialogFragment extends DialogFragment {
 
     private TakeOff takeOff;
 
+    private int position;
+
+    private DeliverViewModel viewModel;
+
     /**
      * 展示详情页面
      *
      * @param takeOff 详情数据
      */
-    public static void show(FragmentManager fragmentManager, TakeOff takeOff) {
+    public static void show(FragmentManager fragmentManager, TakeOff takeOff, int position) {
         DeliverDetailDialogFragment dialogFragment = new DeliverDetailDialogFragment();
         Bundle bundle = new Bundle();
+        bundle.putInt(KEY_POSITION, position);
         bundle.putParcelable(KEY_TAKE_OFF, takeOff);
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fragmentManager, TAG);
@@ -105,6 +113,10 @@ public class DeliverDetailDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         this.context = context;
+
+        if (context instanceof DeliverActivity) {
+            viewModel = new ViewModelProvider((DeliverActivity) context).get(DeliverViewModel.class);
+        }
     }
 
     @Override
@@ -115,6 +127,9 @@ public class DeliverDetailDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             takeOff = getArguments().getParcelable(KEY_TAKE_OFF);
+            position = getArguments().getInt(KEY_POSITION);
+
+            Timber.d("the position is:%s", position);
         }
 
         // 扫描获取数据
@@ -166,6 +181,9 @@ public class DeliverDetailDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
+                        /*if (viewModel != null) {
+                            viewModel.removeData(position);
+                        }*/
                         submit();
                     }
                 })
@@ -262,6 +280,10 @@ public class DeliverDetailDialogFragment extends DialogFragment {
             public void onResponse(@NotNull Call<DeliverResponse> call, @NotNull Response<DeliverResponse> response) {
                 if (response.isSuccessful()) {
 
+                    if (viewModel != null) {
+                        viewModel.removeData(position);
+                    }
+
                     DeliverResponse deliverResponse = response.body();
                     if (deliverResponse.getResponseMessage().getSuccess().equalsIgnoreCase("S")) {
                         showMessage(deliverResponse.getResponseMessage().getMessage());
@@ -283,14 +305,12 @@ public class DeliverDetailDialogFragment extends DialogFragment {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
-    private void registerReceiver()
-    {
-        IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
+    private void registerReceiver() {
+        IntentFilter mFilter = new IntentFilter(Constants.BROADCAST_RESULT);
         getContext().registerReceiver(mReceiver, mFilter);
     }
 
-    private void unRegisterReceiver()
-    {
+    private void unRegisterReceiver() {
         try {
             getContext().unregisterReceiver(mReceiver);
         } catch (Exception e) {

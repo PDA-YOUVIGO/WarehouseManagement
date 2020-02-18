@@ -74,7 +74,7 @@ public class DeliverActivity extends BaseActivity {
     }
 
     private void observeData() {
-        viewModel = new ViewModelProvider.NewInstanceFactory().create(DeliverViewModel.class);
+        viewModel = new ViewModelProvider(this).get(DeliverViewModel.class);
 
         viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
 
