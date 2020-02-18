@@ -28,7 +28,7 @@ import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequestDetails;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.StockMaterial;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,19 +50,19 @@ public class MaterialSearchViewModel extends BaseViewModel {
 
 	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
 	private MutableLiveData<ResultState> queryState = new MutableLiveData<>();
-	private MutableLiveData<List<Material>> _materials = new MutableLiveData<>();
+	private MutableLiveData<List<StockMaterial>> _materials = new MutableLiveData<>();
 
 	/**
 	 * 查询数据
 	 *
-	 * @param material_coding        物料编码
-	 * @param batch_number          批次号
-	 * @param material_description  物料描述
-	 * @param common_name           规格
-	 * @param specification         仓位
-	 * @param position              通用名称
+	 * @param materialCode        物料编码
+	 * @param batchNumber         批次号
+	 * @param materialDescription 物料描述
+	 * @param materialCommonName  通用名称
+	 * @param specification       规格
+	 * @param cargoCode           仓位
 	 */
-	void query(String material_coding, String batch_number, String material_description, String common_name, String specification, String position) {
+	void query(String materialCode, String batchNumber, String materialDescription, String materialCommonName, String specification, String cargoCode) {
 		_isLoading.setValue(true);
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		SapService sapService = retrofitClient.getSapService();
@@ -70,19 +70,20 @@ public class MaterialSearchViewModel extends BaseViewModel {
 		// 构建请求
 		MaterialQueryRequest materialQueryRequest = new MaterialQueryRequest();
 		materialQueryRequest.setControlInfo(new ControlInfo());
+
 		// 请求体
-		MaterialQueryRequestDetails materQueryRequestDetails = new MaterialQueryRequestDetails();
-		materQueryRequestDetails.setMATNR(material_coding); // 物料编码
-		materQueryRequestDetails.setCHARG(batch_number); // 批次
-		materQueryRequestDetails.setMAKTX(material_description); // 物料描述
-		materQueryRequestDetails.setZZCOMMONNAME(common_name); // 通用名称
-		materQueryRequestDetails.setZZDRUGSPEC(specification); //规格
-		materQueryRequestDetails.setLGPLA(position); // 仓位
-		materQueryRequestDetails.setWERKS(retrofitClient.getFactoryCode());// 工厂
-		materQueryRequestDetails.setLGORT(retrofitClient.getStockLocationCode()); // 库存的
-		materQueryRequestDetails.setLGNUM(retrofitClient.getWarehouseNumber()); // 仓库
-		materQueryRequestDetails.setADDITIONAL(new Additional());
-		materialQueryRequest.setMaterialQueryRequestDetails(materQueryRequestDetails);
+		MaterialQueryRequestDetails materialQueryRequestDetails = new MaterialQueryRequestDetails();
+		materialQueryRequestDetails.setMATNR(materialCode == null ? "" : materialCode); // 物料编码
+		materialQueryRequestDetails.setCHARG(batchNumber == null ? "" : batchNumber); // 批次
+		materialQueryRequestDetails.setMAKTX(materialDescription == null ? "" : materialDescription); // 物料描述
+		materialQueryRequestDetails.setZZCOMMONNAME(materialCommonName == null ? "" : materialCommonName); // 通用名称
+		materialQueryRequestDetails.setZZDRUGSPEC(specification == null ? "" : specification); //规格
+		materialQueryRequestDetails.setLGPLA(cargoCode == null ? "" : cargoCode); // 仓位
+		materialQueryRequestDetails.setWERKS(retrofitClient.getFactoryCode());// 工厂
+		materialQueryRequestDetails.setLGORT(retrofitClient.getStockLocationCode()); // 库存的
+		materialQueryRequestDetails.setLGNUM(retrofitClient.getWarehouseNumber()); // 仓库
+		materialQueryRequestDetails.setADDITIONAL(new Additional());
+		materialQueryRequest.setMaterialQueryRequestDetails(materialQueryRequestDetails);
 
 		Call<MaterialQueryResult> materials = sapService.materialQuery(materialQueryRequest);
 		materials.enqueue(new Callback<MaterialQueryResult>() {
@@ -95,20 +96,14 @@ public class MaterialSearchViewModel extends BaseViewModel {
 						_isLoading.setValue(false);
 						return;
 					}
-//					if (materialQueryResult.getMaterialQueryResponse().getData()== null)
-//					{
-//						Timber.e(materialQueryResult.getMaterialQueryResponse().getResult().getMessage());
-//						return;
-//					}
-					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<Material>>) emitter -> {
-						List<Material> data = materialQueryResult.getMaterialQueryResponse().getData();
+
+					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<StockMaterial>>) emitter -> {
+						List<StockMaterial> data = materialQueryResult.getMaterialQueryResponse().getData();
 						emitter.onNext(data);
 						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io())
-							.observeOn(AndroidSchedulers.mainThread())
-							.subscribeWith(new DisposableSubscriber<List<Material>>() {
+					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<StockMaterial>>() {
 						@Override
-						public void onNext(List<Material> materials) {
+						public void onNext(List<StockMaterial> materials) {
 							_materials.setValue(materials);
 						}
 
@@ -138,7 +133,7 @@ public class MaterialSearchViewModel extends BaseViewModel {
 		return _isLoading;
 	}
 
-	LiveData<List<Material>> materials() {
+	LiveData<List<StockMaterial>> materials() {
 		return _materials;
 	}
 

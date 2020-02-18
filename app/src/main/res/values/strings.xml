@@ -109,10 +109,9 @@
     <string name="demand">需求量</string>
     <string name="unit">单位</string>
     <string name="picked_quantity">已拣数量</string>
-    <string name="cargo_space">货位</string>
+    <string name="cargo_space">仓位</string>
 
-    <string name="item_description">物料描述</string>
-    <string name="position">仓位</string>
+    <string name="material_description">物料描述</string>
 
     <string name="out">出库</string>
     <string name="in">拣货</string>
@@ -123,7 +122,7 @@
     <string name="internal_order_number">订单号</string>
     <string name="description">描述</string>
     <string name="factory">工厂</string>
-    <string name="material_batch">物料批次</string>
+    <string name="material_batch_number">物料批次</string>
     <string name="shelving_quantity">上架数量</string>
     <string name="main_quantity">主数量</string>
     <string name="auxiliary_quantity">辅数量</string>
@@ -131,7 +130,7 @@
     <string name="deliver_quantity">下架数量</string>
     <string name="on_deliver_detail">下架详情</string>
 
-    <string name="Material_number">数量</string>
+    <string name="material_number">数量</string>
     <string name="supplier_name">供应商</string>
 
     <string name="supplier_batch">供应商批次</string>
@@ -139,6 +138,7 @@
     <string name="put_position">上架仓位</string>
     <string name="position_submit">提交</string>
 
-    <!--Material-->
+    <!--StockMaterial-->
     <string name="material_detail">请输入查询参数</string>
+    <string name="reserved_out_bound_detail">预留明细</string>
 </resources>

@@ -39,6 +39,7 @@ public class Constants {
     public static final int TIME_OUT = 60;
 
     public static final String SEARCH_RESULT = "search_result";
+    public static final String MATERIAL_SEARCH_RESULT = "material_search_result";
     public static final String CATEGORY = "category";
     public static final String TYPE_SHELVING = "type_shelving";
 

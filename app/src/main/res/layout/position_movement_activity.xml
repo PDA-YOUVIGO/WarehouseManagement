@@ -78,7 +78,7 @@
             android:gravity="start"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="@string/material_batch"
+            android:text="@string/material_batch_number"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_code_description" />
@@ -111,7 +111,7 @@
             android:gravity="start"
             android:paddingTop="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_8"
-            android:text="@string/position"
+            android:text="@string/cargo_space"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
             app:layout_constraintTop_toBottomOf="@id/tv_material_batch" />

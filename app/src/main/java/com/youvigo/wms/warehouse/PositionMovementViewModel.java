@@ -28,7 +28,7 @@ import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequestDetails;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.data.entities.PositionMovementModelView;
 
 import org.jetbrains.annotations.NotNull;
@@ -100,27 +100,27 @@ public class PositionMovementViewModel extends BaseViewModel {
 //					}
 					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<PositionMovementModelView>>) emitter -> {
 						List<PositionMovementModelView> PositionData = new ArrayList<>();
-						List<Material> data = materialQueryResult.getMaterialQueryResponse().getData();
+						List<StockMaterial> data = materialQueryResult.getMaterialQueryResponse().getData();
 						// 组织数据
-						for (Material m : data) {
+						for (StockMaterial m : data) {
 							PositionMovementModelView position = new PositionMovementModelView();
-							position.LGNUM = m.getLGNUM(); //仓库号
+							position.LGNUM = m.getWarehouseNumber(); //仓库号
 							position.TAPOS = m.getZZAUFNR(); // 行项目号
-							position.MATNR = m.getMATNR(); // 物料编码
-							position.ZZCOMMONNAME = m.getZZCOMMONNAME();// 物料通用名称
-							position.MAKTX = m.getMAKTX();// 物料描述
-							position.WERKS = m.getWERKS();// 工厂
+							position.MATNR = m.getMaterialCode(); // 物料编码
+							position.ZZCOMMONNAME = m.getMaterialCommonName();// 物料通用名称
+							position.MAKTX = m.getMaterialDescription();// 物料描述
+							position.WERKS = m.getFactoryCode();// 工厂
 							position.LGORT = retrofitClient.getStockLocationCode();// 库存地点
-							position.CHARG = m.getCHARG();// 批号
-							position.MEINS_TXT = m.getMEINS_TXT(); //基本单位文本
-							position.MEINS = m.getMEINS(); //基本单位
+							position.CHARG = m.getBatchNumber();// 批号
+							position.MEINS_TXT = m.getBaseUnitTxt(); //基本单位文本
+							position.MEINS = m.getBaseUnit(); //基本单位
 							position.VSOLM = ""; //基本单位数量
 							position.ALTME = ""; //辅助单位
 							position.VSOLA = ""; //辅助单位数量
 							position.VLTYP = m.getLGTYP(); // 下架仓位类型
 							position.NLTYP = ""; // 上架仓位类型
 							position.NLPLA = ""; // 上架仓位
-							position.VLPLA = m.getLGPLA(); // 下架仓位
+							position.VLPLA = m.getCargoSpace(); // 下架仓位
 							position.ZZPACKAGING = m.getZZPACKAGING(); // 是否合箱
 							position.ZZLICHA_MAIN = m.getZZLICHA_MAIN(); // 主批次
 							position.ZZMENGE_MAIN = m.getZZMENGE_MAIN(); // 主批次数量
@@ -128,8 +128,8 @@ public class PositionMovementViewModel extends BaseViewModel {
 							position.ZZMENGE_AUXILIARY = m.getZZMENGE_AUXILIARY(); // 辅批次数量
 							position.ZZLICHA = m.getZZLICHA(); // 供应商批次
 							position.VLTYP = m.getZZLICHA(); // 下架仓位类型
-							position.VERME = m.getVERME(); // 可用库存量
-							position.ZZDRUGSPEC = m.getZZDRUGSPEC(); // 规格
+							position.VERME = m.getActualInventory(); // 可用库存量
+							position.ZZDRUGSPEC = m.getSpecification(); // 规格
 							position.BESTQ = m.getBESTQ(); // 库存类别
 							PositionData.add(position);
 						}

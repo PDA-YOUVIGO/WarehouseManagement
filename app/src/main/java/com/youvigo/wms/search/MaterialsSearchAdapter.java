@@ -16,6 +16,8 @@
 
 package com.youvigo.wms.search;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +29,12 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.StockMaterial;
+import com.youvigo.wms.util.Constants;
 
-public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearchAdapter.MaterialCheckVH> {
+import timber.log.Timber;
+
+public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, MaterialsSearchAdapter.MaterialCheckVH> {
     public MaterialsSearchAdapter() {
         super(new MaterialCheckDiffCallback());
     }
@@ -50,7 +55,7 @@ public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearc
     /**
      * 列表item的数量
      */
-    class MaterialCheckVH extends RecyclerView.ViewHolder {
+    class MaterialCheckVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView tv_material_coding; // 物料编码
         private final TextView tv_material_name; // 物料名称
         private final TextView tv_specification; // 规格
@@ -62,7 +67,7 @@ public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearc
 
         MaterialCheckVH(@NonNull View itemView) {
             super(itemView);
-            tv_material_coding = itemView.findViewById(R.id.tv_material_coding);
+            tv_material_coding = itemView.findViewById(R.id.tv_material_code);
             tv_material_name = itemView.findViewById(R.id.tv_material_name);
             tv_specification = itemView.findViewById(R.id.tv_specification);
             tv_number = itemView.findViewById(R.id.tv_number);
@@ -72,36 +77,42 @@ public class MaterialsSearchAdapter extends ListAdapter<Material, MaterialsSearc
             tv_supplier = itemView.findViewById(R.id.tv_supplier);
 
         }
-        void bind(Material Material) {
-            tv_material_coding.setText(Material.getMATNR());
-            tv_material_name.setText(Material.getMAKTX());
-            tv_specification.setText(Material.getZZDRUGSPEC());
-            tv_number.setText(Material.getZZMENGE_MAIN());
-            tv_unit.setText(Material.getMEINS());
-            tv_batch_number.setText(Material.getZZLICHA_MAIN());
-            tv_cargo_space.setText(Material.getLGPLA());
-            tv_supplier.setText(Material.getZZSUPP_NAME());
+        void bind(StockMaterial StockMaterial) {
+            tv_material_coding.setText(StockMaterial.getMaterialCode());
+            tv_material_name.setText(StockMaterial.getMaterialCommonName());
+            tv_specification.setText(StockMaterial.getSpecification());
+            tv_number.setText(String.valueOf(StockMaterial.getActualInventory()));
+            tv_unit.setText(StockMaterial.getBaseUnit());
+            tv_batch_number.setText(StockMaterial.getBatchNumber());
+            tv_cargo_space.setText(StockMaterial.getCargoSpace());
+            tv_supplier.setText(StockMaterial.getZZSUPP_NAME());
         }
-        // 查看详情
-//        @Override
-//        public void onClick(View v) {
-//            if (itemView.getContext() instanceof AppCompatActivity) {
-//                //  ReservedOutbound outOfStock = getItem(getAdapterPosition());
-//                FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-//                OutOfStockDetailDialogFragment.show(fragmentManager);
-//            }
-//        }
+
+
+        @Override
+        public void onClick(View v) {
+            StockMaterial stockMaterial = getItem(getAdapterPosition());
+            Timber.d("onClick > %s", stockMaterial.toString());
+
+            // 点击数据返回到调用到Activity
+            if (itemView.getContext() instanceof MaterialsSearchActivity) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.MATERIAL_SEARCH_RESULT, stockMaterial);
+                ((MaterialsSearchActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
+                ((MaterialsSearchActivity) itemView.getContext()).finish();
+            }
+        }
     }
 
-    static class MaterialCheckDiffCallback extends DiffUtil.ItemCallback<Material> {
+    static class MaterialCheckDiffCallback extends DiffUtil.ItemCallback<StockMaterial> {
         @Override
-        public boolean areItemsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
-            return oldItem.getMATNR().equals(newItem.getMATNR());
+        public boolean areItemsTheSame(@NonNull StockMaterial oldItem, @NonNull StockMaterial newItem) {
+            return oldItem.getMaterialCode().equals(newItem.getMaterialCode());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Material oldItem, @NonNull Material newItem) {
-            return oldItem.getCHARG().equals(newItem.getCHARG());
+        public boolean areContentsTheSame(@NonNull StockMaterial oldItem, @NonNull StockMaterial newItem) {
+            return oldItem.getBatchNumber().equals(newItem.getBatchNumber());
         }
     }
 }

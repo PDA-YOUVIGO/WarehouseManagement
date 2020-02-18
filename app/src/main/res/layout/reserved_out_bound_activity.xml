@@ -233,7 +233,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider"
-            tools:listitem="@layout/item_out_of_stock" />
+            tools:listitem="@layout/item_reserved_outbound" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

@@ -34,50 +34,48 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 
 public class DeliverViewModel extends BaseViewModel {
-    private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
-    private MutableLiveData<MaterialVoucher> _materials = new MutableLiveData<>();
-    private MutableLiveData<List<TakeOff>> _takeOffs = new MutableLiveData<List<TakeOff>>();
+	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<Boolean>(false);
+	private MutableLiveData<MaterialVoucher> _materials = new MutableLiveData<>();
+	private MutableLiveData<List<TakeOff>> _takeOffs = new MutableLiveData<List<TakeOff>>();
 
-    public void handleData(MaterialVoucher material) {
-        _isLoading.setValue(true);
+	public void handleData(MaterialVoucher material) {
+		_isLoading.setValue(true);
 
-        _materials.setValue(material);
+		_materials.setValue(material);
 
-        Disposable disposable = Flowable.create((FlowableOnSubscribe<List<TakeOff>>) emitter -> {
-            emitter.onNext(material.takeOffs);
-            emitter.onComplete();
-        }, BackpressureStrategy.LATEST)
-                //.delay(3, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<List<TakeOff>>() {
-                    @Override
-                    public void onNext(List<TakeOff> result) {
-                        _takeOffs.setValue(result);
-                    }
+		Disposable disposable = Flowable.create((FlowableOnSubscribe<List<TakeOff>>) emitter -> {
+			emitter.onNext(material.takeOffs);
+			emitter.onComplete();
+		}, BackpressureStrategy.LATEST)
+				//.delay(3, TimeUnit.SECONDS)
+				.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<TakeOff>>() {
+					@Override
+					public void onNext(List<TakeOff> result) {
+						_takeOffs.setValue(result);
+					}
 
-                    @Override
-                    public void onError(Throwable t) {
-                        _isLoading.setValue(false);
-                    }
+					@Override
+					public void onError(Throwable t) {
+						_isLoading.setValue(false);
+					}
 
-                    @Override
-                    public void onComplete() {
-                        _isLoading.setValue(false);
-                    }
-                });
-        addSubscription(disposable);
-    }
+					@Override
+					public void onComplete() {
+						_isLoading.setValue(false);
+					}
+				});
+		addSubscription(disposable);
+	}
 
-    public LiveData<Boolean> isLoading() {
-        return _isLoading;
-    }
+	public LiveData<Boolean> isLoading() {
+		return _isLoading;
+	}
 
-    public LiveData<List<TakeOff>> takeOffs() {
-        return _takeOffs;
-    }
+	public LiveData<List<TakeOff>> takeOffs() {
+		return _takeOffs;
+	}
 
-    public LiveData<MaterialVoucher> getMaterials() {
-        return _materials;
-    }
+	public LiveData<MaterialVoucher> getMaterials() {
+		return _materials;
+	}
 }

@@ -39,66 +39,97 @@ import timber.log.Timber;
  */
 public class MaterialsSearchActivity extends BaseActivity implements MaterialSearchDialogFragment.OnMaterialSearchInforCompleted {
 
-    private ProgressBar progressBar;
-    private MaterialsSearchAdapter adapter;
-    private MaterialSearchViewModel viewModel;
+	public static final String KEY_MATERIAL_CODE = "key_material_code";
+	public static final String KEY_BATCH_NUMBER = "key_batch_number";
+	public static final String KEY_MATERIAL_DESCRIPTION = "key_material_description";
+	public static final String KEY_MATERIAL_COMMONNAME = "key_material_commonname";
+	public static final String KEY_SPECIFICATION = "key_specification";
+	public static final String KEY_CARGOCODE = "key_cargoCode";
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initViews();
-        observeData();
-    }
+	private ProgressBar progressBar;
+	private MaterialsSearchAdapter adapter;
+	private MaterialSearchViewModel viewModel;
 
-    private void initViews() {
-        progressBar = findViewById(R.id.progress_bar);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new MaterialsSearchAdapter();
-        recyclerView.setAdapter(adapter);
-    }
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Timber.d("onActivityResult");
-    }
+		initViews();
+		observeData();
+		initIntent();
+	}
 
-    @Override
-    protected void onMenuSearchClicked() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        MaterialSearchDialogFragment.show(fragmentManager);
-    }
+	/**
+	 * 初始化传入参数
+	 */
+	private void initIntent() {
+		Intent intent = getIntent();
+		if (intent != null) {
+			String materialCode = intent.getStringExtra(KEY_MATERIAL_CODE);
+			String batchNumber = intent.getStringExtra(KEY_BATCH_NUMBER);
+			String materialDescription = intent.getStringExtra(KEY_MATERIAL_DESCRIPTION);
+			String materialCommonName = intent.getStringExtra(KEY_MATERIAL_COMMONNAME);
+			String specification = intent.getStringExtra(KEY_SPECIFICATION);
+			String cargoCode = intent.getStringExtra(KEY_CARGOCODE);
 
-    @Override
-    protected int getLayoutId() { return R.layout.materials_search_activity; }
+			inputMaterialInforCompleted(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+		}
+	}
 
-    /**
-     * 接口查询
-     * @param material_coding        物料编码
-     * @param batch_number          批次号
-     * @param material_description  物料描述
-     * @param common_name           规格
-     * @param specification         仓位
-     * @param position              通用名称
-     */
-    @Override
-    public void inputMaterialInforCompleted(String material_coding, String batch_number, String material_description, String common_name, String specification, String position) {
-        Timber.d(material_coding);
-        viewModel.query(material_coding, batch_number,material_description,common_name,specification, position);
-    }
+	private void initViews() {
+		progressBar = findViewById(R.id.progress_bar);
+		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		recyclerView.setHasFixedSize(true);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		adapter = new MaterialsSearchAdapter();
+		recyclerView.setAdapter(adapter);
+	}
 
-    private void observeData() {
-        viewModel = new ViewModelProvider.NewInstanceFactory().create(MaterialSearchViewModel.class);
-        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
-        viewModel.materials().observe(this, material-> adapter.submitList(material));
-        viewModel.getQueryState().observe(this, queryState ->{
-            if (queryState == null) return;
-            if (!queryState.isSuccess()) {
-                Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        } );
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		Timber.d("onActivityResult");
+	}
+
+	@Override
+	protected void onMenuSearchClicked() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		MaterialSearchDialogFragment.show(fragmentManager);
+	}
+
+	@Override
+	protected int getLayoutId() { return R.layout.materials_search_activity; }
+
+	/**
+	 * 接口查询
+	 *
+	 * @param materialCode        物料编码
+	 * @param batchNumber         批次号
+	 * @param materialDescription 物料描述
+	 * @param materialCommonName  通用名称
+	 * @param specification       规格
+	 * @param cargoCode           仓位
+	 */
+	@Override
+	public void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription, String materialCommonName, String specification, String cargoCode) {
+		Timber.d(materialCode);
+		viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+	}
+
+	private void observeData() {
+		viewModel = new ViewModelProvider.NewInstanceFactory().create(MaterialSearchViewModel.class);
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+		viewModel.materials().observe(this, material -> adapter.submitList(material));
+
+		viewModel.getQueryState().observe(this, queryState -> {
+			if (queryState == null) return;
+			if (!queryState.isSuccess()) {
+				Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
+	}
+
+
 }

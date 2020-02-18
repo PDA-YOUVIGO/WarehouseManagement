@@ -18,7 +18,7 @@ package com.youvigo.wms.data.dto.response;
 
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.entities.Material;
+import com.youvigo.wms.data.entities.StockMaterial;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class MaterialQueryResponse {
     private ControlInfo controlInfo;
 
     @SerializedName("ITEM")
-    private List<Material> data;
+    private List<StockMaterial> data;
 
     @SerializedName("RETURN")
     private SapResponseMessage message;
@@ -44,11 +44,11 @@ public class MaterialQueryResponse {
         this.controlInfo = controlInfo;
     }
 
-    public List<Material> getData() {
+    public List<StockMaterial> getData() {
         return data;
     }
 
-    public void setData(List<Material> data) {
+    public void setData(List<StockMaterial> data) {
         this.data = data;
     }
 
@@ -60,7 +60,7 @@ public class MaterialQueryResponse {
         this.message = message;
     }
 
-    public MaterialQueryResponse(ControlInfo controlInfo, List<Material> data, SapResponseMessage message) {
+    public MaterialQueryResponse(ControlInfo controlInfo, List<StockMaterial> data, SapResponseMessage message) {
         this.controlInfo = controlInfo;
         this.data = data;
         this.message = message;

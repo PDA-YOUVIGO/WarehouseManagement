@@ -183,7 +183,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
      * @param view 初始化界面
      */
     private void initViews(View view) {
-        materialCoding = view.findViewById(R.id.tv_material_coding_description); // 物料编码
+        materialCoding = view.findViewById(R.id.tv_material_code_description); // 物料编码
         materialName = view.findViewById(R.id.tv_material_name_description); // 物料描述
         batchNumber = view.findViewById(R.id.tv_batch_number_description); // 批号
         specification = view.findViewById(R.id.tv_specification_description); // 规格

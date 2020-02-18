@@ -66,7 +66,6 @@ public class ReservedOutBoundActivity extends BaseActivity {
     private TextView internalOrder;
     private TextView employer;
     private TextView department;
-    private TextView placeOfReceipt;
 
     private ReservedOutBoundAdapter adapter;
 
@@ -92,7 +91,6 @@ public class ReservedOutBoundActivity extends BaseActivity {
         internalOrder = findViewById(R.id.tv_internal_order_description);
         employer = findViewById(R.id.tv_employer_description);
         department = findViewById(R.id.tv_receiving_department_description);
-        placeOfReceipt = findViewById(R.id.sp_place_of_receipt_description);
         remark = findViewById(R.id.et_remark);
 
         progressBar = findViewById(R.id.progress_bar);
@@ -107,7 +105,6 @@ public class ReservedOutBoundActivity extends BaseActivity {
 
         moveTypeAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.item_spinner, moveTypes);
         moveType.setAdapter(moveTypeAdapter);
-        moveType.setSelection(-1, true);
     }
 
     /**
@@ -118,10 +115,24 @@ public class ReservedOutBoundActivity extends BaseActivity {
 
         viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
 
-        //viewModel.getMaterials().observe(this, materialVoucher -> {
-        //    department.setText(materialVoucher.supplierName);
-        //    orderDate.setText(materialVoucher.date);
-        //});
+        viewModel.getMaterialVoucher().observe(this, materialVoucher -> {
+            orderNumber.setText(materialVoucher.orderNumber);
+            internalOrder.setText(materialVoucher.innerOrderDescription);
+
+            MoveType moveType = moveTypes.stream().filter(v -> v.getMoveCode().equals(materialVoucher.moveType)).findFirst().orElse(null);
+
+            this.moveType.setSelection(moveTypes.indexOf(moveType));
+
+            employer.setText(materialVoucher.employerName);
+            department.setText(materialVoucher.departmentName);
+            remark.setText(materialVoucher.memo);
+        });
+
+        viewModel.getMaterialVoucherItems().observe(this, reservedOutbounds -> {
+            if (reservedOutbounds != null && !reservedOutbounds.isEmpty()) {
+                adapter.submitList(reservedOutbounds);
+            }
+        });
     }
 
     @Override
@@ -137,7 +148,7 @@ public class ReservedOutBoundActivity extends BaseActivity {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.reserved_outbound_activity;
+        return R.layout.reserved_out_bound_activity;
     }
 
     @Override

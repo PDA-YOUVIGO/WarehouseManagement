@@ -292,7 +292,7 @@ public class SearchViewModel extends BaseViewModel {
 						return;
 					}
 
-					if (queryResponse.getDetails().getData().isEmpty()) {
+					if (queryResponse.getDetails().getData() == null || queryResponse.getDetails().getData().isEmpty()) {
 						queryState.setValue(new ResultState(false, queryResponse.getDetails().getMessage().getMessage()));
 						_isLoading.setValue(false);
 						return;
@@ -300,7 +300,7 @@ public class SearchViewModel extends BaseViewModel {
 
 					//移除非可用移动类型的数据
 					if (moveTypes != null && !moveTypes.isEmpty()) {
-						queryResponse.getDetails().getData().removeIf(s -> moveTypes.contains(s.getBWART()));
+						queryResponse.getDetails().getData().removeIf(s -> !moveTypes.contains(s.getBWART()));
 					}
 
 					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
@@ -313,6 +313,13 @@ public class SearchViewModel extends BaseViewModel {
 							materialVoucher.orderNumber = v.get(0).getRSNUM();
 							materialVoucher.date = LocalDate.parse(v.get(0).getBDTER(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 							materialVoucher.creator = v.get(0).getUSNAM();
+							materialVoucher.employerCode = v.get(0).getPERNR();
+							materialVoucher.employerName = v.get(0).getNACHN();
+							materialVoucher.departmentCode = v.get(0).getORGEH();
+							materialVoucher.departmentName = v.get(0).getORGTX();
+							materialVoucher.innerOrder = v.get(0).getAUFNR();
+							materialVoucher.innerOrderDescription = v.get(0).getKTEXT();
+							materialVoucher.moveType = v.get(0).getBWART();
 							materialVoucher.reservedOutbounds = v;
 
 							mockData.add(materialVoucher);
