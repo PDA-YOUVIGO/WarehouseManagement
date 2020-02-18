@@ -17,7 +17,7 @@
 package com.youvigo.wms.data.backend.api;
 
 import com.youvigo.wms.data.dto.base.ApiResponse;
-import com.youvigo.wms.data.dto.response.CargoLocationResponse;
+import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.entities.MoveType;
 
@@ -38,7 +38,7 @@ public interface BackendApi {
 	 * @param cargoLocation 货位编码
 	 */
 	@GET("blade-data/api/cargolocation/detail")
-	Call<ApiResponse<CargoLocationResponse>> verificationCargo(@Query("warehouseCode") String warehouseCode, @Query("cargoLocation") String cargoLocation);
+	Call<ApiResponse<List<CargoLocation>>> verificationCargo(@Query("warehouseCode") String warehouseCode, @Query("cargoLocation") String cargoLocation);
 
 	/**
 	 * 获取物料单位
