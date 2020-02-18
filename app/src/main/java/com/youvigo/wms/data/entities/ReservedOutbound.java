@@ -122,13 +122,15 @@ public class ReservedOutbound implements Parcelable {
     private String EISLO;
 
     /// 已拣
-    private double Num;
+    private double quantity;
 
     /// 货位
-    private String Cargo;
+    private String cargoSpace;
 
-    /// 验证货位
-    private String VerificationCargo;
+    /// 验证信息
+    private String verificationCargoSpace;
+    private double actualInventory;
+    private String verificationBatchNumber;
 
     /// 备注
     private String MEMO;
@@ -137,91 +139,13 @@ public class ReservedOutbound implements Parcelable {
     public ReservedOutbound() {
     }
 
-    @Override
-    public int describeContents() { return 0; }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.RSNUM);
-        dest.writeString(this.RSPOS);
-        dest.writeString(this.KOSTL);
-        dest.writeString(this.LTEXT);
-        dest.writeString(this.BWART);
-        dest.writeString(this.materialCode);
-        dest.writeString(this.materialDescription);
-        dest.writeString(this.WERKS);
-        dest.writeString(this.batchNumber);
-        dest.writeString(this.BDMNG);
-        dest.writeString(this.baseUnit);
-        dest.writeString(this.baseUnitTxt);
-        dest.writeString(this.AUFNR);
-        dest.writeString(this.KTEXT);
-        dest.writeString(this.BDTER);
-        dest.writeString(this.USNAM);
-        dest.writeString(this.specification);
-        dest.writeString(this.materialName);
-        dest.writeString(this.LICHA);
-        dest.writeString(this.ZZLICHA);
-        dest.writeString(this.NACHN);
-        dest.writeString(this.PERNR);
-        dest.writeString(this.ORGEH);
-        dest.writeString(this.ORGTX);
-        dest.writeString(this.UMLGO);
-        dest.writeString(this.LGOBE);
-        dest.writeDouble(this.VERME);
-        dest.writeDouble(this.GESME);
-        dest.writeString(this.EISBE);
-        dest.writeString(this.EISLO);
-        dest.writeDouble(this.Num);
-        dest.writeString(this.Cargo);
-        dest.writeString(this.VerificationCargo);
-        dest.writeString(this.MEMO);
+    public String getVerificationBatchNumber() {
+        return verificationBatchNumber;
     }
 
-    protected ReservedOutbound(Parcel in) {
-        this.RSNUM = in.readString();
-        this.RSPOS = in.readString();
-        this.KOSTL = in.readString();
-        this.LTEXT = in.readString();
-        this.BWART = in.readString();
-        this.materialCode = in.readString();
-        this.materialDescription = in.readString();
-        this.WERKS = in.readString();
-        this.batchNumber = in.readString();
-        this.BDMNG = in.readString();
-        this.baseUnit = in.readString();
-        this.baseUnitTxt = in.readString();
-        this.AUFNR = in.readString();
-        this.KTEXT = in.readString();
-        this.BDTER = in.readString();
-        this.USNAM = in.readString();
-        this.specification = in.readString();
-        this.materialName = in.readString();
-        this.LICHA = in.readString();
-        this.ZZLICHA = in.readString();
-        this.NACHN = in.readString();
-        this.PERNR = in.readString();
-        this.ORGEH = in.readString();
-        this.ORGTX = in.readString();
-        this.UMLGO = in.readString();
-        this.LGOBE = in.readString();
-        this.VERME = in.readDouble();
-        this.GESME = in.readDouble();
-        this.EISBE = in.readString();
-        this.EISLO = in.readString();
-        this.Num = in.readDouble();
-        this.Cargo = in.readString();
-        this.VerificationCargo = in.readString();
-        this.MEMO = in.readString();
+    public void setVerificationBatchNumber(String verificationBatchNumber) {
+        this.verificationBatchNumber = verificationBatchNumber;
     }
-
-    public static final Creator<ReservedOutbound> CREATOR = new Creator<ReservedOutbound>() {
-        @Override
-        public ReservedOutbound createFromParcel(Parcel source) {return new ReservedOutbound(source);}
-
-        @Override
-        public ReservedOutbound[] newArray(int size) {return new ReservedOutbound[size];}
-    };
 
     public String getRSNUM() {
         return RSNUM;
@@ -343,19 +267,133 @@ public class ReservedOutbound implements Parcelable {
         return EISLO;
     }
 
-    public double getNum() {
-        return Num;
+    public double getQuantity() {
+        return quantity;
     }
 
-    public String getCargo() {
-        return Cargo;
+    public String getCargoSpace() {
+        return cargoSpace;
     }
 
-    public String getVerificationCargo() {
-        return VerificationCargo;
+    public String getVerificationCargoSpace() {
+        return verificationCargoSpace;
     }
 
     public String getMEMO() {
         return MEMO;
     }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getActualInventory() {
+        return actualInventory;
+    }
+
+    public void setActualInventory(double actualInventory) {
+        this.actualInventory = actualInventory;
+    }
+
+    public void setCargoSpace(String cargoSpace) {
+        this.cargoSpace = cargoSpace;
+    }
+
+    public void setVerificationCargoSpace(String verificationCargoSpace) {
+        this.verificationCargoSpace = verificationCargoSpace;
+    }
+
+    public void setMEMO(String MEMO) {
+        this.MEMO = MEMO;
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.RSNUM);
+        dest.writeString(this.RSPOS);
+        dest.writeString(this.KOSTL);
+        dest.writeString(this.LTEXT);
+        dest.writeString(this.BWART);
+        dest.writeString(this.materialCode);
+        dest.writeString(this.materialDescription);
+        dest.writeString(this.WERKS);
+        dest.writeString(this.batchNumber);
+        dest.writeString(this.BDMNG);
+        dest.writeString(this.baseUnit);
+        dest.writeString(this.baseUnitTxt);
+        dest.writeString(this.AUFNR);
+        dest.writeString(this.KTEXT);
+        dest.writeString(this.BDTER);
+        dest.writeString(this.USNAM);
+        dest.writeString(this.specification);
+        dest.writeString(this.materialName);
+        dest.writeString(this.LICHA);
+        dest.writeString(this.ZZLICHA);
+        dest.writeString(this.NACHN);
+        dest.writeString(this.PERNR);
+        dest.writeString(this.ORGEH);
+        dest.writeString(this.ORGTX);
+        dest.writeString(this.UMLGO);
+        dest.writeString(this.LGOBE);
+        dest.writeDouble(this.VERME);
+        dest.writeDouble(this.GESME);
+        dest.writeString(this.EISBE);
+        dest.writeString(this.EISLO);
+        dest.writeDouble(this.quantity);
+        dest.writeString(this.cargoSpace);
+        dest.writeString(this.verificationCargoSpace);
+        dest.writeDouble(this.actualInventory);
+        dest.writeString(this.verificationBatchNumber);
+        dest.writeString(this.MEMO);
+    }
+
+    protected ReservedOutbound(Parcel in) {
+        this.RSNUM = in.readString();
+        this.RSPOS = in.readString();
+        this.KOSTL = in.readString();
+        this.LTEXT = in.readString();
+        this.BWART = in.readString();
+        this.materialCode = in.readString();
+        this.materialDescription = in.readString();
+        this.WERKS = in.readString();
+        this.batchNumber = in.readString();
+        this.BDMNG = in.readString();
+        this.baseUnit = in.readString();
+        this.baseUnitTxt = in.readString();
+        this.AUFNR = in.readString();
+        this.KTEXT = in.readString();
+        this.BDTER = in.readString();
+        this.USNAM = in.readString();
+        this.specification = in.readString();
+        this.materialName = in.readString();
+        this.LICHA = in.readString();
+        this.ZZLICHA = in.readString();
+        this.NACHN = in.readString();
+        this.PERNR = in.readString();
+        this.ORGEH = in.readString();
+        this.ORGTX = in.readString();
+        this.UMLGO = in.readString();
+        this.LGOBE = in.readString();
+        this.VERME = in.readDouble();
+        this.GESME = in.readDouble();
+        this.EISBE = in.readString();
+        this.EISLO = in.readString();
+        this.quantity = in.readDouble();
+        this.cargoSpace = in.readString();
+        this.verificationCargoSpace = in.readString();
+        this.actualInventory = in.readDouble();
+        this.verificationBatchNumber = in.readString();
+        this.MEMO = in.readString();
+    }
+
+    public static final Creator<ReservedOutbound> CREATOR = new Creator<ReservedOutbound>() {
+        @Override
+        public ReservedOutbound createFromParcel(Parcel source) {return new ReservedOutbound(source);}
+
+        @Override
+        public ReservedOutbound[] newArray(int size) {return new ReservedOutbound[size];}
+    };
 }

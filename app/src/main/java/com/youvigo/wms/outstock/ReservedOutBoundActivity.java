@@ -36,12 +36,20 @@ import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.dto.base.ControlInfo;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestDetails;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestHead;
+import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.MoveType;
+import com.youvigo.wms.data.entities.ReservedOutbound;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -135,6 +143,56 @@ public class ReservedOutBoundActivity extends BaseActivity {
         });
     }
 
+    private void submit() {
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+
+        MaterialVoucher materialVoucher = viewModel.getMaterialVoucher().getValue();
+        MoveType selectMoveType = (MoveType) moveType.getSelectedItem();
+        String currentRemark = remark.getText().toString();
+
+        String pdaOrderNumber = String.format("%s-%s", retrofitClient.getAccount(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+
+        ReservedOutBoundRequest request = new ReservedOutBoundRequest();
+        request.setControlInfo(new ControlInfo());
+
+        ReservedOutBoundRequestHead requestHead = new ReservedOutBoundRequestHead();
+        requestHead.setZZLLR(materialVoucher.employerCode);
+        requestHead.setBWART(materialVoucher.moveType);
+        requestHead.setPDAOUTORDER(pdaOrderNumber);
+        requestHead.setGMCODE(selectMoveType.getGmcode());
+        requestHead.setNACHN(materialVoucher.employerName);
+        requestHead.setORGEH(materialVoucher.departmentCode);
+        requestHead.setORGTX(materialVoucher.departmentName);
+        requestHead.setDESCS(currentRemark);
+        requestHead.setZOPERC(retrofitClient.getAccount());
+        requestHead.setZOPERN(retrofitClient.getUserName());
+        requestHead.setZOPERT(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
+
+        List<ReservedOutBoundRequestDetails> requestDetails = new ArrayList<>();
+        for (ReservedOutbound reservedOutbound : materialVoucher.reservedOutbounds) {
+            ReservedOutBoundRequestDetails details = new ReservedOutBoundRequestDetails();
+            details.setBDTER(reservedOutbound.getBDTER());
+            details.setRSNUM(reservedOutbound.getRSNUM());
+            details.setRSPOS(reservedOutbound.getRSPOS());
+            details.setWERKS(retrofitClient.getFactoryCode());
+            details.setLGORT(retrofitClient.getStockLocationCode());
+            details.setLGNUM(retrofitClient.getWarehouseNumber());
+            details.setLGPLA(reservedOutbound.getCargoSpace());
+            details.setMATNR(reservedOutbound.getMaterialCode());
+            details.setCHARG(reservedOutbound.getBatchNumber());
+            details.setBDMNG(String.valueOf(reservedOutbound.getQuantity()));
+            details.setMEINS(reservedOutbound.getBaseUnit());
+            details.setUMLGO(reservedOutbound.getUMLGO());
+            details.setMEMO(reservedOutbound.getMEMO());
+            requestDetails.add(details);
+        }
+
+        request.setRequestHead(requestHead);
+        request.setRequestDetails(requestDetails);
+
+        viewModel.submit(request);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -188,4 +246,5 @@ public class ReservedOutBoundActivity extends BaseActivity {
             }
         });
     }
+
 }

@@ -60,7 +60,7 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
     private TextView supplierBatch;
     // 批次号（输入）
     private EditText batchNumber;
-    private EditText cargoCode;
+    private EditText cargoSpace;
 
     // 需求数量
     private TextView requiredQuantity;
@@ -85,6 +85,9 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
                     if (stockMaterial != null) {
                         storeCargoSpace.setText(stockMaterial.getCargoSpace());
                         batchNumber.setText(stockMaterial.getBatchNumber());
+                        reservedOutbound.setVerificationCargoSpace(stockMaterial.getCargoSpace());
+                        reservedOutbound.setActualInventory(stockMaterial.getActualInventory());
+                        reservedOutbound.setVerificationBatchNumber(stockMaterial.getBatchNumber());
                     }
                 }
             }
@@ -129,7 +132,8 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
                 final String scanStatus = intent.getStringExtra("SCAN_STATE");
 
                 if ("ok".equals(scanStatus)) {
-                    cargoCode.setText(scanResult);
+                    cargoSpace.setText(scanResult);
+                    quantity.setFocusable(true);
                 } else {
                     showMessage("获取扫描数据失败");
                 }
@@ -159,9 +163,12 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
                         // 点击取消时回调
                     }
                 })
-                .setPositiveButton("出库", new DialogInterface.OnClickListener() {
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
+
+                        confirm();
+
                         // 点击确定时回调
                         // 出库
                     }
@@ -172,6 +179,31 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 
     private void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * 数据确认
+     */
+    private void confirm() {
+        String quantityValue = quantity.getText().toString();
+        double quantityValueDouble = Double.NaN;
+        String batchNumberValue = batchNumber.getText().toString();
+
+        String remarkValue = remark.getText().toString();
+        String cargoSpaceValue = cargoSpace.getText().toString();
+
+        // 逻辑判断
+        if (cargoSpaceValue.isEmpty()) {
+            showMessage("请扫描下架仓位");
+            return;
+        } else if (!reservedOutbound.getVerificationBatchNumber().equals(batchNumberValue)) {
+            showMessage("批次数据不正确");
+            return;
+        }
+
+        reservedOutbound.setQuantity(Double.parseDouble(quantityValue));
+        reservedOutbound.setMEMO(remarkValue);
+        reservedOutbound.setCargoSpace(cargoSpaceValue);
     }
 
 
@@ -185,7 +217,7 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
         requiredQuantity = view.findViewById(R.id.tv_required_quantity_description);
         basicUnit = view.findViewById(R.id.tv_required_unit_description);
         storeCargoSpace = view.findViewById(R.id.tv_position_description);
-        cargoCode = view.findViewById(R.id.tv_out_shelf_description);
+        cargoSpace = view.findViewById(R.id.tv_out_shelf_description);
         quantity = view.findViewById(R.id.tv_number_description);
         remark = view.findViewById(R.id.et_remark);
 
@@ -207,8 +239,8 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
         supplierBatch.setText(reservedOutbound.getZZLICHA());
         requiredQuantity.setText(reservedOutbound.getBDMNG());
         basicUnit.setText(reservedOutbound.getBaseUnitTxt());
-        storeCargoSpace.setText(reservedOutbound.getCargo());
-        quantity.setText(String.valueOf(reservedOutbound.getNum()));
+        storeCargoSpace.setText(reservedOutbound.getCargoSpace());
+        quantity.setText(String.valueOf(reservedOutbound.getQuantity()));
         remark.setText(reservedOutbound.getMEMO());
     }
 
@@ -232,4 +264,5 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
         super.onDetach();
         unRegisterReceiver();
     }
+
 }

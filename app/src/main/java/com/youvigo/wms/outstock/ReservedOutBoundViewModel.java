@@ -20,8 +20,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
+import com.youvigo.wms.common.ResultState;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.SapService;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
+import com.youvigo.wms.data.dto.response.ReservedOutBoundResponse;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.ReservedOutbound;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -32,12 +39,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReservedOutBoundViewModel extends BaseViewModel {
 
 	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
 	private MutableLiveData<MaterialVoucher> _order = new MutableLiveData<>();
 	private MutableLiveData<List<ReservedOutbound>> _items = new MutableLiveData<>();
+	private MutableLiveData<ResultState> _submitResult = new MutableLiveData<>();
 
 	public void handleDate(MaterialVoucher materialVoucher) {
 
@@ -64,6 +75,34 @@ public class ReservedOutBoundViewModel extends BaseViewModel {
 			}
 		});
 		addSubscription(disposable);
+
+	}
+
+	public void submit(ReservedOutBoundRequest request) {
+		_isLoading.setValue(true);
+
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		SapService sapService = retrofitClient.getSapService();
+
+		Call<ReservedOutBoundResponse> call = sapService.submitReservedOutBound(request);
+		call.enqueue(new Callback<ReservedOutBoundResponse>() {
+			@Override
+			public void onResponse(@NotNull Call<ReservedOutBoundResponse> call, @NotNull Response<ReservedOutBoundResponse> response) {
+				if (response.isSuccessful()) {
+					ReservedOutBoundResponse reservedOutBoundResponse = response.body();
+					if (!reservedOutBoundResponse.getMessage().getSuccess().equals("S")) {
+						_submitResult.setValue(new ResultState(false, reservedOutBoundResponse.getMessage().getMessage()));
+					} else {
+						_submitResult.setValue(new ResultState(true, reservedOutBoundResponse.getMessage().getMessage()));
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(@NotNull Call<ReservedOutBoundResponse> call, @NotNull Throwable t) {
+				_submitResult.setValue(new ResultState(false, t.getMessage()));
+			}
+		});
 
 	}
 

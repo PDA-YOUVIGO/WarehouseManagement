@@ -23,6 +23,7 @@ import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.PositionMovementRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequest;
+import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryQueryRequest;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
@@ -32,6 +33,7 @@ import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.PositionMovementResponse;
 import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
+import com.youvigo.wms.data.dto.response.ReservedOutBoundResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponse;
 
@@ -79,6 +81,12 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Reservation_Query")
 	Call<ReservedOutBoundQueryResponse> queryReservedOutBound(@Body ReservedOutBoundQueryRequest request);
+
+	/**
+	 * 提交预留出库到SAP
+	 */
+	@POST("RESTAdapter/PDA/GI_With_Reservation")
+	Call<ReservedOutBoundResponse> submitReservedOutBound(@Body ReservedOutBoundRequest request);
 
 	/**
 	 * 获取物料信息

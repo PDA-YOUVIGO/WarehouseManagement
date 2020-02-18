@@ -84,9 +84,9 @@ public class ReservedOutBoundAdapter extends ListAdapter<ReservedOutbound, Reser
             batchNumber.setText(reservedOutbound.getBatchNumber());
             demandQuantity.setText(reservedOutbound.getBDMNG());
             demandUnit.setText(reservedOutbound.getBaseUnitTxt());
-            pickedQuantity.setText(String.valueOf(reservedOutbound.getNum()));
+            pickedQuantity.setText(String.valueOf(reservedOutbound.getQuantity()));
             pickedUnit.setText(reservedOutbound.getBaseUnitTxt());
-            cargo.setText(reservedOutbound.getCargo());
+            cargo.setText(reservedOutbound.getCargoSpace());
         }
 
         @Override
