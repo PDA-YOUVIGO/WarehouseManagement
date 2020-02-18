@@ -16,12 +16,15 @@
 
 package com.youvigo.wms.data.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.youvigo.wms.data.dto.base.Additional;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
 
 import java.util.List;
 
-public class WarehouseInventoryModelView {
+public class WarehouseInventoryModelView implements Parcelable {
 
     /// 仓库号
     private String LGNUM ;
@@ -123,6 +126,43 @@ public class WarehouseInventoryModelView {
         this.ZZMENGE_AUXILIARY = ZZMENGE_AUXILIARY;
         this.units = units;
     }
+
+    protected WarehouseInventoryModelView(Parcel in) {
+        LGNUM = in.readString();
+        IVNUM = in.readString();
+        IVPOS = in.readString();
+        MATNR = in.readString();
+        MAKTX = in.readString();
+        ZZCOMMONNAME = in.readString();
+        WERKS = in.readString();
+        CHARG = in.readString();
+        ZZLICHA = in.readString();
+        MEINS = in.readString();
+        MEINS_TXT = in.readString();
+        MENGA = in.readDouble();
+        ADDFLAG = in.readString();
+        LGORT = in.readString();
+        LGPLA = in.readString();
+        NUMBER = in.readDouble();
+        BESTQ = in.readString();
+        ZZPACKAGING = in.readString();
+        ZZLICHA_MAIN = in.readString();
+        ZZMENGE_MAIN = in.readString();
+        ZZLICHA_AUXILIARY = in.readString();
+        ZZMENGE_AUXILIARY = in.readString();
+    }
+
+    public static final Creator<WarehouseInventoryModelView> CREATOR = new Creator<WarehouseInventoryModelView>() {
+        @Override
+        public WarehouseInventoryModelView createFromParcel(Parcel in) {
+            return new WarehouseInventoryModelView(in);
+        }
+
+        @Override
+        public WarehouseInventoryModelView[] newArray(int size) {
+            return new WarehouseInventoryModelView[size];
+        }
+    };
 
     public String getLGNUM() {
         return LGNUM;
@@ -314,5 +354,36 @@ public class WarehouseInventoryModelView {
 
     public void setUnits(List<MaterialUnit> units) {
         this.units = units;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(LGNUM);
+        parcel.writeString(IVNUM);
+        parcel.writeString(IVPOS);
+        parcel.writeString(MATNR);
+        parcel.writeString(MAKTX);
+        parcel.writeString(ZZCOMMONNAME);
+        parcel.writeString(WERKS);
+        parcel.writeString(CHARG);
+        parcel.writeString(ZZLICHA);
+        parcel.writeString(MEINS);
+        parcel.writeString(MEINS_TXT);
+        parcel.writeDouble(MENGA);
+        parcel.writeString(ADDFLAG);
+        parcel.writeString(LGORT);
+        parcel.writeString(LGPLA);
+        parcel.writeDouble(NUMBER);
+        parcel.writeString(BESTQ);
+        parcel.writeString(ZZPACKAGING);
+        parcel.writeString(ZZLICHA_MAIN);
+        parcel.writeString(ZZMENGE_MAIN);
+        parcel.writeString(ZZLICHA_AUXILIARY);
+        parcel.writeString(ZZMENGE_AUXILIARY);
     }
 }

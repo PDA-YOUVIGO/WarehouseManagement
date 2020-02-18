@@ -42,6 +42,9 @@ public class Constants {
     public static final String MATERIAL_SEARCH_RESULT = "material_search_result";
     public static final String CATEGORY = "category";
     public static final String TYPE_SHELVING = "type_shelving";
+    public static final String TYPE_WAREHOUSE_INVENTORY= "type_warehouse_inventory";
+    public static final String WAREHOUSE_INVENTORY_DETAILS_RESULT= "warehouse_inventory_details_result";
+    public static final String WAREHOUSE_INVENTORY_RESULT= "warehouse_inventory_result";
 
     /**
      * 出库下架

@@ -16,7 +16,10 @@
 
 package com.youvigo.wms.data.dto.response;
 
-public class WarehouseInventoryQueryResponseDetails {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class WarehouseInventoryQueryResponseDetails implements Parcelable {
 
     /// 系统盘点记录号
     private String IVNUM ;
@@ -35,6 +38,36 @@ public class WarehouseInventoryQueryResponseDetails {
         this.IVPOS = IVPOS;
         this.LGPLA = LGPLA;
     }
+
+    protected WarehouseInventoryQueryResponseDetails(Parcel in) {
+        IVNUM = in.readString();
+        IVPOS = in.readString();
+        LGPLA = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(IVNUM);
+        dest.writeString(IVPOS);
+        dest.writeString(LGPLA);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<WarehouseInventoryQueryResponseDetails> CREATOR = new Creator<WarehouseInventoryQueryResponseDetails>() {
+        @Override
+        public WarehouseInventoryQueryResponseDetails createFromParcel(Parcel in) {
+            return new WarehouseInventoryQueryResponseDetails(in);
+        }
+
+        @Override
+        public WarehouseInventoryQueryResponseDetails[] newArray(int size) {
+            return new WarehouseInventoryQueryResponseDetails[size];
+        }
+    };
 
     public String getIVNUM() {
         return IVNUM;
@@ -59,4 +92,5 @@ public class WarehouseInventoryQueryResponseDetails {
     public void setLGPLA(String LGPLA) {
         this.LGPLA = LGPLA;
     }
+
 }

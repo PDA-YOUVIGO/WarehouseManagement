@@ -28,59 +28,59 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
+import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 
-public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQueryResponseDetails, WarehouseInventoryAdapter.WarehouseInventoryCheckVH> {
+public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventoryModelView, WarehouseInventoryManAdapter.WarehouseInventoryManCheckVH> {
 
-    public WarehouseInventoryAdapter() { super(new WarehouseInventoryDiffCallback()); }
+    public WarehouseInventoryManAdapter() { super(new WarehouseInventoryManDiffCallback()); }
 
     /**
      * 初始化界面
      */
     @NonNull
     @Override
-    public WarehouseInventoryCheckVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_warehouse_inventory, parent, false);
-        return new WarehouseInventoryCheckVH(view);
+    public WarehouseInventoryManCheckVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_warehouse_inventory_man, parent, false);
+        return new WarehouseInventoryManCheckVH(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WarehouseInventoryCheckVH holder, int Inventory) {
+    public void onBindViewHolder(@NonNull WarehouseInventoryManCheckVH holder, int InventoryMan) {
         // 绑定数据在UI上显示
-         holder.bind(getItem(Inventory));
+         holder.bind(getItem(InventoryMan));
     }
 
     /**
      * 列表item数据绑定
      */
-    class WarehouseInventoryCheckVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView tv_item_position_code; // 仓位
+    class WarehouseInventoryManCheckVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView tv_item_position_code;
 
-        WarehouseInventoryCheckVH(@NonNull View itemView) {
+        WarehouseInventoryManCheckVH(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             tv_item_position_code = itemView.findViewById(R.id.tv_item_position_code);
         }
-        void bind(WarehouseInventoryQueryResponseDetails inventory) {
-            tv_item_position_code.setText(inventory.getIVNUM()); // 仓位
+        void bind(WarehouseInventoryModelView inventory) {
+            tv_item_position_code.setText(inventory.getIVNUM());
         }
 
         @Override
         public void onClick(View view) {
             if (itemView.getContext() instanceof AppCompatActivity) {
-                WarehouseInventoryQueryResponseDetails position = getItem(getAdapterPosition());
+                WarehouseInventoryModelView position = getItem(getAdapterPosition());
            }
         }
     }
 
-    static class WarehouseInventoryDiffCallback extends DiffUtil.ItemCallback<WarehouseInventoryQueryResponseDetails> {
+    static class WarehouseInventoryManDiffCallback extends DiffUtil.ItemCallback<WarehouseInventoryModelView> {
         @Override
-        public boolean areItemsTheSame(@NonNull WarehouseInventoryQueryResponseDetails oldItem, @NonNull WarehouseInventoryQueryResponseDetails newItem) {
+        public boolean areItemsTheSame(@NonNull WarehouseInventoryModelView oldItem, @NonNull WarehouseInventoryModelView newItem) {
             return oldItem.getLGPLA().equals(newItem.getLGPLA());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull WarehouseInventoryQueryResponseDetails oldItem, @NonNull WarehouseInventoryQueryResponseDetails newItem) {
+        public boolean areContentsTheSame(@NonNull WarehouseInventoryModelView oldItem, @NonNull WarehouseInventoryModelView newItem) {
             return oldItem.getLGPLA().equals(newItem.getLGPLA());
         }
     }

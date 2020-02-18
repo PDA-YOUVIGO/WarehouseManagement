@@ -26,8 +26,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.youvigo.wms.base.BaseFragment;
-import com.youvigo.wms.inventory.SwitchStockLocationActivity;
 import com.youvigo.wms.deliver.DeliverActivity;
+import com.youvigo.wms.inventory.SwitchStockLocationActivity;
 import com.youvigo.wms.outstock.NoReservedOutboundActivity;
 import com.youvigo.wms.outstock.ReservedOutBoundActivity;
 import com.youvigo.wms.product.FinishedProductsActivity;
@@ -90,7 +90,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
                 launchNoReservedOutBoundActivity();
                 break;
             case R.id.tv_warehouse_inventory:
-                launchWarehouseInventoryActivity();
+                launchwarehouseInventoryActivity();
                 break;
             case R.id.tv_position_movement:
                 launchPositionMovementActivity();
@@ -134,7 +134,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
         startActivity(intent);
     }
 
-    private void launchWarehouseInventoryActivity() {
+    private void launchwarehouseInventoryActivity() {
         Intent intent = new Intent(context, WarehouseInventoryActivity.class);
         startActivity(intent);
     }

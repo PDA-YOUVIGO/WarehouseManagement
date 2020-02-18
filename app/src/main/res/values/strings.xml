@@ -37,6 +37,7 @@
     <string name="out_of_stock">有预留出库</string>
     <string name="no_reserved_outbound">无预留出库</string>
     <string name="warehouse_inventory">仓库盘点</string>
+    <string name="warehouse_inventory_search">盘点查询</string>
     <string name="position_movement">仓位移动</string>
     <string name="inventory_check">库存查询</string>
     <string name="switch_stock_locations">切换库存地</string>

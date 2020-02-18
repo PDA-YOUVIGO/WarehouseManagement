@@ -16,11 +16,14 @@
 
 package com.youvigo.wms.data.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
 
 import java.util.List;
 
-public class WarehouseInventoryQueryModelView {
+public class WarehouseInventoryQueryModelView implements Parcelable {
 
     /// 凭证号
     private String IVNUM ;
@@ -36,6 +39,23 @@ public class WarehouseInventoryQueryModelView {
         this.lines = lines;
     }
 
+    protected WarehouseInventoryQueryModelView(Parcel in) {
+        IVNUM = in.readString();
+    }
+
+
+    public static final Creator<WarehouseInventoryQueryModelView> CREATOR = new Creator<WarehouseInventoryQueryModelView>() {
+        @Override
+        public WarehouseInventoryQueryModelView createFromParcel(Parcel in) {
+            return new WarehouseInventoryQueryModelView(in);
+        }
+
+        @Override
+        public WarehouseInventoryQueryModelView[] newArray(int size) {
+            return new WarehouseInventoryQueryModelView[size];
+        }
+    };
+
     public String getIVNUM() {
         return IVNUM;
     }
@@ -50,5 +70,16 @@ public class WarehouseInventoryQueryModelView {
 
     public void setLines(List<WarehouseInventoryQueryResponseDetails> lines) {
         this.lines = lines;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(IVNUM);
+        parcel.writeTypedList(lines);
     }
 }

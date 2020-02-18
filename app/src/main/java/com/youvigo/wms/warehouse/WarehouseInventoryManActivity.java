@@ -40,9 +40,7 @@ import java.util.List;
 import timber.log.Timber;
 
 
-public class WarehouseInventoryActivity extends BaseActivity {
-    protected static final int REQUEST_CODE = 103;
-    public static final String VOUCHER_NUMBER = "voucherNumber";
+public class WarehouseInventoryManActivity extends BaseActivity {
     private ProgressBar progressBar;
     private WarehouseInventoryAdapter adapter;
     private WarehouseInventoryViewModel viewModel;
@@ -101,10 +99,10 @@ public class WarehouseInventoryActivity extends BaseActivity {
 
     @Override
     protected void onMenuSearchClicked() {
-        String voucherNumber = this.voucherNumber.getText().toString();
-        Intent intent = new Intent(this, WarehouseInventorySearchActivity.class);
-        intent.putExtra(Constants.CATEGORY, Constants.TYPE_WAREHOUSE_INVENTORY);
-        intent.putExtra(VOUCHER_NUMBER, voucherNumber);
-        startActivityForResult(intent, REQUEST_CODE);
+//        String voucherNumber = this.voucherNumber.getText().toString();
+//        Intent intent = new Intent(this, WarehouseInventorySearchActivity.class);
+//        intent.putExtra(Constants.CATEGORY, Constants.TYPE_WAREHOUSE_INVENTORY);
+//        intent.putExtra(VOUCHER_NUMBER, voucherNumber);
+//        startActivityForResult(intent, REQUEST_CODE);
     }
 }

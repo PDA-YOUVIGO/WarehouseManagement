@@ -34,37 +34,79 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="665dp"
+        android:layout_marginLeft="@dimen/dp_4"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_text"
-            android:layout_width="341dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_rectangle"
-            android:maxLength="100"
-            android:maxLines="1"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingRight="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_2"
-            android:singleLine="true"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/voucher"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/voucher"
-            app:layout_constraintTop_toTopOf="@+id/voucher" />
 
         <TextView
             android:id="@+id/voucher"
-            android:layout_width="61dp"
-            android:layout_height="25dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:gravity="center"
-            android:text="凭证号"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="凭证/仓位"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/inventory_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="@+id/voucher"
+            app:layout_constraintEnd_toStartOf="@+id/inventory_position_code"
+            app:layout_constraintStart_toEndOf="@+id/voucher"
+            app:layout_constraintTop_toTopOf="@+id/voucher"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="1010203"/>
+
+        <TextView
+            android:id="@+id/inventory_position_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="@+id/voucher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/inventory_code"
+            app:layout_constraintTop_toTopOf="@+id/voucher"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="1515612"/>
+
+        <TextView
+            android:id="@+id/material_code_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="物料编码"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="@+id/voucher"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/voucher" />
+
+        <EditText
+            android:id="@+id/material_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_4"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="@dimen/dp_4"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="@+id/material_code_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/material_code_description"
+            app:layout_constraintTop_toBottomOf="@+id/voucher" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -73,11 +115,9 @@
             android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/voucher"
-            app:layout_constraintVertical_bias="0.0"
-            tools:listitem="@layout/item_warehouse_inventory_position" />
+            app:layout_constraintTop_toBottomOf="@+id/material_code_description"
+            tools:listitem="@layout/item_warehouse_inventory_man" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

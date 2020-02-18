@@ -72,6 +72,10 @@
             android:label="@string/warehouse_inventory" />
 
         <activity
+            android:name=".warehouse.WarehouseInventorySearchActivity"
+            android:label="@string/warehouse_inventory_search" />
+
+        <activity
             android:name=".warehouse.PositionMovementActivity"
             android:label="@string/position_movement" />
 

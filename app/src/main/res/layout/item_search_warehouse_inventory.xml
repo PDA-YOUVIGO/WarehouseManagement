@@ -26,8 +26,8 @@
     app:cardElevation="@dimen/dp_4">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="407dp"
+        android:layout_height="match_parent"
         android:background="?android:selectableItemBackground"
         android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_4"
@@ -35,27 +35,30 @@
         android:paddingBottom="@dimen/dp_4">
 
         <TextView
-            android:id="@+id/tv_item_position_description"
+            android:id="@+id/tv_item_inventory_code_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/cargo_space"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center|start"
+            android:text="@string/warehouse_number"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_16"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_item_position_code"
+            android:id="@+id/tv_item_inventory_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_4"
+            android:layout_marginLeft="@dimen/dp_4"
             android:gravity="start|center"
-            android:textSize="@dimen/dp_16"
-            app:layout_constraintBottom_toBottomOf="@id/tv_item_position_description"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_inventory_code_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_item_position_description"
-            app:layout_constraintTop_toTopOf="@id/tv_item_position_description"
+            app:layout_constraintStart_toEndOf="@id/tv_item_inventory_code_description"
+            app:layout_constraintTop_toTopOf="@id/tv_item_inventory_code_description"
             tools:text="000001232323" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
