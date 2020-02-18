@@ -56,7 +56,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
      * 列表item的数量
      */
     class MaterialCheckVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView tv_material_coding; // 物料编码
+        private final TextView tv_material_code; // 物料编码
         private final TextView tv_material_name; // 物料名称
         private final TextView tv_specification; // 规格
         private final TextView tv_number; // 数量
@@ -67,7 +67,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 
         MaterialCheckVH(@NonNull View itemView) {
             super(itemView);
-            tv_material_coding = itemView.findViewById(R.id.tv_material_code);
+            tv_material_code = itemView.findViewById(R.id.tv_material_code);
             tv_material_name = itemView.findViewById(R.id.tv_material_name);
             tv_specification = itemView.findViewById(R.id.tv_specification);
             tv_number = itemView.findViewById(R.id.tv_number);
@@ -77,8 +77,9 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
             tv_supplier = itemView.findViewById(R.id.tv_supplier);
 
         }
+
         void bind(StockMaterial StockMaterial) {
-            tv_material_coding.setText(StockMaterial.getMaterialCode());
+            tv_material_code.setText(StockMaterial.getMaterialCode());
             tv_material_name.setText(StockMaterial.getMaterialCommonName());
             tv_specification.setText(StockMaterial.getSpecification());
             tv_number.setText(String.valueOf(StockMaterial.getActualInventory()));
@@ -87,7 +88,6 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
             tv_cargo_space.setText(StockMaterial.getCargoSpace());
             tv_supplier.setText(StockMaterial.getZZSUPP_NAME());
         }
-
 
         @Override
         public void onClick(View v) {
