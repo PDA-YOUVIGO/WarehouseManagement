@@ -72,16 +72,19 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 			String specification = intent.getStringExtra(KEY_SPECIFICATION);
 			String cargoCode = intent.getStringExtra(KEY_CARGOCODE);
 
-			inputMaterialInforCompleted(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+			viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+
 		}
 	}
 
 	private void initViews() {
 		progressBar = findViewById(R.id.progress_bar);
+
 		RecyclerView recyclerView = findViewById(R.id.recycler_view);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 		adapter = new MaterialsSearchAdapter();
 		recyclerView.setAdapter(adapter);
 	}
@@ -121,6 +124,7 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	private void observeData() {
 		viewModel = new ViewModelProvider.NewInstanceFactory().create(MaterialSearchViewModel.class);
 		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+
 		viewModel.materials().observe(this, material -> adapter.submitList(material));
 
 		viewModel.getQueryState().observe(this, queryState -> {

@@ -147,6 +147,7 @@ public class SearchActivity extends AppCompatActivity {
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 		adapter = new SearchAdapter();
 		recyclerView.setAdapter(adapter);
 	}
@@ -185,6 +186,7 @@ public class SearchActivity extends AppCompatActivity {
 		//viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
 		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+
 		viewModel.materials().observe(this, materials -> {
 			adapter.submitList(materials);
 			adapter.notifyDataSetChanged();
