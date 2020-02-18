@@ -141,4 +141,11 @@
     <!--StockMaterial-->
     <string name="material_detail">请输入查询参数</string>
     <string name="reserved_out_bound_detail">预留明细</string>
+
+    <!--盘点-->
+    <string name="warehouse_number">凭证记录号</string>
+    <string name="position">仓位</string>
+    <string name="Material_number">数量</string>
+
+
 </resources>

@@ -18,17 +18,13 @@ package com.youvigo.wms.data.dto.response;
 
 public class WarehouseInventoryQueryResponseDetails {
 
-    /// <summary>
     /// 系统盘点记录号
-    /// </summary>
     private String IVNUM ;
-    /// <summary>
+
     /// 库存文件项目号
-    /// </summary>
     private String IVPOS ;
-    /// <summary>
+
     /// 仓位
-    /// </summary>
     private String LGPLA ;
 
     public WarehouseInventoryQueryResponseDetails() {

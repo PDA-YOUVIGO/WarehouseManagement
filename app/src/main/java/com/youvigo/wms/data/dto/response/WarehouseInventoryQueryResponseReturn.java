@@ -17,7 +17,6 @@
 package com.youvigo.wms.data.dto.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.youvigo.wms.data.dto.base.Additional;
 
 import java.util.List;
 
@@ -26,14 +25,14 @@ public class WarehouseInventoryQueryResponseReturn {
     private List<WarehouseInventoryQueryResponseDetails> data ;
 
     /// 附加字段
-    private Additional ADDITIONAL;
+    private String ADDITIONAL;
 
     private WarehouseInventoryQueryResponseMessage RETURN ;
 
     public WarehouseInventoryQueryResponseReturn() {
     }
 
-    public WarehouseInventoryQueryResponseReturn(List<WarehouseInventoryQueryResponseDetails> data, Additional ADDITIONAL, WarehouseInventoryQueryResponseMessage RETURN) {
+    public WarehouseInventoryQueryResponseReturn(List<WarehouseInventoryQueryResponseDetails> data, String ADDITIONAL, WarehouseInventoryQueryResponseMessage RETURN) {
         this.data = data;
         this.ADDITIONAL = ADDITIONAL;
         this.RETURN = RETURN;
@@ -47,11 +46,11 @@ public class WarehouseInventoryQueryResponseReturn {
         this.data = data;
     }
 
-    public Additional getADDITIONAL() {
+    public String getADDITIONAL() {
         return ADDITIONAL;
     }
 
-    public void setADDITIONAL(Additional ADDITIONAL) {
+    public void setADDITIONAL(String ADDITIONAL) {
         this.ADDITIONAL = ADDITIONAL;
     }
 
