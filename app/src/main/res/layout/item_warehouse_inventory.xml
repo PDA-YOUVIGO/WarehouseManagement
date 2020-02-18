@@ -41,7 +41,7 @@
             android:gravity="center|start"
             android:text="@string/warehouse_number"
             android:textColor="@color/colorPrimary"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,9 +49,10 @@
             android:id="@+id/tv_item_inventory_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
+            android:paddingStart="@dimen/dp_4"
+            android:layout_marginLeft="@dimen/dp_4"
             android:gravity="start|center"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_inventory_code_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_item_inventory_code_description"

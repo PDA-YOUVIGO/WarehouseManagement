@@ -41,7 +41,7 @@
             android:gravity="start"
             android:text="@string/position"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,8 +49,9 @@
             android:id="@+id/tv_item_position_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
+            android:paddingLeft="@dimen/dp_4"
             android:gravity="start|center"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_position_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_item_position_description"
