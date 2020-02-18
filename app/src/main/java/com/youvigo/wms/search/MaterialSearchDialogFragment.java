@@ -36,96 +36,83 @@ import com.youvigo.wms.R;
 import org.jetbrains.annotations.NotNull;
 
 public class MaterialSearchDialogFragment extends DialogFragment {
-    public static final int REQUEST_CODE = 102;
-    private static final String TAG = "materialSearchDialogFragment";
-    private View view;
-    private Context context;
-    private OnMaterialSearchInforCompleted mOnMaterialSearchInforCompleted;
-    private TextView material_coding;
-    private TextView batch_number;
-    private TextView material_description;
-    private TextView common_name;
-    private TextView specification;
-    private TextView position;
+	public static final int REQUEST_CODE = 102;
+	private static final String TAG = "materialSearchDialogFragment";
+	private View view;
+	private Context context;
+	private OnMaterialSearchInforCompleted mOnMaterialSearchInforCompleted;
+	private TextView materialCode;
+	private TextView batchNumber;
+	private TextView materialDescription;
+	private TextView materialCommonName;
+	private TextView specification;
+	private TextView cargoSpace;
 
-    /**
-     * Dialog Show
-     */
-    public static void show(FragmentManager fragmentManager) {
-        MaterialSearchDialogFragment dialogFragment = new MaterialSearchDialogFragment();
-        Bundle bundle = new Bundle();
-        dialogFragment.setArguments(bundle);
-        dialogFragment.show(fragmentManager, TAG);
-    }
+	/**
+	 * Dialog Show
+	 */
+	public static void show(FragmentManager fragmentManager) {
+		MaterialSearchDialogFragment dialogFragment = new MaterialSearchDialogFragment();
+		Bundle bundle = new Bundle();
+		dialogFragment.setArguments(bundle);
+		dialogFragment.show(fragmentManager, TAG);
+	}
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DetailDialogTheme);
-    }
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setStyle(DialogFragment.STYLE_NORMAL, R.style.DetailDialogTheme);
+	}
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.context = context;
-    }
+	@Override
+	public void onAttach(@NonNull Context context) {
+		super.onAttach(context);
+		this.context = context;
+	}
 
-    @Override
-    public void onAttach(@NotNull Activity activity) {
-        super.onAttach(activity);
-        mOnMaterialSearchInforCompleted = (OnMaterialSearchInforCompleted) activity;
-    }
+	@Override
+	public void onAttach(@NotNull Activity activity) {
+		super.onAttach(activity);
+		mOnMaterialSearchInforCompleted = (OnMaterialSearchInforCompleted) activity;
+	}
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        view = LayoutInflater.from(context).inflate(R.layout.material_search_dialog_fragment, null);
-        return buildDialog(view);
-    }
+	@NonNull
+	@Override
+	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+		view = LayoutInflater.from(context).inflate(R.layout.material_search_dialog_fragment, null);
+		return buildDialog(view);
+	}
 
-    @NotNull
-    private AlertDialog buildDialog(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(R.string.material_detail);
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
-                // 点击取消时回调
-                dismiss();
-            }
-        });
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
-                material_coding = view.findViewById(R.id.et_material_coding);
-                batch_number = view.findViewById(R.id.et_batch_number);
-                material_description = view.findViewById(R.id.et_item);
-                common_name = view.findViewById(R.id.et_common_name);
-                specification = view.findViewById(R.id.et_specification);
-                position = view.findViewById(R.id.et_position);
-                mOnMaterialSearchInforCompleted.inputMaterialInforCompleted(
-                        material_coding.getText() == null ? "" : material_coding.getText().toString(),
-                        batch_number.getText() == null ? "" : batch_number.getText().toString(),
-                        material_description.getText() == null ? "" : material_description.getText().toString(),
-                        common_name.getText() == null ? "" : common_name.getText().toString(),
-                        specification.getText() == null ? "" : specification.getText().toString(),
-                        position.getText() == null ? "" : position.getText().toString()
-                );
-                dismiss();
-            }
-        });
-        builder.setView(view);
-        return builder
-                .create();
-    }
+	@NotNull
+	private AlertDialog buildDialog(View view) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(R.string.material_detail);
+		builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog1, int which) {
+				// 点击取消时回调
+				dismiss();
+			}
+		});
 
-    public interface OnMaterialSearchInforCompleted {
-        void inputMaterialInforCompleted(String material_coding,
-                                         String batch_number,
-                                         String material_description,
-                                         String common_name,
-                                         String specification,
-                                         String position
-        );
-    }
+		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog1, int which) {
+				materialCode = view.findViewById(R.id.et_material_coding);
+				batchNumber = view.findViewById(R.id.et_batch_number);
+				materialDescription = view.findViewById(R.id.et_item);
+				materialCommonName = view.findViewById(R.id.et_common_name);
+				specification = view.findViewById(R.id.et_specification);
+				cargoSpace = view.findViewById(R.id.et_position);
+				mOnMaterialSearchInforCompleted.inputMaterialInforCompleted(materialCode.getText() == null ? "" : materialCode.getText().toString(), batchNumber.getText() == null ? "" : batchNumber.getText().toString(), materialDescription.getText() == null ? "" : materialDescription.getText().toString(), materialCommonName.getText() == null ? "" : materialCommonName.getText().toString(), specification.getText() == null ? "" : specification.getText().toString(), cargoSpace.getText() == null ? "" : cargoSpace.getText().toString());
+				dismiss();
+			}
+		});
+		builder.setView(view);
+		return builder.create();
+	}
+
+	public interface OnMaterialSearchInforCompleted {
+		void inputMaterialInforCompleted(String material_coding, String batch_number, String material_description, String common_name, String specification, String position);
+	}
 }

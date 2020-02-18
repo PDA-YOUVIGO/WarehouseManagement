@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="@string/position"
+            android:text="@string/cargo_space"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
