@@ -67,7 +67,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.position_movement_menu, menu);
+        getMenuInflater().inflate(R.menu.submit_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -121,7 +121,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         }  else if (item.getItemId() == R.id.menu_search) {
             onMenuSearchClicked();
         }
-        else if (item.getItemId() == R.id.position_submit) {
+        else if (item.getItemId() == R.id.tv_submit) {
             onMenuSubmitClicked();
         }
         return true;

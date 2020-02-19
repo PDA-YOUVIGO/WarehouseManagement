@@ -19,18 +19,20 @@ package com.youvigo.wms.data.dto.request;
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 
+import java.util.List;
+
 public class WarehouseInventoryRequest {
 
     @SerializedName("ControlInfo")
     private ControlInfo controlInfo;
 
     @SerializedName("ITEM")
-    private WarehouseInventoryRequestDetails requestDetails;
+    private List<WarehouseInventoryRequestDetails> requestDetails;
 
     public WarehouseInventoryRequest() {
     }
 
-    public WarehouseInventoryRequest(ControlInfo controlInfo, WarehouseInventoryRequestDetails requestDetails) {
+    public WarehouseInventoryRequest(ControlInfo controlInfo, List<WarehouseInventoryRequestDetails> requestDetails) {
         this.controlInfo = controlInfo;
         this.requestDetails = requestDetails;
     }
@@ -43,11 +45,11 @@ public class WarehouseInventoryRequest {
         this.controlInfo = controlInfo;
     }
 
-    public WarehouseInventoryRequestDetails getRequestDetails() {
+    public List<WarehouseInventoryRequestDetails> getRequestDetails() {
         return requestDetails;
     }
 
-    public void setRequestDetails(WarehouseInventoryRequestDetails requestDetails) {
+    public void setRequestDetails(List<WarehouseInventoryRequestDetails> requestDetails) {
         this.requestDetails = requestDetails;
     }
 }

@@ -32,40 +32,14 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_4"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
-            android:id="@+id/tv_start"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:layout_marginTop="@dimen/dp_4"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
-            app:layout_constraintEnd_toStartOf="@id/tv_end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="2010-11-01" />
-
-        <TextView
-            android:id="@+id/tv_end"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:background="@drawable/bg_rectangle"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingBottom="@dimen/dp_2"
-            app:layout_constraintBottom_toBottomOf="@id/tv_start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_start"
-            app:layout_constraintTop_toTopOf="@id/tv_start"
-            tools:text="2020-01-01" />
 
         <TextView
             android:id="@+id/voucher"
@@ -73,31 +47,66 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:text="盘点凭证"
+            android:text="凭证/仓位"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_start" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/edit_text"
+        <TextView
+            android:id="@+id/inventory_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="@+id/voucher"
+            app:layout_constraintEnd_toStartOf="@+id/inventory_position_code"
+            app:layout_constraintStart_toEndOf="@+id/voucher"
+            app:layout_constraintTop_toTopOf="@+id/voucher"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="1010203" />
+
+        <TextView
+            android:id="@+id/inventory_position_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/bg_rectangle"
-            android:maxLength="100"
-            android:maxLines="1"
             android:paddingLeft="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_2"
-            android:paddingRight="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_2"
-            android:singleLine="true"
-            android:textSize="14sp"
+            android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@+id/voucher"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/voucher"
-            app:layout_constraintTop_toTopOf="@+id/voucher" />
+            app:layout_constraintStart_toEndOf="@+id/inventory_code"
+            app:layout_constraintTop_toTopOf="@+id/voucher"
+            tools:text="1515612" />
 
+        <TextView
+            android:id="@+id/material_code_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="物料编码"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintEnd_toEndOf="@+id/voucher"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/voucher" />
+
+        <EditText
+            android:id="@+id/material_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_4"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="@+id/material_code_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/material_code_description"
+            app:layout_constraintTop_toTopOf="@+id/material_code_description" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -108,8 +117,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text"
-            tools:listitem="@layout/item_search_warehouse_inventory" />
+            app:layout_constraintTop_toBottomOf="@+id/material_code_description"
+            tools:listitem="@layout/item_warehouse_inventory_man" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

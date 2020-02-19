@@ -104,33 +104,33 @@ public class PositionMovementViewModel extends BaseViewModel {
 						// 组织数据
 						for (StockMaterial m : data) {
 							PositionMovementModelView position = new PositionMovementModelView();
-							position.LGNUM = m.getWarehouseNumber(); //仓库号
-							position.TAPOS = m.getZZAUFNR(); // 行项目号
-							position.MATNR = m.getMaterialCode(); // 物料编码
-							position.ZZCOMMONNAME = m.getMaterialCommonName();// 物料通用名称
-							position.MAKTX = m.getMaterialDescription();// 物料描述
-							position.WERKS = m.getFactoryCode();// 工厂
-							position.LGORT = retrofitClient.getStockLocationCode();// 库存地点
-							position.CHARG = m.getBatchNumber();// 批号
-							position.MEINS_TXT = m.getBaseUnitTxt(); //基本单位文本
-							position.MEINS = m.getBaseUnit(); //基本单位
-							position.VSOLM = ""; //基本单位数量
-							position.ALTME = ""; //辅助单位
-							position.VSOLA = ""; //辅助单位数量
-							position.VLTYP = m.getLGTYP(); // 下架仓位类型
-							position.NLTYP = ""; // 上架仓位类型
-							position.NLPLA = ""; // 上架仓位
-							position.VLPLA = m.getCargoSpace(); // 下架仓位
-							position.ZZPACKAGING = m.getZZPACKAGING(); // 是否合箱
-							position.ZZLICHA_MAIN = m.getZZLICHA_MAIN(); // 主批次
-							position.ZZMENGE_MAIN = m.getZZMENGE_MAIN(); // 主批次数量
-							position.ZZLICHA_AUXILIARY = m.getZZLICHA_AUXILIARY(); // 辅批次
-							position.ZZMENGE_AUXILIARY = m.getZZMENGE_AUXILIARY(); // 辅批次数量
-							position.ZZLICHA = m.getZZLICHA(); // 供应商批次
-							position.VLTYP = m.getZZLICHA(); // 下架仓位类型
-							position.VERME = m.getActualInventory(); // 可用库存量
-							position.ZZDRUGSPEC = m.getSpecification(); // 规格
-							position.BESTQ = m.getBESTQ(); // 库存类别
+							position.setLGNUM(m.getWarehouseNumber()); //仓库号
+							position.setTAPOS(m.getZZAUFNR()); // 行项目号
+							position.setMATNR(m.getMaterialCode()); // 物料编码
+							position.setZZCOMMONNAME(m.getMaterialCommonName());// 物料通用名称
+							position.setMAKTX(m.getMaterialDescription());// 物料描述
+							position.setWERKS(m.getFactoryCode());// 工厂
+							position.setLGORT(retrofitClient.getStockLocationCode());// 库存地点
+							position.setCHARG( m.getBatchNumber());// 批号
+							position.setMEINS_TXT(m.getBaseUnitTxt()); //基本单位文本
+							position.setMEINS(m.getBaseUnit()); //基本单位
+							position.setVSOLM(""); //基本单位数量
+							position.setALTME(""); //辅助单位
+							position.setVSOLA(""); //辅助单位数量
+							position.setVLTYP(m.getLGTYP()); // 下架仓位类型
+							position.setNLTYP(""); // 上架仓位类型
+							position.setNLPLA(""); // 上架仓位
+							position.setVLPLA(m.getCargoSpace()); // 下架仓位
+							position.setZZPACKAGING(m.getZZPACKAGING()); // 是否合箱
+							position.setZZLICHA_MAIN(m.getZZLICHA_MAIN()); // 主批次
+							position.setZZMENGE_MAIN(m.getZZMENGE_MAIN()); // 主批次数量
+							position.setZZLICHA_AUXILIARY(m.getZZLICHA_AUXILIARY()); // 辅批次
+							position.setZZMENGE_AUXILIARY(m.getZZMENGE_AUXILIARY()); // 辅批次数量
+							position.setZZLICHA(m.getZZLICHA()); // 供应商批次
+							position.setVLTYP(m.getZZLICHA()); // 下架仓位类型
+							position.setVERME(m.getActualInventory()); // 可用库存量
+							position.setZZDRUGSPEC(m.getSpecification()); // 规格
+							position.setBESTQ(m.getBESTQ()); // 库存类别
 							PositionData.add(position);
 						}
 						emitter.onNext(PositionData);

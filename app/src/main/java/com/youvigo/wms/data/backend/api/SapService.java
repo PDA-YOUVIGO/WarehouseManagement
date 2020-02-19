@@ -26,6 +26,7 @@ import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryQueryRequest;
+import com.youvigo.wms.data.dto.request.WarehouseInventoryRequest;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
@@ -36,6 +37,7 @@ import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
 import com.youvigo.wms.data.dto.response.ReservedOutBoundResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponse;
+import com.youvigo.wms.data.dto.response.WarehouseInventoryResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -105,4 +107,11 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Stock_Checking_Query")
 	Call<WarehouseInventoryQueryResponse> queryWarehouseInventory(@Body WarehouseInventoryQueryRequest request);
+
+	/**
+	 * 盘点提交
+	 */
+	@POST("RESTAdapter/PDA/Stock_Checking_Input")
+	Call<WarehouseInventoryResponse> submitWarehouseInventory(@Body WarehouseInventoryRequest request);
+
 }

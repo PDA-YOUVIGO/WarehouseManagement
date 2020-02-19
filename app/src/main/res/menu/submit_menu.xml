@@ -17,8 +17,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/position_submit"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"
+        android:id="@+id/tv_submit"
+        android:icon="@drawable/ic_android_submit1"
         android:title="@string/position_submit"
         app:showAsAction="always" />
 </menu>

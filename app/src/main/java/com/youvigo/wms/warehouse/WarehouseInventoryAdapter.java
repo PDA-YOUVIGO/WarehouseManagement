@@ -16,13 +16,14 @@
 
 package com.youvigo.wms.warehouse;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,8 @@ public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQue
 
     public WarehouseInventoryAdapter() { super(new WarehouseInventoryDiffCallback()); }
 
+    private Context context;
+
     /**
      * 初始化界面
      */
@@ -41,6 +44,7 @@ public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQue
     @Override
     public WarehouseInventoryCheckVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_warehouse_inventory, parent, false);
+        context = parent.getContext();
         return new WarehouseInventoryCheckVH(view);
     }
 
@@ -62,14 +66,18 @@ public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQue
             tv_item_position_code = itemView.findViewById(R.id.tv_item_position_code);
         }
         void bind(WarehouseInventoryQueryResponseDetails inventory) {
-            tv_item_position_code.setText(inventory.getIVNUM()); // 仓位
+            tv_item_position_code.setText(inventory.getLGPLA()); // 仓位
         }
 
         @Override
         public void onClick(View view) {
-            if (itemView.getContext() instanceof AppCompatActivity) {
-                WarehouseInventoryQueryResponseDetails position = getItem(getAdapterPosition());
-           }
+            WarehouseInventoryQueryResponseDetails details = getItem(getAdapterPosition());
+            // 获取盘点方式，明盘
+//            String inventory_method = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context);
+            Intent intent = new Intent(context, WarehouseInventoryBrightDiskActivity.class);
+            intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_CARGO_CODE, details.getLGPLA());
+            intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_VOUCHER_NUM,details.getIVNUM());
+            context.startActivity(intent);
         }
     }
 
