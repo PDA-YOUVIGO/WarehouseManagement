@@ -16,12 +16,17 @@
 
 package com.youvigo.wms.search;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -31,6 +36,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.util.Constants;
+
+import java.util.ArrayList;
 
 import timber.log.Timber;
 
@@ -104,6 +112,44 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 
 	@Override
 	protected int getLayoutId() { return R.layout.materials_search_activity; }
+
+	/**
+	 * 点击事件
+	 * @param item menu
+	 * @return Boolean
+	 */
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
+		}  else if (item.getItemId() == R.id.menu_search) {
+			onMenuSearchClicked();
+		}
+		else if (item.getItemId() == R.id.tv_check_all) {
+			onMenuCheckAllClicked();
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.check_all_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	/**
+	 * 全选
+	 */
+	protected  void onMenuCheckAllClicked(){
+		if (viewModel.materials().getValue().size() <= 0){
+			return;
+		}
+		Intent intent = new Intent();
+		intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) viewModel.materials().getValue());
+		this.setResult(Activity.RESULT_OK, intent);
+		this.finish();
+	}
 
 	/**
 	 * 接口查询

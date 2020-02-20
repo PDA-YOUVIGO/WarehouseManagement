@@ -117,8 +117,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    List<StockMaterial> stockMaterial = new ArrayList<>();
-                    stockMaterial.add( data.getParcelableExtra(Constants.MATERIAL_SEARCH_RESULT));
+                    List<StockMaterial> stockMaterial = data.getParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT);
                     processorData(inventoryResult,stockMaterial);
                     Timber.d("onActivityResult material:%s", inventoryResult.toString());
                 }
