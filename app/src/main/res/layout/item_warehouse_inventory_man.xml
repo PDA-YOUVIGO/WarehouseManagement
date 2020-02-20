@@ -65,9 +65,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:gravity="start|center"
-            android:text="物料名称"
+            android:text="物料名称："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_code_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_code_description" />
 
@@ -93,7 +94,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:gravity="start|center"
             android:text="现存量："
             android:textColor="@color/colorPrimary"
@@ -133,7 +134,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:gravity="start"
             android:text="批次号："
             android:textColor="@color/colorPrimary"
@@ -186,64 +187,6 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/tv_supplier_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:gravity="start"
-            android:text="供应商批次："
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cargo_space_description" />
-
-        <TextView
-            android:id="@+id/tv_supplier"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
-            android:text="101111111"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_supplier_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_supplier_description"
-            app:layout_constraintTop_toTopOf="@+id/tv_supplier_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/tv_voucher_code_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:gravity="start"
-            android:text="凭证号："
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintTop_toBottomOf="@+id/tv_supplier_description" />
-
-        <TextView
-            android:id="@+id/voucher_code"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
-            android:text="101111111"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_voucher_code_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_voucher_code_description"
-            app:layout_constraintTop_toTopOf="@+id/tv_voucher_code_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
             android:id="@+id/tv_inventory_number_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
@@ -254,7 +197,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintTop_toBottomOf="@id/tv_voucher_code_description" />
+            app:layout_constraintTop_toBottomOf="@id/tv_cargo_space_description" />
 
         <TextView
             android:id="@+id/tv_inventory_number"

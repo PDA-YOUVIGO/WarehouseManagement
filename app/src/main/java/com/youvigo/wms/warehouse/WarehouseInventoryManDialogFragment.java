@@ -264,7 +264,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         voucher_code.setText(inventoryModekView.getIVNUM());
 
         tv_on_put_qty.setText(inventoryModekView.getZZMENGE_MAIN());
-        tv_unit.setText(inventoryModekView.getMEINS());
+        tv_unit.setText(inventoryModekView.getMEINS_TXT());
         tv_assist_qty.setText(inventoryModekView.getZZMENGE_AUXILIARY());
 
         auxiliaryUnitsAdapter = new ArrayAdapter<>(context, R.layout.item_spinner, auxiliaryUnits);
