@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
   ~ Copyright (c) 2020. komamj
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,17 @@
   ~ limitations under the License.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_search"
-        android:icon="@drawable/ic_action_search_black"
-        android:title="@string/search"
-        app:showAsAction="always" />
-</menu>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="21"
+    android:viewportHeight="21"
+    android:tint="#000000"
+    android:alpha="0.8">
+  <group android:translateX="-1.9375"
+      android:translateY="-1.5">
+      <path
+          android:fillColor="#FF000000"
+          android:pathData="M2.01,21L23,12 2.01,3 2,10l15,2 -15,2z"/>
+  </group>
+</vector>

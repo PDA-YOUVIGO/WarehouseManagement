@@ -48,7 +48,7 @@ public class MaterialVoucher implements Parcelable {
     // 出库下架搜索结果
     public List<TakeOff> takeOffs;
 
-    public List<ReservedOutbound> reservedOutbounds;
+    public List<ReservedOutBound> reservedOutBounds;
 
     public MaterialVoucher() {
     }
@@ -78,7 +78,7 @@ public class MaterialVoucher implements Parcelable {
         dest.writeString(this.memo);
         dest.writeTypedList(this.shelvings);
         dest.writeTypedList(this.takeOffs);
-        dest.writeTypedList(this.reservedOutbounds);
+        dest.writeTypedList(this.reservedOutBounds);
     }
 
     protected MaterialVoucher(Parcel in) {
@@ -96,7 +96,7 @@ public class MaterialVoucher implements Parcelable {
         this.memo = in.readString();
         this.shelvings = in.createTypedArrayList(Shelving.CREATOR);
         this.takeOffs = in.createTypedArrayList(TakeOff.CREATOR);
-        this.reservedOutbounds = in.createTypedArrayList(ReservedOutbound.CREATOR);
+        this.reservedOutBounds = in.createTypedArrayList(ReservedOutBound.CREATOR);
     }
 
     public static final Creator<MaterialVoucher> CREATOR = new Creator<MaterialVoucher>() {

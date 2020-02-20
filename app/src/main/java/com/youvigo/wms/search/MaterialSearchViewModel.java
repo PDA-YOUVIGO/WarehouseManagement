@@ -91,7 +91,7 @@ public class MaterialSearchViewModel extends BaseViewModel {
 			public void onResponse(@NotNull Call<MaterialQueryResult> call, @NotNull Response<MaterialQueryResult> response) {
 				if (response.isSuccessful()) {
 					MaterialQueryResult materialQueryResult = response.body();
-					if (!materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equalsIgnoreCase("S")) {
+					if (!materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equalsIgnoreCase("S") || materialQueryResult.getMaterialQueryResponse().getData() == null) {
 						queryState.setValue(new ResultState(false, materialQueryResult.getMaterialQueryResponse().getMessage().getMessage()));
 						_isLoading.setValue(false);
 						return;

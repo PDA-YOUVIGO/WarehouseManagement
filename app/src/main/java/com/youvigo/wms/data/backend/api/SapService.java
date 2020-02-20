@@ -22,6 +22,7 @@ import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.PositionMovementRequest;
+import com.youvigo.wms.data.dto.request.PrintRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
@@ -32,6 +33,7 @@ import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.PositionMovementResponse;
+import com.youvigo.wms.data.dto.response.PrintResponse;
 import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
 import com.youvigo.wms.data.dto.response.ReservedOutBoundResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
@@ -105,4 +107,10 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Stock_Checking_Query")
 	Call<WarehouseInventoryQueryResponse> queryWarehouseInventory(@Body WarehouseInventoryQueryRequest request);
+
+	/**
+	 * 打印有（无）预留出库单据
+	 */
+	@POST("RESTAdapter/PDA/GI_Print")
+	Call<PrintResponse> submitPrint(@Body PrintRequest request);
 }

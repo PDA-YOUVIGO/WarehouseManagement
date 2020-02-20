@@ -22,22 +22,61 @@ public class Constants {
     public static final String BROADCAST_ENABLE = "enable_disable_barcode";
     public static final String BROADCAST_RESULT = "nlscan.action.SCANNER_RESULT";
 
-    public static final String SAP_URL = "http://52.82.87.90:50000/";
-    public static final String PDA_URL = "http://52.83.32.16:8081/";
-    public static final String SAP_USERNAME = "zengzx";
-    public static final String SAP_PASSWORD = "abcd1234";
-    public static final String ACCOUNT = "account";
-    public static final String USERNAME = "username";
-
+    // 通用设置
     public static final String DATE_PATTERN = "yyyyMMdd";
     public static final String DATETIME_PATTERN = "yyyy-MM-dd hh:mm:ss";
-    public static final String SAP_ADDRESS = "sap_address";
-    public static final String PDA_ADDRESS = "pda_address";
+
+    /** 登录工厂 */
     public static final String FACTORYCODE = "factory_code";
+
+    /** 登录库存地 */
     public static final String STOCKLOCATION = "stocklocation";
+
+    /** 登录仓库 */
     public static final String WAREHOUSE_NUMBER = "warehouseNumber";
+
+    /** 登录用户账号 */
+    public static final String ACCOUNT = "account";
+
+    /** 登录用户名字 */
+    public static final String USERNAME = "username";
+
+    /** 默认系统超时时间（秒） */
     public static final int TIME_OUT = 60;
 
+    // 系统设置Key
+    /** SAP接口地址 */
+    public static final String SAP_URL = "sap_interface_address";
+
+    /** Sap接口用户 */
+    public static final String SAP_ACCOUNT = "sap_interface_accounnt";
+
+    /** Sap接口密码 */
+    public static final String SAP_PASSWORD = "sap_interface_password";
+
+    /** PDA接口地址 */
+    public static final String PDA_URL = "pda_interface_address";
+
+    /** 打印机名字 */
+    public static final String PRINTER_NAME = "printer_name";
+
+    /** 显示合箱 */
+    public static final String DISPLAY_MERGEBOX = "display_mergebox";
+
+    /** 业务类型 */
+    public static final String BUSINESS_TYPE = "business_type";
+
+    /** 混批存储 */
+    public static final String HYBRID_STORAGE = "hybrid_storage";
+
+    /** 混批存储策略 */
+    public static final String HYBRID_STORAGE_STRATEGY = "hybrid_storage_strategy";
+
+    /** 盘点方式 */
+    public static final String INVENTORY_METHOD = "inventory_method";
+
+
+    // Actvity通用信息
     public static final String SEARCH_RESULT = "search_result";
     public static final String MATERIAL_SEARCH_RESULT = "material_search_result";
     public static final String CATEGORY = "category";
@@ -46,9 +85,7 @@ public class Constants {
     public static final String WAREHOUSE_INVENTORY_DETAILS_RESULT= "warehouse_inventory_details_result";
     public static final String WAREHOUSE_INVENTORY_RESULT= "warehouse_inventory_result";
 
-    /**
-     * 出库下架
-     */
+    /** 出库下架 */
     public static final String TYPE_DELIVER = "type_deliver";
     public static final String TYPE_RESERVED_OUT_BOUND = "type_reserved_out_bound";
 

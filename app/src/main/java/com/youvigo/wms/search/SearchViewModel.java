@@ -34,7 +34,7 @@ import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.entities.MaterialVoucher;
-import com.youvigo.wms.data.entities.ReservedOutbound;
+import com.youvigo.wms.data.entities.ReservedOutBound;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.util.Constants;
@@ -153,6 +153,7 @@ public class SearchViewModel extends BaseViewModel {
 
 			@Override
 			public void onFailure(@NotNull Call<ShelvingResult> call, @NotNull Throwable t) {
+				_isLoading.setValue(false);
 				queryState.setValue(new ResultState(false, t.getMessage()));
 				Timber.e(t);
 			}
@@ -247,6 +248,7 @@ public class SearchViewModel extends BaseViewModel {
 
 			@Override
 			public void onFailure(@NotNull Call<DeliverQueryResponse> call, @NotNull Throwable t) {
+				_isLoading.setValue(false);
 				queryState.setValue(new ResultState(false, t.getMessage()));
 				Timber.e(t);
 			}
@@ -305,9 +307,9 @@ public class SearchViewModel extends BaseViewModel {
 
 					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
 						List<MaterialVoucher> mockData = new ArrayList<>();
-						List<ReservedOutbound> reservedOutbounds = queryResponse.getDetails().getData();
+						List<ReservedOutBound> reservedOutBounds = queryResponse.getDetails().getData();
 
-						Map<String, List<ReservedOutbound>> group = reservedOutbounds.stream().collect(Collectors.groupingBy(ReservedOutbound::getRSNUM));
+						Map<String, List<ReservedOutBound>> group = reservedOutBounds.stream().collect(Collectors.groupingBy(ReservedOutBound::getRSNUM));
 						group.forEach((k, v) -> {
 							MaterialVoucher materialVoucher = new MaterialVoucher();
 							materialVoucher.orderNumber = v.get(0).getRSNUM();
@@ -320,7 +322,7 @@ public class SearchViewModel extends BaseViewModel {
 							materialVoucher.innerOrder = v.get(0).getAUFNR();
 							materialVoucher.innerOrderDescription = v.get(0).getKTEXT();
 							materialVoucher.moveType = v.get(0).getBWART();
-							materialVoucher.reservedOutbounds = v;
+							materialVoucher.reservedOutBounds = v;
 
 							mockData.add(materialVoucher);
 						});
@@ -350,6 +352,7 @@ public class SearchViewModel extends BaseViewModel {
 
 			@Override
 			public void onFailure(@NotNull Call<ReservedOutBoundQueryResponse> call, @NotNull Throwable t) {
+				_isLoading.setValue(false);
 				queryState.setValue(new ResultState(false, t.getMessage()));
 				Timber.e(t);
 			}

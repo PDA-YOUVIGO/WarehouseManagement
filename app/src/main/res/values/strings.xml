@@ -78,21 +78,21 @@
     <string name="stockLocationExample">2100 - 科伦药物研究院</string>
 
     <!-- Preference Titles -->
-    <string name="interface_settings_header">Interface Settings</string>
-    <string name="business_settings_header">Business Settings</string>
+    <string name="interface_settings_header">接口设置</string>
+    <string name="business_settings_header">业务设置</string>
 
     <!-- Interface Preferences -->
-    <string name="sap_interface_address_title">SAP Interface Address</string>
-    <string name="pda_interface_address_title">PDA Interface Address</string>
-    <string name="printer_name_title">Printer name</string>
+    <string name="sap_interface_address_title">SAP接口地址</string>
+    <string name="pda_interface_address_title">PDA接口地址</string>
+    <string name="printer_name_title">打印机名</string>
 
     <!-- Business Preferences -->
-    <string name="display_mergebox_title">Display Merge Box</string>
-    <string name="display_mergebox_summary">Display data on business panel.</string>
-    <string name="business_type_title">Business Type</string>
-    <string name="inventory_method_title">Inventory Method</string>
-    <string name="inventory_header">Inventory Settings</string>
-    <string name="hybrid_storage_title">Hybrid storage</string>
+    <string name="display_mergebox_title">显示合箱</string>
+    <string name="display_mergebox_summary">显示合箱在业务面板</string>
+    <string name="hybrid_storage_strategy">混批存放策略</string>
+    <string name="inventory_method_title">盘点方法</string>
+    <string name="inventory_header">盘点设置</string>
+    <string name="hybrid_storage_title">混批存放</string>
     <string name="basic_order">基本单位</string>
 
     <!--out of stock-->
@@ -137,7 +137,7 @@
     <string name="supplier_batch">供应商批次</string>
     <string name="sold_position">下架仓位</string>
     <string name="put_position">上架仓位</string>
-    <string name="position_submit">提交</string>
+    <string name="submit">提交</string>
 
     <!--StockMaterial-->
     <string name="material_detail">请输入查询参数</string>
@@ -147,6 +147,9 @@
     <string name="warehouse_number">凭证记录号</string>
     <string name="position">仓位</string>
     <string name="Material_number">数量</string>
+    <string name="business_type_title">业务类型</string>
+    <string name="sap_interface_account_title">SAP接口账户</string>
+    <string name="sap_interface_password_title">SAP接口密码</string>
 
 
 </resources>

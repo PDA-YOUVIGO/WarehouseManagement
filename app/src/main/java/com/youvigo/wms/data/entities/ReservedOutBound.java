@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2020. komamj
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.youvigo.wms.data.entities;
 
 import android.os.Parcel;
@@ -21,7 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ReservedOutbound implements Parcelable {
+public class ReservedOutBound implements Parcelable {
 
     /// 预留单号
     private String RSNUM;
@@ -136,7 +120,7 @@ public class ReservedOutbound implements Parcelable {
     private String MEMO;
 
 
-    public ReservedOutbound() {
+    public ReservedOutBound() {
     }
 
     public String getVerificationBatchNumber() {
@@ -350,7 +334,7 @@ public class ReservedOutbound implements Parcelable {
         dest.writeString(this.MEMO);
     }
 
-    protected ReservedOutbound(Parcel in) {
+    protected ReservedOutBound(Parcel in) {
         this.RSNUM = in.readString();
         this.RSPOS = in.readString();
         this.KOSTL = in.readString();
@@ -389,11 +373,15 @@ public class ReservedOutbound implements Parcelable {
         this.MEMO = in.readString();
     }
 
-    public static final Creator<ReservedOutbound> CREATOR = new Creator<ReservedOutbound>() {
+    public static final Creator<ReservedOutBound> CREATOR = new Creator<ReservedOutBound>() {
         @Override
-        public ReservedOutbound createFromParcel(Parcel source) {return new ReservedOutbound(source);}
+        public ReservedOutBound createFromParcel(Parcel source) {return new ReservedOutBound(source);}
 
         @Override
-        public ReservedOutbound[] newArray(int size) {return new ReservedOutbound[size];}
+        public ReservedOutBound[] newArray(int size) {return new ReservedOutBound[size];}
     };
+
+    public void setBatchNumber(String batchNumber) {
+        this.batchNumber = batchNumber;
+    }
 }

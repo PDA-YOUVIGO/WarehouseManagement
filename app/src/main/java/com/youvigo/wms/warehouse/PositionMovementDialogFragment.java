@@ -141,7 +141,6 @@ public class PositionMovementDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog1, int which) {
-                        verify();
                         if(!verify()){return;}
                         submit();
                         mOnPositionInforCompleted.inputPositionInforCompleted(localtion);

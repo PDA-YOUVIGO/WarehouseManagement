@@ -1,5 +1,5 @@
-<PreferenceScreen
-	xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<PreferenceCategory app:title="@string/interface_settings_header">
 
@@ -7,15 +7,34 @@
 		<EditTextPreference
 			app:key="sap_interface_address"
 			app:title="@string/sap_interface_address_title"
+			android:maxLines="1"
+			android:defaultValue="http://118.114.254.69:8001"
+			android:summary="@string/sap_interface_address_title"
+			app:useSimpleSummaryProvider="true" />
+
+		<EditTextPreference
+			app:key="sap_interface_accounnt"
+			app:title="@string/sap_interface_account_title"
+			android:maxLines="1"
+			app:useSimpleSummaryProvider="true" />
+
+		<EditTextPreference
+			app:key="sap_interface_password"
+			app:title="@string/sap_interface_password_title"
+			android:maxLines="1"
+			android:inputType="textPassword"
 			app:useSimpleSummaryProvider="true" />
 
 		<EditTextPreference
 			app:key="pda_interface_address"
 			app:title="@string/pda_interface_address_title"
+			android:maxLines="1"
+			android:defaultValue="http://52.83.32.16:8081"
 			app:useSimpleSummaryProvider="true" />
 
 		<EditTextPreference
 			app:key="printer_name"
+			android:maxLines="1"
 			app:title="@string/printer_name_title"
 			app:useSimpleSummaryProvider="true" />
 
@@ -43,14 +62,14 @@
 			app:key="hybrid_storage"
 			app:title="@string/hybrid_storage_title" />
 
-		<!-- 混批策略 -->
+		<!-- 混批存储策略 -->
 		<ListPreference
 			app:dependency="hybrid_storage"
 			app:defaultValue="none"
 			app:entries="@array/hybrid_storage_entries"
 			app:entryValues="@array/hybrid_storage_values"
 			app:key="hybrid_storage_strategy"
-			app:title="@string/business_type_title"
+			app:title="@string/hybrid_storage_strategy"
 			app:useSimpleSummaryProvider="true" />
 
 	</PreferenceCategory>

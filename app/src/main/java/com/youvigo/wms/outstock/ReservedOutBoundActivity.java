@@ -18,14 +18,19 @@ package com.youvigo.wms.outstock;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -40,9 +46,10 @@ import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestDetails;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestHead;
+import com.youvigo.wms.data.dto.response.SapResponseMessage;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.MoveType;
-import com.youvigo.wms.data.entities.ReservedOutbound;
+import com.youvigo.wms.data.entities.ReservedOutBound;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
@@ -62,189 +69,241 @@ import timber.log.Timber;
 /**
  * 有预留出库页面
  */
-public class ReservedOutBoundActivity extends BaseActivity {
-    public static final String ORDER_NUMBER = "order_number";
-    public static final String FILTER_MOVETYPES = "filter_movetypes";
+public class ReservedOutBoundActivity extends BaseActivity implements OnItemCompleted {
+	public static final String ORDER_NUMBER = "order_number";
+	public static final String FILTER_MOVETYPES = "filter_movetypes";
 
-    private EditText orderNumber, remark;
+	private EditText orderNumber, remark;
 
-    private ProgressBar progressBar;
+	private ProgressBar progressBar;
 
-    private Spinner moveType;
-    private TextView internalOrder;
-    private TextView employer;
-    private TextView department;
+	private Spinner moveType;
+	private TextView internalOrder;
+	private TextView employer;
+	private TextView department;
 
-    private ReservedOutBoundAdapter adapter;
+	private ReservedOutBoundAdapter adapter;
 
-    private List<MoveType> moveTypes = new ArrayList<>();
-    private ArrayAdapter<MoveType> moveTypeAdapter;
+	private List<MoveType> moveTypes = new ArrayList<>();
+	private ArrayAdapter<MoveType> moveTypeAdapter;
 
-    private ReservedOutBoundViewModel viewModel;
+	private ReservedOutBoundViewModel viewModel;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.reserved_out_bound_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-        initViews();
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        loadMoveType();
+		initViews();
 
-        observeData();
-    }
+		loadMoveType();
 
-    private void initViews() {
-        orderNumber = findViewById(R.id.tv_document_number_description);
-        moveType = findViewById(R.id.sp_move_type_description);
-        internalOrder = findViewById(R.id.tv_internal_order_description);
-        employer = findViewById(R.id.tv_employer_description);
-        department = findViewById(R.id.tv_receiving_department_description);
-        remark = findViewById(R.id.et_remark);
+		observeData();
+	}
 
-        progressBar = findViewById(R.id.progress_bar);
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ReservedOutBoundAdapter();
-        recyclerView.setAdapter(adapter);
+	private void initViews() {
+		orderNumber = findViewById(R.id.tv_document_number_description);
+		moveType = findViewById(R.id.sp_move_type_description);
+		internalOrder = findViewById(R.id.tv_internal_order_description);
+		employer = findViewById(R.id.tv_employer_description);
+		department = findViewById(R.id.tv_receiving_department_description);
+		remark = findViewById(R.id.et_remark);
 
-        moveType.setEnabled(false);
+		progressBar = findViewById(R.id.progress_bar);
+		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		recyclerView.setHasFixedSize(true);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		adapter = new ReservedOutBoundAdapter();
+		recyclerView.setAdapter(adapter);
 
-        moveTypeAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.item_spinner, moveTypes);
-        moveType.setAdapter(moveTypeAdapter);
-    }
+		moveType.setEnabled(false);
 
-    /**
-     * 观察数据变化
-     */
-    private void observeData() {
-        viewModel = new ViewModelProvider.NewInstanceFactory().create(ReservedOutBoundViewModel.class);
+		moveTypeAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.item_spinner, moveTypes);
+		moveType.setAdapter(moveTypeAdapter);
+	}
 
-        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+	/**
+	 * 观察数据变化
+	 */
+	private void observeData() {
+		viewModel = new ViewModelProvider.NewInstanceFactory().create(ReservedOutBoundViewModel.class);
 
-        viewModel.getMaterialVoucher().observe(this, materialVoucher -> {
-            orderNumber.setText(materialVoucher.orderNumber);
-            internalOrder.setText(materialVoucher.innerOrderDescription);
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
 
-            MoveType moveType = moveTypes.stream().filter(v -> v.getMoveCode().equals(materialVoucher.moveType)).findFirst().orElse(null);
+		viewModel.getMaterialVoucher().observe(this, materialVoucher -> {
+			orderNumber.setText(materialVoucher.orderNumber);
+			internalOrder.setText(materialVoucher.innerOrderDescription);
 
-            this.moveType.setSelection(moveTypes.indexOf(moveType));
+			MoveType moveType = moveTypes.stream().filter(v -> v.getMoveCode().equals(materialVoucher.moveType)).findFirst().orElse(null);
 
-            employer.setText(materialVoucher.employerName);
-            department.setText(materialVoucher.departmentName);
-            remark.setText(materialVoucher.memo);
-        });
+			this.moveType.setSelection(moveTypes.indexOf(moveType));
 
-        viewModel.getMaterialVoucherItems().observe(this, reservedOutbounds -> {
-            if (reservedOutbounds != null && !reservedOutbounds.isEmpty()) {
-                adapter.submitList(reservedOutbounds);
-            }
-        });
-    }
+			employer.setText(materialVoucher.employerName);
+			department.setText(materialVoucher.departmentName);
+			remark.setText(materialVoucher.memo);
+		});
 
-    private void submit() {
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		viewModel.getMaterialVoucherItems().observe(this, reservedOutbounds -> {
+			if (reservedOutbounds != null && !reservedOutbounds.isEmpty()) {
+				adapter.submitList(reservedOutbounds);
+			}
+		});
 
-        MaterialVoucher materialVoucher = viewModel.getMaterialVoucher().getValue();
-        MoveType selectMoveType = (MoveType) moveType.getSelectedItem();
-        String currentRemark = remark.getText().toString();
+		viewModel.getSapResult().observe(this, sapResponseMessage -> {
+			if (sapResponseMessage.getSuccess().equals("S")) {
+				showAlertDialog("返回结果", sapResponseMessage.getMessage(), sapResponseMessage);
+			} else {
+				Toast.makeText(this, sapResponseMessage.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		});
+	}
 
-        String pdaOrderNumber = String.format("%s-%s", retrofitClient.getAccount(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+	private void submit() {
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 
-        ReservedOutBoundRequest request = new ReservedOutBoundRequest();
-        request.setControlInfo(new ControlInfo());
+		MaterialVoucher materialVoucher = viewModel.getMaterialVoucher().getValue();
+		MoveType selectMoveType = (MoveType) moveType.getSelectedItem();
+		String currentRemark = remark.getText().toString();
 
-        ReservedOutBoundRequestHead requestHead = new ReservedOutBoundRequestHead();
-        requestHead.setZZLLR(materialVoucher.employerCode);
-        requestHead.setBWART(materialVoucher.moveType);
-        requestHead.setPDAOUTORDER(pdaOrderNumber);
-        requestHead.setGMCODE(selectMoveType.getGmcode());
-        requestHead.setNACHN(materialVoucher.employerName);
-        requestHead.setORGEH(materialVoucher.departmentCode);
-        requestHead.setORGTX(materialVoucher.departmentName);
-        requestHead.setDESCS(currentRemark);
-        requestHead.setZOPERC(retrofitClient.getAccount());
-        requestHead.setZOPERN(retrofitClient.getUserName());
-        requestHead.setZOPERT(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
+		String pdaOrderNumber = String.format("%s-%s", retrofitClient.getAccount(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
 
-        List<ReservedOutBoundRequestDetails> requestDetails = new ArrayList<>();
-        for (ReservedOutbound reservedOutbound : materialVoucher.reservedOutbounds) {
-            ReservedOutBoundRequestDetails details = new ReservedOutBoundRequestDetails();
-            details.setBDTER(reservedOutbound.getBDTER());
-            details.setRSNUM(reservedOutbound.getRSNUM());
-            details.setRSPOS(reservedOutbound.getRSPOS());
-            details.setWERKS(retrofitClient.getFactoryCode());
-            details.setLGORT(retrofitClient.getStockLocationCode());
-            details.setLGNUM(retrofitClient.getWarehouseNumber());
-            details.setLGPLA(reservedOutbound.getCargoSpace());
-            details.setMATNR(reservedOutbound.getMaterialCode());
-            details.setCHARG(reservedOutbound.getBatchNumber());
-            details.setBDMNG(String.valueOf(reservedOutbound.getQuantity()));
-            details.setMEINS(reservedOutbound.getBaseUnit());
-            details.setUMLGO(reservedOutbound.getUMLGO());
-            details.setMEMO(reservedOutbound.getMEMO());
-            requestDetails.add(details);
-        }
+		ReservedOutBoundRequest request = new ReservedOutBoundRequest();
+		request.setControlInfo(new ControlInfo());
 
-        request.setRequestHead(requestHead);
-        request.setRequestDetails(requestDetails);
+		ReservedOutBoundRequestHead requestHead = new ReservedOutBoundRequestHead();
+		requestHead.setZZLLR(materialVoucher.employerCode);
+		requestHead.setBWART(materialVoucher.moveType);
+		requestHead.setPDAOUTORDER(pdaOrderNumber);
+		requestHead.setGMCODE(selectMoveType.getGmcode());
+		requestHead.setNACHN(materialVoucher.employerName);
+		requestHead.setORGEH(materialVoucher.departmentCode);
+		requestHead.setORGTX(materialVoucher.departmentName);
+		requestHead.setDESCS(currentRemark);
+		requestHead.setZOPERC(retrofitClient.getAccount());
+		requestHead.setZOPERN(retrofitClient.getUserName());
+		requestHead.setZOPERT(LocalDateTime.now().format(DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
 
-        viewModel.submit(request);
-    }
+		List<ReservedOutBoundRequestDetails> requestDetails = new ArrayList<>();
+		for (ReservedOutBound reservedOutbound : materialVoucher.reservedOutBounds) {
+			ReservedOutBoundRequestDetails details = new ReservedOutBoundRequestDetails();
+			details.setBDTER(reservedOutbound.getBDTER());
+			details.setRSNUM(reservedOutbound.getRSNUM());
+			details.setRSPOS(reservedOutbound.getRSPOS());
+			details.setWERKS(retrofitClient.getFactoryCode());
+			details.setLGORT(retrofitClient.getStockLocationCode());
+			details.setLGNUM(retrofitClient.getWarehouseNumber());
+			details.setLGPLA(reservedOutbound.getCargoSpace());
+			details.setMATNR(reservedOutbound.getMaterialCode());
+			details.setCHARG(reservedOutbound.getBatchNumber());
+			details.setBDMNG(String.valueOf(reservedOutbound.getQuantity()));
+			details.setMEINS(reservedOutbound.getBaseUnit());
+			details.setUMLGO(reservedOutbound.getUMLGO());
+			details.setMEMO(reservedOutbound.getMEMO());
+			requestDetails.add(details);
+		}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+		request.setRequestHead(requestHead);
+		request.setRequestDetails(requestDetails);
 
-        if (searchResult != null) {
-            viewModel.handleDate(searchResult);
-        }
+		viewModel.submit(request);
+	}
 
-        Timber.d("onActivityResult");
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.reserved_out_bound_activity;
-    }
+		if (searchResult != null) {
+			viewModel.handleDate(searchResult);
+		}
 
-    @Override
-    protected void onMenuSearchClicked() {
+		Timber.d("onActivityResult");
+	}
 
-        String number = orderNumber.getText().toString();
-        List<String> filter_movetypes = moveTypes.stream().map(MoveType::getMoveCode).collect(Collectors.toList());
+	@Override
+	protected int getLayoutId() {
+		return R.layout.reserved_out_bound_activity;
+	}
 
-        Intent intent = new Intent(this, SearchActivity.class);
-        intent.putExtra(Constants.CATEGORY, Constants.TYPE_RESERVED_OUT_BOUND);
-        intent.putExtra(ORDER_NUMBER, number);
-        intent.putExtra(FILTER_MOVETYPES, new ArrayList<>(filter_movetypes));
-        startActivityForResult(intent, REQUEST_CODE);
-    }
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
+		} else if (item.getItemId() == R.id.menu_search) {
+			onMenuSearchClicked();
+		} else if (item.getItemId() == R.id.menu_submit) {
+			onMenuSubmitClicked();
+		}
 
-    /**
-     * 加载库存地
-     */
-    private void loadMoveType() {
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
-        BackendApi backendApi = retrofitClient.getBackendApi();
+		return true;
+	}
 
-        Call<ApiResponse<List<MoveType>>> call = backendApi.getMoveTypes(retrofitClient.getFactoryCode());
-        call.enqueue(new Callback<ApiResponse<List<MoveType>>>() {
-            @Override
-            public void onResponse(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Response<ApiResponse<List<MoveType>>> response) {
-                if (response.isSuccessful()) {
-                    ApiResponse<List<MoveType>> apiResponse = response.body();
-                    moveTypes.addAll(apiResponse.getData());
-                    moveTypeAdapter.notifyDataSetChanged();
-                }
-            }
+	protected void onMenuSubmitClicked() {
+		submit();
+	}
 
-            @Override
-            public void onFailure(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Throwable t) {
+	@Override
+	protected void onMenuSearchClicked() {
 
-            }
-        });
-    }
+		String number = orderNumber.getText().toString();
+		List<String> filter_movetypes = moveTypes.stream().map(MoveType::getMoveCode).collect(Collectors.toList());
 
+		Intent intent = new Intent(this, SearchActivity.class);
+		intent.putExtra(Constants.CATEGORY, Constants.TYPE_RESERVED_OUT_BOUND);
+		intent.putExtra(ORDER_NUMBER, number);
+		intent.putExtra(FILTER_MOVETYPES, new ArrayList<>(filter_movetypes));
+		startActivityForResult(intent, REQUEST_CODE);
+	}
+
+	/**
+	 * 加载库存地
+	 */
+	private void loadMoveType() {
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		BackendApi backendApi = retrofitClient.getBackendApi();
+
+		Call<ApiResponse<List<MoveType>>> call = backendApi.getMoveTypes(retrofitClient.getFactoryCode());
+		call.enqueue(new Callback<ApiResponse<List<MoveType>>>() {
+			@Override
+			public void onResponse(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Response<ApiResponse<List<MoveType>>> response) {
+				if (response.isSuccessful()) {
+					ApiResponse<List<MoveType>> apiResponse = response.body();
+					moveTypes.addAll(apiResponse.getData());
+					moveTypeAdapter.notifyDataSetChanged();
+				}
+			}
+
+			@Override
+			public void onFailure(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Throwable t) {
+
+			}
+		});
+	}
+
+	private void showAlertDialog(String title, String message, SapResponseMessage sapResponseMessage) {
+		AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
+				//.setPositiveButton("确定", (dialog, which) -> {
+				//	dialog.dismiss();
+				//	// 确认
+				//})
+				.setNegativeButton("关闭", (dialog, which) -> {
+					dialog.dismiss();
+				}).setNeutralButton("打印", (dialog, which) -> {
+
+				}).create();
+
+
+		normalDialog.show();
+	}
+
+	@Override
+	public void itemCompleted(int adapterPosition) {
+		adapter.notifyItemChanged(adapterPosition);
+	}
 }

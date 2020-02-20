@@ -17,23 +17,23 @@
 package com.youvigo.wms.data.dto.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.youvigo.wms.data.entities.ReservedOutbound;
+import com.youvigo.wms.data.entities.ReservedOutBound;
 
 import java.util.List;
 
 public class ReservedOutBoundQueryResponseDetails {
 
 	@SerializedName("ITEM")
-	private List<ReservedOutbound> data;
+	private List<ReservedOutBound> data;
 
 	@SerializedName("RETURN")
 	private SapResponseMessage message;
 
-	public List<ReservedOutbound> getData() {
+	public List<ReservedOutBound> getData() {
 		return data;
 	}
 
-	public void setData(List<ReservedOutbound> data) {
+	public void setData(List<ReservedOutBound> data) {
 		this.data = data;
 	}
 
@@ -45,7 +45,7 @@ public class ReservedOutBoundQueryResponseDetails {
 		this.message = message;
 	}
 
-	public ReservedOutBoundQueryResponseDetails(List<ReservedOutbound> data, SapResponseMessage message) {
+	public ReservedOutBoundQueryResponseDetails(List<ReservedOutBound> data, SapResponseMessage message) {
 		this.data = data;
 		this.message = message;
 	}

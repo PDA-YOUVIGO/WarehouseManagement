@@ -280,13 +280,12 @@ public class DeliverDetailDialogFragment extends DialogFragment {
             public void onResponse(@NotNull Call<DeliverResponse> call, @NotNull Response<DeliverResponse> response) {
                 if (response.isSuccessful()) {
 
-                    if (viewModel != null) {
-                        viewModel.removeData(position);
-                    }
-
                     DeliverResponse deliverResponse = response.body();
                     if (deliverResponse.getResponseMessage().getSuccess().equalsIgnoreCase("S")) {
                         showMessage(deliverResponse.getResponseMessage().getMessage());
+                        if (viewModel != null) {
+                            viewModel.removeData(position);
+                        }
                     } else if (deliverResponse.getResponseMessage().getSuccess().equalsIgnoreCase("E")) {
                         showMessage(deliverResponse.getResponseMessage().getMessage());
                     }

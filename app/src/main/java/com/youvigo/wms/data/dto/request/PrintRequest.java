@@ -19,18 +19,13 @@ package com.youvigo.wms.data.dto.request;
 import com.google.gson.annotations.SerializedName;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 
-import java.util.List;
-
-public class ReservedOutBoundRequest {
+public class PrintRequest {
 
 	@SerializedName("ControlInfo")
 	private ControlInfo controlInfo;
 
 	@SerializedName("HEAD")
-	private ReservedOutBoundRequestHead requestHead;
-
-	@SerializedName("ITEM")
-	private List<ReservedOutBoundRequestDetails> requestDetails;
+	private PrintRequestDetails printRequestDetails;
 
 	public ControlInfo getControlInfo() {
 		return controlInfo;
@@ -40,28 +35,19 @@ public class ReservedOutBoundRequest {
 		this.controlInfo = controlInfo;
 	}
 
-	public ReservedOutBoundRequestHead getRequestHead() {
-		return requestHead;
+	public PrintRequestDetails getPrintRequestDetails() {
+		return printRequestDetails;
 	}
 
-	public void setRequestHead(ReservedOutBoundRequestHead requestHead) {
-		this.requestHead = requestHead;
+	public void setPrintRequestDetails(PrintRequestDetails printRequestDetails) {
+		this.printRequestDetails = printRequestDetails;
 	}
 
-	public List<ReservedOutBoundRequestDetails> getRequestDetails() {
-		return requestDetails;
-	}
-
-	public void setRequestDetails(List<ReservedOutBoundRequestDetails> requestDetails) {
-		this.requestDetails = requestDetails;
-	}
-
-	public ReservedOutBoundRequest(ControlInfo controlInfo, ReservedOutBoundRequestHead requestHead, List<ReservedOutBoundRequestDetails> requestDetails) {
+	public PrintRequest(ControlInfo controlInfo, PrintRequestDetails printRequestDetails) {
 		this.controlInfo = controlInfo;
-		this.requestHead = requestHead;
-		this.requestDetails = requestDetails;
+		this.printRequestDetails = printRequestDetails;
 	}
 
-	public ReservedOutBoundRequest() {
+	public PrintRequest() {
 	}
 }
