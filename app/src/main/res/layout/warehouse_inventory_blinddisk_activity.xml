@@ -32,9 +32,12 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="665dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_4"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -43,15 +46,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="@dimen/dp_4"
-            android:text="凭证/仓位"
+            android:layout_marginTop="4dp"
+            android:text="编码/批次"
             android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <TextView
-            android:id="@+id/inventory_code"
+        <EditText
+            android:id="@+id/material_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -59,14 +61,14 @@
             android:paddingLeft="@dimen/dp_4"
             android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@+id/voucher"
-            app:layout_constraintEnd_toStartOf="@+id/inventory_position_code"
+            app:layout_constraintEnd_toStartOf="@+id/material_batch_code"
             app:layout_constraintStart_toEndOf="@+id/voucher"
             app:layout_constraintTop_toTopOf="@+id/voucher"
             app:layout_constraintVertical_bias="0.0"
-            tools:text="1010203"/>
+            tools:text="1010203" />
 
-        <TextView
-            android:id="@+id/inventory_position_code"
+        <EditText
+            android:id="@+id/material_batch_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -76,10 +78,9 @@
             android:textSize="@dimen/dp_16"
             app:layout_constraintBottom_toBottomOf="@+id/voucher"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/inventory_code"
+            app:layout_constraintStart_toEndOf="@+id/material_code"
             app:layout_constraintTop_toTopOf="@+id/voucher"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="1515612"/>
+            tools:text="1515612" />
 
         <TextView
             android:id="@+id/material_code_description"
@@ -87,18 +88,17 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:text="物料编码"
+            android:text="物料仓位"
             android:textSize="@dimen/dp_16"
             app:layout_constraintEnd_toEndOf="@+id/voucher"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/voucher" />
 
-        <EditText
-            android:id="@+id/material_code"
+        <TextView
+            android:id="@+id/position_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_4"
-            android:layout_marginTop="4dp"
             android:layout_marginRight="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:paddingLeft="@dimen/dp_4"
@@ -106,7 +106,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/material_code_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/material_code_description"
-            app:layout_constraintTop_toBottomOf="@+id/voucher" />
+            app:layout_constraintTop_toTopOf="@+id/material_code_description" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -115,6 +115,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/material_code_description"
             tools:listitem="@layout/item_warehouse_inventory_man" />
