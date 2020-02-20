@@ -76,6 +76,10 @@
             android:label="@string/warehouse_inventory_bright_disk" />
 
         <activity
+            android:name=".warehouse.WarehouseInventoryBlindDiskActivity"
+            android:label="@string/warehouse_inventory_bright_disk" />
+
+        <activity
             android:name=".warehouse.WarehouseInventorySearchActivity"
             android:label="@string/warehouse_inventory_search" />
 

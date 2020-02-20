@@ -58,9 +58,10 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
     private ProgressBar progressBar;
     private WarehouseInventoryManAdapter adapter;
     private WarehouseInventoryManViewModel viewModel;
-    private TextView voucherNumber;
+    private String voucherNumber;
     private TextView cargoCode;
     private EditText materialCode;
+    private EditText material_batch_code;
     @Nullable
     protected List<WarehouseInventoryModelView> inventoryResult = new ArrayList<>();
 
@@ -79,8 +80,8 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
     }
 
     private void initViews() {
-        voucherNumber = findViewById(R.id.inventory_code); //凭证号
-        cargoCode = findViewById(R.id.inventory_position_code); //仓位
+        material_batch_code = findViewById(R.id.material_batch_code); //批号
+        cargoCode = findViewById(R.id.position_code); //仓位
         materialCode = findViewById(R.id.material_code); //物料编码
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
@@ -105,12 +106,8 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         Intent intent = getIntent();
         if (intent != null) {
             String position_code = intent.getStringExtra(KEY_CARGO_CODE);
-            String voucher_Number = intent.getStringExtra(KEY_VOUCHER_NUM);
+            voucherNumber = intent.getStringExtra(KEY_VOUCHER_NUM);
             cargoCode.setText(position_code);
-            voucherNumber.setText(voucher_Number);
-            intent = new Intent(this, MaterialsSearchActivity.class);
-            intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, position_code);
-            startActivityForResult(intent, REQUEST_CODE);
         }
     }
 
@@ -120,8 +117,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         if (requestCode == REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    List<StockMaterial> stockMaterial = new ArrayList<>();
-                    stockMaterial.add( data.getParcelableExtra(Constants.MATERIAL_SEARCH_RESULT));
+                    List<StockMaterial> stockMaterial = data.getParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT);
                     processorData(inventoryResult,stockMaterial);
                     Timber.d("onActivityResult material:%s", inventoryResult.toString());
                 }
@@ -140,7 +136,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
             inverrtoryModelView.setWERKS(retrofitClient.getFactoryCode()); // 工厂
             inverrtoryModelView.setLGORT(retrofitClient.getStockLocationCode()); // 库存地
 
-            inverrtoryModelView.setIVNUM(voucherNumber.getText().toString()); // 凭证号
+            inverrtoryModelView.setIVNUM(voucherNumber); // 凭证号
             inverrtoryModelView.setMATNR(m.getMaterialCode()); // 物料编码
             inverrtoryModelView.setMAKTX(m.getMaterialDescription()); // 物料描述
             inverrtoryModelView.setCHARG(m.getBatchNumber()); // 批号
@@ -173,7 +169,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
     }
 
     @Override
-    protected int getLayoutId() { return R.layout.warehouse_inventory_brightdisk_activity; }
+    protected int getLayoutId() { return R.layout.warehouse_inventory_blinddisk_activity; }
 
     /**
      * 点击事件
@@ -213,11 +209,13 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
      */
     @Override
     protected void onMenuSearchClicked() {
-        String position_code = cargoCode.getText().toString();
-        String mCode = materialCode.getText().toString();
+        String position_code = cargoCode.getText().toString(); //仓位
+        String mCode = materialCode.getText().toString(); //物料编码
+        String mBatch = material_batch_code.getText().toString(); // 物料编码
         Intent intent = new Intent(this, MaterialsSearchActivity.class);
         intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, position_code);
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, mCode);
+        intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,mBatch);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

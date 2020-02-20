@@ -38,7 +38,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="@string/material_coding"
+            android:text="物料编码："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,9 +65,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:gravity="start|center"
-            android:text="@string/material_name"
+            android:text="物料名称："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@+id/tv_material_code_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_code_description" />
 
@@ -93,14 +94,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:gravity="start|center"
-            android:text="现存量"
+            android:text="现存量："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_name_description" />
 
         <TextView
@@ -123,6 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
+            android:textColor="@color/colorAccent"
             android:paddingLeft="@dimen/dp_4"
             android:paddingRight="@dimen/dp_4"
             android:text="箱"
@@ -134,14 +134,12 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:gravity="start"
-            android:text="@string/batch_number"
+            android:text="批次号："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_number_description" />
 
         <TextView
@@ -166,12 +164,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:gravity="start"
-            android:text="@string/cargo_space"
+            android:text="仓位："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_batch_number_description" />
 
         <TextView
@@ -191,78 +187,17 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/tv_supplier_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:gravity="start"
-            android:text="@string/supplier_batch"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cargo_space_description" />
-
-        <TextView
-            android:id="@+id/tv_supplier"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
-            android:text="101111111"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_supplier_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_supplier_description"
-            app:layout_constraintTop_toTopOf="@+id/tv_supplier_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/tv_voucher_code_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
-            android:gravity="start"
-            android:text="凭证号"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_supplier_description" />
-
-        <TextView
-            android:id="@+id/voucher_code"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:paddingLeft="@dimen/dp_4"
-            android:paddingRight="@dimen/dp_4"
-            android:text="101111111"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_voucher_code_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_voucher_code_description"
-            app:layout_constraintTop_toTopOf="@+id/tv_voucher_code_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
             android:id="@+id/tv_inventory_number_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
             android:gravity="start|center"
-            android:text="盘点数"
+            android:text="盘点数："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_material_code_description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_voucher_code_description" />
+            app:layout_constraintTop_toBottomOf="@id/tv_cargo_space_description" />
 
         <TextView
             android:id="@+id/tv_inventory_number"

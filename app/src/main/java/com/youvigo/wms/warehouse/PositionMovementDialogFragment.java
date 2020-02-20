@@ -196,7 +196,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
      */
     private void initViews(View view) {
         materialCoding = view.findViewById(R.id.tv_material_code_description); // 物料编码
-        materialName = view.findViewById(R.id.tv_material_name_description); // 物料描述
+        materialName = view.findViewById(R.id.tv_material_name_description); // 物料名称
         batchNumber = view.findViewById(R.id.tv_batch_number_description); // 批号
         specification = view.findViewById(R.id.tv_specification_description); // 规格
         supplierBatch = view.findViewById(R.id.tv_supplier_batch_description); // 供应商批次
@@ -208,7 +208,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
         tv_unit = view.findViewById(R.id.sp_main_unit); // 上架单位
 
         materialCoding.setText(position.getMATNR());
-        materialName.setText(position.getMAKTX());
+        materialName.setText(position.getZZCOMMONNAME());
         batchNumber.setText(position.getCHARG());
         specification.setText(position.getZZDRUGSPEC());
         supplierBatch.setText(position.getZZLICHA());
@@ -217,7 +217,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
         tv_put_position_number.setText(position.getNLPLA());
         tv_put_position_type.setText(position.getNLTYP());
         tv_put_position_main_qty.setText(position.getVSOLM());
-        tv_unit.setText(position.getMEINS());
+        tv_unit.setText(position.getMEINS_TXT());
 
         tv_put_position_number.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

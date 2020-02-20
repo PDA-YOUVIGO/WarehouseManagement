@@ -41,7 +41,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:gravity="start"
-            android:text="@string/cargo_space"
+            android:text="仓位："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"

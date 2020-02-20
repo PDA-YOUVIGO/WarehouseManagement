@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.common.SharedPreferenceUtils;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
 
 public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQueryResponseDetails, WarehouseInventoryAdapter.WarehouseInventoryCheckVH> {
@@ -72,12 +73,22 @@ public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQue
         @Override
         public void onClick(View view) {
             WarehouseInventoryQueryResponseDetails details = getItem(getAdapterPosition());
-            // 获取盘点方式，明盘
-//            String inventory_method = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context);
-            Intent intent = new Intent(context, WarehouseInventoryBrightDiskActivity.class);
-            intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_CARGO_CODE, details.getLGPLA());
-            intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_VOUCHER_NUM,details.getIVNUM());
-            context.startActivity(intent);
+
+            String inventoryWay = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context); // 获取盘点方式
+            if (inventoryWay.equals("BrightDisk")){
+                //明盘
+                Intent intent = new Intent(context, WarehouseInventoryBrightDiskActivity.class);
+                intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_CARGO_CODE, details.getLGPLA());
+                intent.putExtra(WarehouseInventoryBrightDiskActivity.KEY_VOUCHER_NUM,details.getIVNUM());
+                context.startActivity(intent);
+            }
+            else {
+                // 盲盘
+                Intent intent1 = new Intent(context, WarehouseInventoryBlindDiskActivity.class);
+                intent1.putExtra(WarehouseInventoryBrightDiskActivity.KEY_CARGO_CODE, details.getLGPLA());
+                intent1.putExtra(WarehouseInventoryBrightDiskActivity.KEY_VOUCHER_NUM,details.getIVNUM());
+                context.startActivity(intent1);
+            }
         }
     }
 

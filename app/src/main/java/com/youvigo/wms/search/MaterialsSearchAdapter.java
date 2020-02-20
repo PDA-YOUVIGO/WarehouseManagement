@@ -18,6 +18,7 @@ package com.youvigo.wms.search;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.util.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -85,7 +89,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 			tv_material_name.setText(StockMaterial.getMaterialCommonName());
 			tv_specification.setText(StockMaterial.getSpecification());
 			tv_number.setText(String.valueOf(StockMaterial.getActualInventory()));
-			tv_unit.setText(StockMaterial.getBaseUnit());
+			tv_unit.setText(StockMaterial.getBaseUnitTxt());
 			tv_batch_number.setText(StockMaterial.getBatchNumber());
 			tv_cargo_space.setText(StockMaterial.getCargoSpace());
 			tv_supplier.setText(StockMaterial.getZZSUPP_NAME());
@@ -93,13 +97,13 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 
 		@Override
 		public void onClick(View v) {
-			StockMaterial stockMaterial = getItem(getAdapterPosition());
-			Timber.d("onClick > %s", stockMaterial.toString());
-
+			List<StockMaterial> list = new ArrayList<>();
+			list.add(getItem(getAdapterPosition()));
+			Timber.d("onClick > %s", list.toString());
 			// 点击数据返回到调用到Activity
 			if (itemView.getContext() instanceof MaterialsSearchActivity) {
 				Intent intent = new Intent();
-				intent.putExtra(Constants.MATERIAL_SEARCH_RESULT, stockMaterial);
+				intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) list);
 				((MaterialsSearchActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
 				((MaterialsSearchActivity) itemView.getContext()).finish();
 			}

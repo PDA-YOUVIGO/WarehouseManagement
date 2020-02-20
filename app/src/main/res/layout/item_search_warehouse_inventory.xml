@@ -41,7 +41,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:gravity="center|start"
-            android:text="@string/warehouse_number"
+            android:text="盘点记录号："
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_16"
             app:layout_constraintStart_toStartOf="parent"

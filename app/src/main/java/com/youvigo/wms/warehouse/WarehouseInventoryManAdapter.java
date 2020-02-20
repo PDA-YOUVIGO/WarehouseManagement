@@ -61,8 +61,6 @@ public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventory
         private final TextView tv_unit; //单位
         private final TextView tv_batch_number; //批次号
         private final TextView tv_cargo_space; //仓位
-        private final TextView tv_supplier; //供应商批次
-        private final TextView voucher_code; //凭证号
         private final TextView tv_inventory_number; // 盘点数量
 
         WarehouseInventoryManCheckVH(@NonNull View itemView) {
@@ -74,19 +72,15 @@ public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventory
             tv_unit = itemView.findViewById(R.id.tv_unit);
             tv_batch_number = itemView.findViewById(R.id.tv_batch_number);
             tv_cargo_space = itemView.findViewById(R.id.tv_cargo_space);
-            tv_supplier = itemView.findViewById(R.id.tv_supplier);
-            voucher_code = itemView.findViewById(R.id.voucher_code);
             tv_inventory_number = itemView.findViewById(R.id.tv_inventory_number);
         }
         void bind(WarehouseInventoryModelView inventory) {
             tv_material_code.setText(inventory.getMATNR());
             tv_material_name.setText(inventory.getZZCOMMONNAME());
             tv_number.setText(String.valueOf(inventory.getNUMBER()));
-            tv_unit.setText(inventory.getMEINS());
+            tv_unit.setText(inventory.getMEINS_TXT());
             tv_batch_number.setText(inventory.getCHARG());
             tv_cargo_space.setText(inventory.getLGPLA());
-            tv_supplier.setText(inventory.getZZLICHA());
-            voucher_code.setText(inventory.getIVNUM());
             tv_inventory_number.setText(String.valueOf(inventory.getMENGA()));
         }
         @Override
