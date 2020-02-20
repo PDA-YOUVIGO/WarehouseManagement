@@ -102,12 +102,12 @@
         android:hint="批次"
         android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_batch_number_description"
-        app:layout_constraintEnd_toStartOf="@id/mb_query"
+        app:layout_constraintEnd_toStartOf="@id/mb_inner_order_query"
         app:layout_constraintStart_toEndOf="@id/tv_batch_number_description"
         app:layout_constraintTop_toTopOf="@id/tv_batch_number_description" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_query"
+        android:id="@+id/mb_inner_order_query"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/dp_8"

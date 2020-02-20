@@ -210,7 +210,7 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 		specification = view.findViewById(R.id.tv_specification);
 		batchNumber = view.findViewById(R.id.et_batch_number);
 		supplierBatch = view.findViewById(R.id.tv_supplier_batch);
-		queryBtn = view.findViewById(R.id.mb_query);
+		queryBtn = view.findViewById(R.id.mb_inner_order_query);
 		requiredQuantity = view.findViewById(R.id.tv_required_quantity_description);
 		basicUnit = view.findViewById(R.id.tv_required_unit_description);
 		storeCargoSpace = view.findViewById(R.id.tv_position_description);

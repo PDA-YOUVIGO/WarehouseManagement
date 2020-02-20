@@ -64,7 +64,7 @@
             android:label="@string/out_of_stock" />
 
         <activity
-            android:name=".outstock.NoReservedOutboundActivity"
+            android:name=".outstock.NoReservedOutBoundActivity"
             android:label="@string/no_reserved_outbound" />
 
         <activity

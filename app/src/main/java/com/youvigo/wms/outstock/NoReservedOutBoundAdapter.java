@@ -32,8 +32,8 @@ import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.InventoryCheck;
 import com.youvigo.wms.data.entities.NoReservedOutbound;
 
-public class NoReservedOutboundAdapter extends ListAdapter<NoReservedOutbound, NoReservedOutboundAdapter.NoReservedOutboundVH> {
-    public NoReservedOutboundAdapter() {
+public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutbound, NoReservedOutBoundAdapter.NoReservedOutboundVH> {
+    public NoReservedOutBoundAdapter() {
         super(new NoReservedOutboundDiffCallback());
     }
 
@@ -91,7 +91,7 @@ public class NoReservedOutboundAdapter extends ListAdapter<NoReservedOutbound, N
         public void onClick(View v) {
             if (itemView.getContext() instanceof AppCompatActivity) {
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                NoReservedOutboundDetailDialogFragment.show(fragmentManager);
+                NoReservedOutBoundDetailDialogFragment.show(fragmentManager);
             }
         }
     }

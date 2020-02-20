@@ -39,10 +39,10 @@ import com.youvigo.wms.search.MaterialsSearchActivity;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NoReservedOutboundDetailDialogFragment extends DialogFragment {
+public class NoReservedOutBoundDetailDialogFragment extends DialogFragment {
     public static final int REQUEST_CODE = 105;
 
-    private static final String TAG = "NoReservedOutboundDetailDialogFragment";
+    private static final String TAG = "NoReservedOutBoundDetailDialogFragment";
     private static final String KEY_NO_RESERVED_OUTBOUND = "key_no_reserved_outbound";
 
     // 物料编码
@@ -123,7 +123,7 @@ public class NoReservedOutboundDetailDialogFragment extends DialogFragment {
         specification = view.findViewById(R.id.tv_specification);
         batchNumber = view.findViewById(R.id.et_batch_number);
         supplierBatch = view.findViewById(R.id.tv_supplier_batch);
-        query = view.findViewById(R.id.mb_query);
+        query = view.findViewById(R.id.mb_inner_order_query);
         query.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

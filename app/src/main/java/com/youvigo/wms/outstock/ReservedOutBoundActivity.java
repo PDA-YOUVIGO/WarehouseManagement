@@ -73,7 +73,8 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 	public static final String ORDER_NUMBER = "order_number";
 	public static final String FILTER_MOVETYPES = "filter_movetypes";
 
-	private EditText orderNumber, remark;
+	private EditText orderNumber;
+	private EditText remark;
 
 	private ProgressBar progressBar;
 
@@ -91,7 +92,7 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.reserved_out_bound_menu, menu);
+		getMenuInflater().inflate(R.menu.search_submit_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 

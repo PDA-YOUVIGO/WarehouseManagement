@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/tv_submit"
-        android:icon="@drawable/ic_android_submit1"
+        android:icon="@drawable/ic_action_send_black"
         android:title="@string/submit"
         app:showAsAction="always" />
 </menu>

@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.youvigo.wms.base.BaseFragment;
 import com.youvigo.wms.deliver.DeliverActivity;
 import com.youvigo.wms.inventory.SwitchStockLocationActivity;
-import com.youvigo.wms.outstock.NoReservedOutboundActivity;
+import com.youvigo.wms.outstock.NoReservedOutBoundActivity;
 import com.youvigo.wms.outstock.ReservedOutBoundActivity;
 import com.youvigo.wms.product.FinishedProductsActivity;
 import com.youvigo.wms.search.MaterialsSearchActivity;
@@ -130,7 +130,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void launchNoReservedOutBoundActivity() {
-        Intent intent = new Intent(context, NoReservedOutboundActivity.class);
+        Intent intent = new Intent(context, NoReservedOutBoundActivity.class);
         startActivity(intent);
     }
 

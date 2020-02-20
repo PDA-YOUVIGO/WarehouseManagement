@@ -20,9 +20,11 @@ import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.entities.MoveType;
+import com.youvigo.wms.data.entities.StockLocal;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -48,9 +50,16 @@ public interface BackendApi {
 	Call<ApiResponse<List<Material>>> getMaterial(@Query("matnr") String matnr);
 
 	/**
-	 * 获取库存地参照
+	 * 获取移动类型参照
 	 * @param factoryCode 工厂编码
 	 */
 	@GET("blade-data/api/movetype/list")
 	Call<ApiResponse<List<MoveType>>> getMoveTypes(@Query("factoryCode") String factoryCode);
+
+	/**
+	 * 获取库存地参照
+	 * @param factoryCode 工厂编码
+	 */
+	@GET("blade-data/api/stocklocaltion/list")
+	Observable<ApiResponse<StockLocal>> getStockLocal(@Query("factoryCode") String factoryCode);
 }
