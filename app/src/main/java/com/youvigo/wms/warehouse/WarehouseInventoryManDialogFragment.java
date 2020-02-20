@@ -36,6 +36,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.common.SharedPreferenceUtils;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -247,13 +248,21 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         tv_assist_qty = view.findViewById(R.id.tv_assist_qty); // 辅数量
         auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
 
+        String inventoryWay = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context); // 获取盘点方式
+
+        // 辨别盘点方式
+        if (inventoryWay.equals("BrightDisk")){
+            tv_position_qty.setText(String.valueOf(inventoryModekView.getNUMBER()));
+        }else {
+            tv_position_qty.setText("/");
+        }
         materialCoding.setText(inventoryModekView.getMATNR());
         materialName.setText(inventoryModekView.getZZCOMMONNAME());
         batchNumber.setText(inventoryModekView.getCHARG());
         supplierBatch.setText(inventoryModekView.getZZLICHA());
         cargoCode.setText(inventoryModekView.getLGPLA());
         voucher_code.setText(inventoryModekView.getIVNUM());
-        tv_position_qty.setText(String.valueOf(inventoryModekView.getNUMBER()));
+
         tv_on_put_qty.setText(inventoryModekView.getZZMENGE_MAIN());
         tv_unit.setText(inventoryModekView.getMEINS());
         tv_assist_qty.setText(inventoryModekView.getZZMENGE_AUXILIARY());

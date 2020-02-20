@@ -85,7 +85,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 			tv_material_name.setText(StockMaterial.getMaterialCommonName());
 			tv_specification.setText(StockMaterial.getSpecification());
 			tv_number.setText(String.valueOf(StockMaterial.getActualInventory()));
-			tv_unit.setText(StockMaterial.getBaseUnit());
+			tv_unit.setText(StockMaterial.getBaseUnitTxt());
 			tv_batch_number.setText(StockMaterial.getBatchNumber());
 			tv_cargo_space.setText(StockMaterial.getCargoSpace());
 			tv_supplier.setText(StockMaterial.getZZSUPP_NAME());

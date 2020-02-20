@@ -114,6 +114,7 @@ public class WarehouseInventorySearchActivity extends AppCompatActivity {
 
     private void initIntent() {
         voucherNumber.setText(getIntent().getStringExtra(WarehouseInventoryActivity.VOUCHER_NUMBER));
+        onMenuSearchClicked();
     }
 
     @Override

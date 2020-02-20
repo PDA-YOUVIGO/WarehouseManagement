@@ -278,6 +278,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:textColor="@color/colorAccent"
         android:paddingLeft="@dimen/dp_4"
         android:text="瓶"
         app:layout_constraintBottom_toBottomOf="@id/tv_listing"

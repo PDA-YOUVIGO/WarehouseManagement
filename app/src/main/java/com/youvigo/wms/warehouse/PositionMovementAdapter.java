@@ -77,10 +77,10 @@ public class PositionMovementAdapter extends ListAdapter<PositionMovementModelVi
         }
         void bind(PositionMovementModelView position) {
             tv_material_coding.setText(position.getMATNR()); // 物料编码
-            tv_material_name.setText(position.getMAKTX()); // 物料名称
+            tv_material_name.setText(position.getZZCOMMONNAME()); // 物料名称
             tv_batch_number.setText(position.getCHARG()); // 批次号
             tv_number.setText(position.getVSOLM()); // 数量
-            tv_unit.setText(position.getMEINS()); //单位
+            tv_unit.setText(position.getMEINS_TXT()); //单位
             tv_supplier_batch_number.setText(position.getZZLICHA()); //供应商批次
             sold_position_number.setText(position.getVLPLA()); //下架货位
             tv_put_position_number.setText(position.getNLPLA()); //上架仓位

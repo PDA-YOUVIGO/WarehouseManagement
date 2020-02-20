@@ -82,7 +82,7 @@ public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventory
             tv_material_code.setText(inventory.getMATNR());
             tv_material_name.setText(inventory.getZZCOMMONNAME());
             tv_number.setText(String.valueOf(inventory.getNUMBER()));
-            tv_unit.setText(inventory.getMEINS());
+            tv_unit.setText(inventory.getMEINS_TXT());
             tv_batch_number.setText(inventory.getCHARG());
             tv_cargo_space.setText(inventory.getLGPLA());
             tv_supplier.setText(inventory.getZZLICHA());
