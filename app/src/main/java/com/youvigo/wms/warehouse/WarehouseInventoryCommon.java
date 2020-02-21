@@ -20,80 +20,29 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.youvigo.wms.data.backend.RetrofitClient;
-import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.Additional;
-import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.dto.request.WarehouseInventoryRequest;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryRequestDetails;
-import com.youvigo.wms.data.dto.response.WarehouseInventoryResponse;
-import com.youvigo.wms.data.dto.response.WarehouseInventoryResponseResult;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 import com.youvigo.wms.util.Constants;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 
 public class WarehouseInventoryCommon {
     private Context context;
-    private List<WarehouseInventoryModelView> data;
 
-    public WarehouseInventoryCommon(Context context,List<WarehouseInventoryModelView> data) {
+    public WarehouseInventoryCommon(Context context) {
         this.context = context;
-        this.data = data;
     }
-
-
-    public void inventorySubmit()
-    {
-        if (!verify()){ return; }
-        submit();
-    }
-
-    /**
-     * 提交数据
-     */
-    private void submit(){
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
-        SapService sapService = retrofitClient.getSapService();
-        WarehouseInventoryRequest request = new WarehouseInventoryRequest();
-        request.setControlInfo(new ControlInfo());
-        request.setRequestDetails(proData(retrofitClient));
-        Call<WarehouseInventoryResponse> call = sapService.submitWarehouseInventory(request);
-        call.enqueue(new Callback<WarehouseInventoryResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Response<WarehouseInventoryResponse> response) {
-                if (response.isSuccessful()) {
-                    WarehouseInventoryResponse Response = response.body();
-                    WarehouseInventoryResponseResult responseResult = Response.getData();
-                    if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showMessage(responseResult.getMSGTXT());
-                    } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
-                        showMessage(responseResult.getMSGTXT());
-                    }
-                }
-            }
-            @Override
-            public void onFailure(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Throwable t) {
-                showMessage(t.getMessage());
-            }
-        });
-    }
-
     /**
      * 构建数据
      * @param retrofitClient 通用处理类
      * @return List
      */
-    private List<WarehouseInventoryRequestDetails> proData(RetrofitClient retrofitClient){
+    public List<WarehouseInventoryRequestDetails> proData(RetrofitClient retrofitClient,List<WarehouseInventoryModelView> data){
         List<WarehouseInventoryRequestDetails> details = new ArrayList<>();
         for (WarehouseInventoryModelView m : data) {
             WarehouseInventoryRequestDetails requestItem = new WarehouseInventoryRequestDetails();
@@ -128,18 +77,22 @@ public class WarehouseInventoryCommon {
 
     /**
      * 数据验证
-     * @return
+     * @return Boolean
      */
-    private boolean verify() {
+    public boolean verify(List<WarehouseInventoryModelView> data) {
+        boolean flag = true;
         if (data == null){
             showMessage("无数据提交");
-            return false;
+            flag = false;
         }
         for (int i= 0; i < data.size();i++){
-            if (data.get(i).getMENGA()==0){showMessage("请维护" + i+1 +"行明细数据的盘点数量再提交"); return false;}
-//            if (data.get(i).getZZMENGE_AUXILIARY().isEmpty()){showMessage("请维护" + i+1 +"行明细数据的辅数量再提交");return false;}
+            if (data.get(i).getMENGA()==0){
+                flag = false;
+                showMessage("请维护" + i+1 +"行明细数据的盘点数量再提交");
+                break;
+            }
         }
-        return true;
+        return flag;
     }
 
     /**

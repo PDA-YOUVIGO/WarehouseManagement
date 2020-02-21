@@ -37,15 +37,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.Additional;
+import com.youvigo.wms.data.dto.base.ControlInfo;
+import com.youvigo.wms.data.dto.request.WarehouseInventoryRequest;
+import com.youvigo.wms.data.dto.response.WarehouseInventoryResponse;
+import com.youvigo.wms.data.dto.response.WarehouseInventoryResponseResult;
 import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.util.Constants;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 /**
@@ -200,8 +210,44 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
      * 提交数据
      */
     protected void onMenuSubmitClicked(){
-        WarehouseInventoryCommon  common = new WarehouseInventoryCommon(this,viewModel.inventorys().getValue());
-        common.inventorySubmit();
+        WarehouseInventoryCommon  common = new WarehouseInventoryCommon(this);
+        List<WarehouseInventoryModelView> data = viewModel.inventorys().getValue();
+        if (!common.verify(data)){
+            return;
+        }
+        submit(data);
+    }
+
+    /**
+     * 提交数据
+     */
+    private void submit(List<WarehouseInventoryModelView> data){
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        SapService sapService = retrofitClient.getSapService();
+        WarehouseInventoryRequest request = new WarehouseInventoryRequest();
+        request.setControlInfo(new ControlInfo());
+        request.setRequestDetails(new WarehouseInventoryCommon(this).proData(retrofitClient,data));
+        Call<WarehouseInventoryResponse> call = sapService.submitWarehouseInventory(request);
+        call.enqueue(new Callback<WarehouseInventoryResponse>() {
+            @Override
+            public void onResponse(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Response<WarehouseInventoryResponse> response) {
+                if (response.isSuccessful()) {
+                    WarehouseInventoryResponse Response = response.body();
+                    WarehouseInventoryResponseResult responseResult = Response.getData();
+                    if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
+                        showMessage(responseResult.getMSGTXT());
+                    } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
+                        inventoryResult.clear();
+                        adapter.notifyDataSetChanged();
+                        showMessage(responseResult.getMSGTXT());
+                    }
+                }
+            }
+            @Override
+            public void onFailure(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Throwable t) {
+                showMessage(t.getMessage());
+            }
+        });
     }
 
     /**

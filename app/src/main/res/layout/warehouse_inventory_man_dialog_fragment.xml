@@ -65,8 +65,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:paddingLeft="@dimen/dp_4"
         android:maxLines="2"
+        android:paddingLeft="@dimen/dp_4"
         android:singleLine="true"
         android:text="气泡袋气泡袋气泡袋气泡"
         android:textSize="@dimen/dp_14"
@@ -143,8 +143,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="@dimen/dp_2"
-        android:paddingLeft="@dimen/dp_4"
         android:hint="1235461561..."
+        android:paddingLeft="@dimen/dp_4"
         android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_cargo_code"
         app:layout_constraintEnd_toEndOf="parent"
@@ -170,8 +170,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="@dimen/dp_2"
-        android:paddingLeft="@dimen/dp_4"
         android:hint="1235461561..."
+        android:paddingLeft="@dimen/dp_4"
         android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_voucher_code_description"
         app:layout_constraintEnd_toEndOf="parent"
@@ -204,6 +204,149 @@
         app:layout_constraintTop_toTopOf="@id/tv_position_number_description" />
 
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_position_number_description"
+        tools:ignore="MissingConstraints">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="2dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/tv_checkout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="合箱"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_master_batch_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center|end"
+            android:text="主批次："
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_master_batch_qty_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_checkout" />
+
+        <TextView
+            android:id="@+id/tv_master_batch_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:hint="1235461561..."
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_master_batch_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_master_batch_description"
+            app:layout_constraintTop_toTopOf="@id/tv_master_batch_description" />
+
+        <TextView
+            android:id="@+id/tv_master_batch_qty_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center|end"
+            android:text="主批次数量："
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_master_batch_description" />
+
+        <TextView
+            android:id="@+id/tv_master_batch_qty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:hint="1235461561..."
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_master_batch_qty_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_master_batch_qty_description"
+            app:layout_constraintTop_toTopOf="@id/tv_master_batch_qty_description" />
+
+        <TextView
+            android:id="@+id/tv_auxiliary_batch_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center|end"
+            android:text="辅批次："
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_master_batch_qty_description"
+            app:layout_constraintStart_toStartOf="@id/tv_master_batch_qty_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_master_batch_qty_description" />
+
+        <TextView
+            android:id="@+id/tv_auxiliary_batch_code"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:hint="1235461561..."
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_auxiliary_batch_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_auxiliary_batch_description"
+            app:layout_constraintTop_toTopOf="@id/tv_auxiliary_batch_description" />
+
+        <TextView
+            android:id="@+id/tv_auxiliary_batch_qty_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center|end"
+            android:text="辅批次数量："
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintEnd_toEndOf="@id/tv_auxiliary_batch_description"
+            app:layout_constraintStart_toStartOf="@id/tv_auxiliary_batch_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_auxiliary_batch_description" />
+
+        <TextView
+            android:id="@+id/tv_auxiliary_batch_qty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:hint="1235461561..."
+            android:paddingLeft="@dimen/dp_4"
+            android:textSize="@dimen/dp_14"
+            app:layout_constraintBottom_toBottomOf="@id/tv_auxiliary_batch_qty_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_auxiliary_batch_qty_description"
+            app:layout_constraintTop_toTopOf="@id/tv_auxiliary_batch_qty_description" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_auxiliary_batch_qty_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/tv_listed"
         style="@style/TextAppearance.AppCompat.Title"
@@ -214,8 +357,8 @@
         android:text="主数量："
         android:textSize="@dimen/dp_14"
         app:layout_constraintEnd_toEndOf="@id/tv_supplier_batch"
-        app:layout_constraintStart_toStartOf="@id/tv_supplier_batch"
-        app:layout_constraintTop_toBottomOf="@id/tv_position_number_description" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <EditText
         android:id="@+id/tv_on_put_qty"
@@ -223,10 +366,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="1dp"
-        android:inputType="number"
-        android:paddingLeft="@dimen/dp_4"
         android:background="@drawable/bg_rectangle"
-        android:text="15645615"
+        android:inputType="numberDecimal"
+        android:paddingLeft="@dimen/dp_4"
+        android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_listed"
         app:layout_constraintEnd_toStartOf="@+id/tv_unit"
         app:layout_constraintStart_toEndOf="@+id/tv_listed"
@@ -234,12 +377,12 @@
 
     <TextView
         android:id="@+id/tv_unit"
-        android:layout_width="72dp"
-        android:layout_height="24dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:paddingLeft="@dimen/dp_4"
-        android:textColor="@color/colorAccent"
         android:text="个"
+        android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/tv_listed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_on_put_qty"
@@ -266,7 +409,7 @@
         android:layout_marginEnd="@dimen/dp_2"
         android:background="@drawable/bg_rectangle"
         android:digits="1234567890"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:paddingLeft="@dimen/dp_4"
         android:singleLine="true"
         android:textSize="@dimen/dp_14"
@@ -285,5 +428,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_assist_qty"
         app:layout_constraintTop_toTopOf="@id/tv_listing" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
