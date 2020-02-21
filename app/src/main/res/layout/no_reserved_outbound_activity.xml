@@ -80,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="@id/tv_move_type_description"
             app:layout_constraintTop_toBottomOf="@id/tv_move_type_description" />
 
-        <EditText
+        <TextView
             android:id="@+id/tv_internal_order"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -201,6 +201,7 @@
             android:layout_marginBottom="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/harvest"
+            android:visibility="gone"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/dp_14"
             app:layout_constraintEnd_toEndOf="@id/tv_move_type_description"
@@ -216,6 +217,7 @@
             android:paddingEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
+            android:visibility="gone"
             android:maxLines="1"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_place_of_receipt_description"
@@ -246,7 +248,7 @@
             android:paddingEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
-            android:hint="表头备注..."
+            android:hint="备注..."
             android:maxLines="1"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"

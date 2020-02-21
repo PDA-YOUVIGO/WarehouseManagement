@@ -66,7 +66,7 @@ public class PositionMovementAdapter extends ListAdapter<PositionMovementModelVi
         PositionMoveCheckVH(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            tv_material_coding = itemView.findViewById(R.id.tv_material_code);
+            tv_material_coding = itemView.findViewById(R.id.et_material_code);
             tv_material_name = itemView.findViewById(R.id.tv_material_name);
             tv_batch_number = itemView.findViewById(R.id.tv_batch_number);
             tv_number = itemView.findViewById(R.id.tv_number);

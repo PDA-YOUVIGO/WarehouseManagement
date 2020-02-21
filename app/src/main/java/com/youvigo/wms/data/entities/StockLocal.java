@@ -20,4 +20,42 @@ public class StockLocal {
 	public String localCode;
 	public String localName;
 	public String factoryCode;
+
+	@Override
+	public String toString() {
+		return String.format("%s - %s", localCode, localName);
+	}
+
+	public String getLocalCode() {
+		return localCode;
+	}
+
+	public void setLocalCode(String localCode) {
+		this.localCode = localCode;
+	}
+
+	public String getLocalName() {
+		return localName;
+	}
+
+	public void setLocalName(String localName) {
+		this.localName = localName;
+	}
+
+	public String getFactoryCode() {
+		return factoryCode;
+	}
+
+	public void setFactoryCode(String factoryCode) {
+		this.factoryCode = factoryCode;
+	}
+
+	public StockLocal() {
+	}
+
+	public StockLocal(String localCode, String localName, String factoryCode) {
+		this.localCode = localCode;
+		this.localName = localName;
+		this.factoryCode = factoryCode;
+	}
 }

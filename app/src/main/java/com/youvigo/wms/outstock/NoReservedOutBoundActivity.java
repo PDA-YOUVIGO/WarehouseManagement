@@ -16,15 +16,20 @@
 
 package com.youvigo.wms.outstock;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,140 +45,240 @@ import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.entities.Employee;
+import com.youvigo.wms.data.entities.InternalOrder;
 import com.youvigo.wms.data.entities.MoveType;
+import com.youvigo.wms.data.entities.StockLocal;
 import com.youvigo.wms.search.EmployeeSearchActivity;
 import com.youvigo.wms.search.InternalOrderSearchActivity;
+import com.youvigo.wms.util.Constants;
 
 import java.util.List;
 
-import retrofit2.Call;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 无预留出库页面
  */
 public class NoReservedOutBoundActivity extends BaseActivity {
-    public static final int REQUEST_CODE = 103;
+	public static final int REQUEST_CODE = 301;
+	public static final int EMPLOYEE_REQUEST_CODE = 302;
+	public static final int INNER_ORDER_REQUEST_CODE = 303;
+	public static final int MATERIAL_REQUEST_CODE = 303;
 
-    private ProgressBar progressBar;
+	private ProgressBar progressBar;
 
-    private Spinner moveType;
-    private Spinner placeOfReceipt;
+	private Spinner moveType;
 
-    private TextView internalOrder;
-    private TextView employer;
-    private TextView department;
+	private TextView placeOfReceiptTitle;
+	private Spinner placeOfReceipt;
 
-    private EditText remark;
+	private TextView internalOrder;
+	private TextView employer;
+	private TextView department;
 
-    private MaterialButton innerOrderQuery;
-    private MaterialButton employeeQuery;
+	private EditText remark;
 
-    private NoReservedOutBoundAdapter adapter;
-    private NoreservedOutBoundViewModel viewModel;
+	private MaterialButton innerOrderQuery;
+	private MaterialButton employeeQuery;
 
-    private ArrayAdapter<MoveType> moveTypeAdapter;
-    private ArrayAdapter<?> placeOfReceiptAdapter;
+	private NoReservedOutBoundAdapter adapter;
+	private NoreservedOutBoundViewModel viewModel;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.submit_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+	private ArrayAdapter<MoveType> moveTypeAdapter;
+	private ArrayAdapter<StockLocal> placeOfReceiptAdapter;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.submit_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
-        initViews();
-        observeData();
-    }
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    private void initViews() {
-        moveType = findViewById(R.id.sp_move_type);
-        placeOfReceipt = findViewById(R.id.sp_place_of_receipt);
-        internalOrder = findViewById(R.id.tv_internal_order);
+		initViews();
+		loadSpinnerData();
+		observeData();
+	}
 
-        innerOrderQuery = findViewById(R.id.mb_inner_order_query);
-        innerOrderQuery.setOnClickListener(v -> launchInternalOrderSearchActivity());
+	private void initViews() {
+		moveType = findViewById(R.id.sp_move_type);
+		placeOfReceipt = findViewById(R.id.sp_place_of_receipt);
+		placeOfReceiptTitle = findViewById(R.id.tv_place_of_receipt_description);
 
-        FloatingActionButton newDelivery = findViewById(R.id.fab_add);
-        newDelivery.setOnClickListener(v -> {
-            // 新增发货
-        });
+		// 移动类型改不隐藏收货地，只有311移动类型才显示收货地
+		moveType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				MoveType adapterItem = moveTypeAdapter.getItem(position);
+				if (adapterItem.getMoveCode().equals("311")) {
+					placeOfReceiptTitle.setVisibility(View.VISIBLE);
+					placeOfReceipt.setVisibility(View.VISIBLE);
+				}else {
+					// 默认隐藏收货地
+					placeOfReceiptTitle.setVisibility(View.GONE);
+					placeOfReceipt.setVisibility(View.GONE);
+				}
+			}
 
-        employer = findViewById(R.id.tv_employer);
-        department = findViewById(R.id.tv_department);
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
 
-        employeeQuery = findViewById(R.id.mb_employee_query);
-        employeeQuery.setOnClickListener(v -> {
-            // 查询领用人
-            launchEmployeeSearchActivity();
-        });
+			}
+		});
 
-        // 收货地
-        placeOfReceipt = findViewById(R.id.sp_place_of_receipt);
-        remark = findViewById(R.id.et_remark);
+		internalOrder = findViewById(R.id.tv_internal_order);
 
-        progressBar = findViewById(R.id.progress_bar);
+		innerOrderQuery = findViewById(R.id.mb_inner_order_query);
+		innerOrderQuery.setOnClickListener(v -> launchInternalOrderSearchActivity());
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		FloatingActionButton newDelivery = findViewById(R.id.fab_add);
+		newDelivery.setOnClickListener(v -> {
+			// 新增发货
+			launchMaterialActivity();
+		});
 
-        adapter = new NoReservedOutBoundAdapter();
-        recyclerView.setAdapter(adapter);
-    }
+		employer = findViewById(R.id.tv_employer);
+		department = findViewById(R.id.tv_department);
 
-    private void launchEmployeeSearchActivity() {
-        Intent intent = new Intent(this, EmployeeSearchActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
+		employeeQuery = findViewById(R.id.mb_employee_query);
+		employeeQuery.setOnClickListener(v -> {
+			// 查询领用人
+			launchEmployeeSearchActivity();
+		});
 
-    private void launchInternalOrderSearchActivity() {
-        Intent intent = new Intent(this, InternalOrderSearchActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
-    }
+		// 收货地
+		placeOfReceipt = findViewById(R.id.sp_place_of_receipt);
+		remark = findViewById(R.id.et_remark);
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+		progressBar = findViewById(R.id.progress_bar);
 
-        Timber.d("onActivityResult");
-    }
+		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		recyclerView.setHasFixedSize(true);
+		recyclerView.setItemAnimator(new DefaultItemAnimator());
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.no_reserved_outbound_activity;
-    }
+		adapter = new NoReservedOutBoundAdapter();
+		recyclerView.setAdapter(adapter);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        } else if (item.getItemId() == R.id.menu_submit) {
-            onMenuSubmitClicked();
-        }
+	private void launchMaterialActivity() {
+		//FragmentManager fragmentManager = this.getSupportFragmentManager();
+		//NoReservedOutBoundDetailDialogFragment.show(fragmentManager, null, -1);
+		Intent intent = new Intent(this, NoReservedOutBoundDetailActivity.class);
+		startActivityForResult(intent, MATERIAL_REQUEST_CODE);
+	}
 
-        return true;
-    }
+	private void launchEmployeeSearchActivity() {
+		Intent intent = new Intent(this, EmployeeSearchActivity.class);
+		startActivityForResult(intent, EMPLOYEE_REQUEST_CODE);
+	}
 
-    private void observeData() {
-        viewModel = new ViewModelProvider.NewInstanceFactory().create(NoreservedOutBoundViewModel.class);
-    }
+	private void launchInternalOrderSearchActivity() {
+		Intent intent = new Intent(this, InternalOrderSearchActivity.class);
+		startActivityForResult(intent, INNER_ORDER_REQUEST_CODE);
+	}
 
-    private void onMenuSubmitClicked() {
-        // 提交
-    }
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		if (resultCode == Activity.RESULT_OK) {
+			if (data != null) {
+				if (requestCode == EMPLOYEE_REQUEST_CODE) {
+					Employee currentEmployee = data.getParcelableExtra(Constants.EMPLOYEE_RESULT);
+					employer.setText(currentEmployee.getEmployeeName());
+					department.setText(currentEmployee.getDepartmentName());
+				} else if (requestCode == INNER_ORDER_REQUEST_CODE) {
+					// todo 逻辑
+					InternalOrder currentInternalOrder = data.getParcelableExtra(Constants.INTERNAL_ORDER_RESULT);
+					internalOrder.setText(currentInternalOrder.getDescription());
+				}
+			}
+		}
 
-    private void loadSpinnerData() {
+		super.onActivityResult(requestCode, resultCode, data);
 
-        RetrofitClient retrofitClient = RetrofitClient.getInstance();
-        BackendApi backendApi = retrofitClient.getBackendApi();
+	}
 
-        Call<ApiResponse<List<MoveType>>> callMoveTypes = backendApi.getMoveTypes(retrofitClient.getFactoryCode());
+	@Override
+	protected int getLayoutId() {
+		return R.layout.no_reserved_outbound_activity;
+	}
 
-    }
+	@Override
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			onBackPressed();
+			return true;
+		} else if (item.getItemId() == R.id.menu_submit) {
+			onMenuSubmitClicked();
+		}
+
+		return true;
+	}
+
+	@Override
+	protected void onMenuSearchClicked() {
+
+	}
+
+	private void observeData() {
+		viewModel = new ViewModelProvider.NewInstanceFactory().create(NoreservedOutBoundViewModel.class);
+	}
+
+	private void onMenuSubmitClicked() {
+		// 提交
+	}
+
+	@SuppressLint("CheckResult")
+	private void loadSpinnerData() {
+
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		BackendApi backendApi = retrofitClient.getBackendApi();
+
+		backendApi.getMoveTypes(retrofitClient.getFactoryCode())
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ApiResponse<List<MoveType>>>() {
+					@Override
+					public void onSuccess(ApiResponse<List<MoveType>> listApiResponse) {
+						moveTypeAdapter = new ArrayAdapter<>(getApplication(), R.layout.item_spinner,
+								listApiResponse.getData());
+						moveType.setAdapter(moveTypeAdapter);
+					}
+
+					@Override
+					public void onError(Throwable e) {
+						showMessage(String.format("移动类型数据加载失败，%s", e.getMessage()));
+					}
+				});
+
+		backendApi.getStockLocal(retrofitClient.getFactoryCode())
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ApiResponse<List<StockLocal>>>() {
+					@Override
+					public void onSuccess(ApiResponse<List<StockLocal>> listApiResponse) {
+						if (listApiResponse != null) {
+							placeOfReceiptAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.item_spinner,
+									listApiResponse.getData());
+							placeOfReceipt.setAdapter(placeOfReceiptAdapter);
+							placeOfReceipt.setSelection(Spinner.INVALID_POSITION, false);
+						}
+					}
+
+					@Override
+					public void onError(Throwable e) {
+						showMessage(String.format("目的库存地数据加载失败，%s", e.getMessage()));
+					}
+				});
+	}
+
+	private void showMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	}
+
 }

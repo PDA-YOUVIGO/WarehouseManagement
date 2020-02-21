@@ -18,12 +18,12 @@ ext {
     gradlePluginVersion = '3.5.3'
 
     appcompatVersion = '1.1.0'
-    materialVersion = '1.0.0'
+    materialVersion = '1.1.0'
     navigationVersion = '2.1.0'
     constraintlayoutVersion = '1.1.3'
 
     lifecycleVersion = '2.2.0'
-    roomVersion = '2.2.3'
+    roomVersion = '2.2.4'
 
     permissionVersion = '3.0.0'
 

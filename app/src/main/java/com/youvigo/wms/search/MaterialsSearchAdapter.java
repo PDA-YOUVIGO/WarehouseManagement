@@ -74,7 +74,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 
 			itemView.setOnClickListener(this);
 
-			tv_material_code = itemView.findViewById(R.id.tv_material_code);
+			tv_material_code = itemView.findViewById(R.id.et_material_code);
 			tv_material_name = itemView.findViewById(R.id.tv_material_name);
 			tv_specification = itemView.findViewById(R.id.tv_specification);
 			tv_number = itemView.findViewById(R.id.tv_number);

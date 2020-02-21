@@ -16,11 +16,87 @@
 
 package com.youvigo.wms.data.entities;
 
-public class InternalOrder {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
+import com.youvigo.wms.data.dto.base.Additional;
+
+public class InternalOrder implements Parcelable {
+
     // 订单号
-    public String orderId;
+    @SerializedName("AUFNR")
+    private String number;
+
     // 描述
-    public String description;
+    @SerializedName("KTEXT")
+    private String description;
+
     // 工厂
-    public String factory;
+    @SerializedName("WERKS")
+    private String factory;
+
+    private Additional additional;
+
+    protected InternalOrder(Parcel in) {
+        number = in.readString();
+        description = in.readString();
+        factory = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(number);
+        dest.writeString(description);
+        dest.writeString(factory);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<InternalOrder> CREATOR = new Creator<InternalOrder>() {
+        @Override
+        public InternalOrder createFromParcel(Parcel in) {
+            return new InternalOrder(in);
+        }
+
+        @Override
+        public InternalOrder[] newArray(int size) {
+            return new InternalOrder[size];
+        }
+    };
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFactory() {
+        return factory;
+    }
+
+    public void setFactory(String factory) {
+        this.factory = factory;
+    }
+
+    public Additional getAdditional() {
+        return additional;
+    }
+
+    public void setAdditional(Additional additional) {
+        this.additional = additional;
+    }
 }

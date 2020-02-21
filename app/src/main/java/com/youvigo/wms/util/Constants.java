@@ -78,6 +78,8 @@ public class Constants {
 
     // Actvity通用信息
     public static final String SEARCH_RESULT = "search_result";
+    public static final String EMPLOYEE_RESULT = "employee_result";
+    public static final String INTERNAL_ORDER_RESULT = "internal_order_result";
     public static final String MATERIAL_SEARCH_RESULT = "material_search_result";
     public static final String CATEGORY = "category";
     public static final String TYPE_SHELVING = "type_shelving";

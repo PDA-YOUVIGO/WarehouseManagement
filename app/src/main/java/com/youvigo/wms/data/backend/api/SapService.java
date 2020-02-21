@@ -19,6 +19,7 @@ package com.youvigo.wms.data.backend.api;
 import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
 import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
+import com.youvigo.wms.data.dto.request.InternalOrderRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.PositionMovementRequest;
@@ -31,6 +32,7 @@ import com.youvigo.wms.data.dto.request.WarehouseInventoryRequest;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
+import com.youvigo.wms.data.dto.response.InternalOrderResponse;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.PositionMovementResponse;
@@ -41,6 +43,7 @@ import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponse;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryResponse;
 
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -91,6 +94,12 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/GI_With_Reservation")
 	Call<ReservedOutBoundResponse> submitReservedOutBound(@Body ReservedOutBoundRequest request);
+
+	/**
+	 * 获取内部订单
+	 */
+	@POST("RESTAdapter/PDA/Internal_Order_Query")
+	Single<InternalOrderResponse> queryInternalOrder(@Body InternalOrderRequest request);
 
 	/**
 	 * 获取物料信息

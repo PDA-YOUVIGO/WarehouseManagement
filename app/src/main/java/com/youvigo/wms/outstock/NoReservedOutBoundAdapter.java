@@ -29,10 +29,9 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.InventoryCheck;
-import com.youvigo.wms.data.entities.NoReservedOutbound;
+import com.youvigo.wms.data.entities.NoReservedOutBoundDetail;
 
-public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutbound, NoReservedOutBoundAdapter.NoReservedOutboundVH> {
+public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutBoundDetail, NoReservedOutBoundAdapter.NoReservedOutboundVH> {
     public NoReservedOutBoundAdapter() {
         super(new NoReservedOutboundDiffCallback());
     }
@@ -47,67 +46,63 @@ public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutbound, N
     @Override
     public void onBindViewHolder(@NonNull NoReservedOutboundVH holder, int position) {
         // 绑定数据在UI上显示
-        // holder.bind(getItem(position));
-    }
-
-    /**
-     * 显示的item数量
-     *
-     * @return
-     */
-    @Override
-    public int getItemCount() {
-        return 20;
+         holder.bind(getItem(position));
     }
 
     class NoReservedOutboundVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView itemNumber;
+        private final TextView materialCode;
         private final TextView materialName;
-        private final TextView basicOrder;
+        private final TextView pickedQuantity;
+        private final TextView pickedUnit;
         private final TextView specification;
-        private final TextView lotNumber;
+        private final TextView batchNumber;
+        private final TextView cargoSpace;
 
         NoReservedOutboundVH(@NonNull View itemView) {
             super(itemView);
 
             itemView.setOnClickListener(this);
 
-            itemNumber = itemView.findViewById(R.id.tv_item_material_code);
+            materialCode = itemView.findViewById(R.id.tv_material_code_description);
             materialName = itemView.findViewById(R.id.tv_material_name_description);
-            basicOrder = itemView.findViewById(R.id.tv_quantity);
             specification = itemView.findViewById(R.id.tv_specification_description);
-            lotNumber = itemView.findViewById(R.id.tv_batch_number_description);
+            batchNumber = itemView.findViewById(R.id.tv_batch_number_description);
+            pickedQuantity = itemView.findViewById(R.id.tv_picked);
+            pickedUnit = itemView.findViewById(R.id.tv_picked_unit);
+            cargoSpace = itemView.findViewById(R.id.tv_cargo_space);
         }
 
-        void bind(InventoryCheck inventoryCheck) {
-            itemNumber.setText(inventoryCheck.itemNumber);
-            materialName.setText(inventoryCheck.materialName);
-            basicOrder.setText(inventoryCheck.basicOrder);
-            specification.setText(inventoryCheck.specification);
-            lotNumber.setText(inventoryCheck.lotNumber);
+        void bind(NoReservedOutBoundDetail noReservedOutBoundDetail) {
+            materialCode.setText(noReservedOutBoundDetail.getMaterialCode());
+            materialName.setText(noReservedOutBoundDetail.getMaterialDescription());
+            pickedQuantity.setText(String.valueOf(noReservedOutBoundDetail.getQuantity()));
+            pickedUnit.setText(noReservedOutBoundDetail.getBaseUnit());
+            specification.setText(noReservedOutBoundDetail.getSpecification());
+            batchNumber.setText(noReservedOutBoundDetail.getBatchNumber());
+            cargoSpace.setText(noReservedOutBoundDetail.getCargoSpace());
         }
 
         @Override
         public void onClick(View v) {
             if (itemView.getContext() instanceof AppCompatActivity) {
+                NoReservedOutBoundDetail noReservedOutBoundDetail = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                NoReservedOutBoundDetailDialogFragment.show(fragmentManager);
+                NoReservedOutBoundDetailDialogFragment.show(fragmentManager, noReservedOutBoundDetail, getAdapterPosition());
             }
         }
     }
 
-    static class NoReservedOutboundDiffCallback extends DiffUtil.ItemCallback<NoReservedOutbound> {
+    static class NoReservedOutboundDiffCallback extends DiffUtil.ItemCallback<NoReservedOutBoundDetail> {
         @Override
-        public boolean areItemsTheSame(@NonNull NoReservedOutbound oldItem, @NonNull NoReservedOutbound newItem) {
-            return oldItem.itemNumber.equals(newItem.itemNumber);
+        public boolean areItemsTheSame(@NonNull NoReservedOutBoundDetail oldItem, @NonNull NoReservedOutBoundDetail newItem) {
+            return oldItem.getMaterialCode().equals(newItem.getMaterialCode());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull NoReservedOutbound oldItem, @NonNull NoReservedOutbound newItem) {
-            return oldItem.materialName.equals(newItem.materialName)
-                    && oldItem.basicOrder.equals(newItem.basicOrder)
-                    && oldItem.lotNumber.equals(newItem.lotNumber)
-                    && oldItem.specification.equals(newItem.specification);
+        public boolean areContentsTheSame(@NonNull NoReservedOutBoundDetail oldItem, @NonNull NoReservedOutBoundDetail newItem) {
+            return oldItem.getMaterialCode().equals(newItem.getMaterialCode())
+                    && oldItem.getBatchNumber().equals(newItem.getBatchNumber())
+                    && oldItem.getSpecification().equals(newItem.getSpecification());
         }
     }
 }

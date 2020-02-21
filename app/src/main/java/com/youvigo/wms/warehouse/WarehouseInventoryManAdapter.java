@@ -66,7 +66,7 @@ public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventory
         WarehouseInventoryManCheckVH(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            tv_material_code = itemView.findViewById(R.id.tv_material_code);
+            tv_material_code = itemView.findViewById(R.id.et_material_code);
             tv_material_name = itemView.findViewById(R.id.tv_material_name);
             tv_number = itemView.findViewById(R.id.tv_number);
             tv_unit = itemView.findViewById(R.id.tv_unit);

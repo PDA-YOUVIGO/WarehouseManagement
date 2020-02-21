@@ -17,10 +17,13 @@
 package com.youvigo.wms.search;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,10 +35,11 @@ import com.youvigo.wms.base.BaseActivity;
  * 员工查询页面
  */
 public class EmployeeSearchActivity extends BaseActivity {
-    private EditText editText;
+    private EditText et_employeeCode;
 
     private ProgressBar progressBar;
 
+    private EmployeeSearchViewModel viewModel;
     private EmployeeSearchAdapter adapter;
 
     @Override
@@ -43,15 +47,17 @@ public class EmployeeSearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initViews();
+        observeData();
     }
 
     private void initViews() {
-        editText = findViewById(R.id.edit_text);
+        et_employeeCode = findViewById(R.id.et_employee_code);
         progressBar = findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         adapter = new EmployeeSearchAdapter();
         recyclerView.setAdapter(adapter);
     }
@@ -64,5 +70,26 @@ public class EmployeeSearchActivity extends BaseActivity {
     @Override
     protected void onMenuSearchClicked() {
         // 提交数据到后端进行查询
+        viewModel.queryEmployee(et_employeeCode.getText().toString());
+    }
+
+    /**
+     * 观察数据变化
+     */
+    private void observeData() {
+        viewModel = new ViewModelProvider.NewInstanceFactory().create(EmployeeSearchViewModel.class);
+
+        viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+
+        viewModel.resultState().observe(this, queryState -> {
+            if (queryState == null) return;
+            if (!queryState.isSuccess()) {
+                Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        viewModel.employees().observe(this, employees -> {
+            adapter.submitList(employees);
+        });
     }
 }

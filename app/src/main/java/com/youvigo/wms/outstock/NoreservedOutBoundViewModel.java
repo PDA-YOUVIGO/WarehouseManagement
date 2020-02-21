@@ -21,19 +21,34 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.youvigo.wms.base.BaseViewModel;
 import com.youvigo.wms.data.dto.response.SapResponseMessage;
-import com.youvigo.wms.data.entities.MaterialVoucher;
+import com.youvigo.wms.data.entities.NoReservedOutBoundDetail;
+import com.youvigo.wms.data.entities.NoReservedOutBound;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NoreservedOutBoundViewModel extends BaseViewModel {
 
 	private MutableLiveData<Boolean> _isLoading = new MutableLiveData<>(false);
-	private MutableLiveData<MaterialVoucher> _order = new MutableLiveData<>();
+	private MutableLiveData<NoReservedOutBound> _order = new MutableLiveData<>();
+	private MutableLiveData<List<NoReservedOutBoundDetail>> _details = new MutableLiveData<>();
 	private MutableLiveData<SapResponseMessage> _sap_result = new MutableLiveData<>();
+
+	void init() {
+		NoReservedOutBound noReservedOutBound = new NoReservedOutBound();
+		List<NoReservedOutBoundDetail> noReservedOutBoundDetails = new ArrayList<>();
+		noReservedOutBound.setDetails(noReservedOutBoundDetails);
+
+		_order.setValue(noReservedOutBound);
+
+
+	}
 
 	public LiveData<Boolean> isLoading() {
 		return _isLoading;
 	}
 
-	public LiveData<MaterialVoucher> getMaterialVoucher() {
+	public LiveData<NoReservedOutBound> getMaterialVoucher() {
 		return _order;
 	}
 

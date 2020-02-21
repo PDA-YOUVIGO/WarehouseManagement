@@ -66,7 +66,7 @@ public class ReservedOutBoundAdapter extends ListAdapter<ReservedOutBound, Reser
 		private final TextView demandUnit;
 		private final TextView pickedQuantity;
 		private final TextView pickedUnit;
-		private final TextView cargo;
+		private final TextView cargoSpace;
 
 
 		ReservedOutBoundVH(@NonNull View itemView) {
@@ -82,7 +82,7 @@ public class ReservedOutBoundAdapter extends ListAdapter<ReservedOutBound, Reser
 			demandUnit = itemView.findViewById(R.id.tv_demand_unit);
 			pickedQuantity = itemView.findViewById(R.id.tv_picked);
 			pickedUnit = itemView.findViewById(R.id.tv_picked_unit);
-			cargo = itemView.findViewById(R.id.tv_cargo_space);
+			cargoSpace = itemView.findViewById(R.id.tv_cargo_space);
 		}
 
 		void bind(ReservedOutBound reservedOutbound) {
@@ -94,7 +94,7 @@ public class ReservedOutBoundAdapter extends ListAdapter<ReservedOutBound, Reser
 			demandUnit.setText(reservedOutbound.getBaseUnitTxt());
 			pickedQuantity.setText(String.valueOf(reservedOutbound.getQuantity()));
 			pickedUnit.setText(reservedOutbound.getBaseUnitTxt());
-			cargo.setText(reservedOutbound.getCargoSpace());
+			cargoSpace.setText(reservedOutbound.getCargoSpace());
 		}
 
 		@Override

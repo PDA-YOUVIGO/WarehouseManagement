@@ -36,6 +36,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:text="@string/internal_order_number"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,9 +59,10 @@
         <TextView
             android:id="@+id/tv_description_title"
             style="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/colorPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/description"
             android:textSize="@dimen/dp_14"
@@ -75,38 +77,12 @@
             android:gravity="start|center"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="我买的药品"
+            android:text="阿昔洛韦"
             app:layout_constraintBottom_toBottomOf="@id/tv_description_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_description_title"
             app:layout_constraintTop_toTopOf="@id/tv_description_title" />
 
-        <TextView
-            android:id="@+id/tv_factory_title"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_8"
-            android:gravity="start"
-            android:text="@string/factory"
-            android:textSize="@dimen/dp_14"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_internal_order_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_description_title" />
-
-        <TextView
-            android:id="@+id/tv_factory"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_4"
-            android:gravity="start|center"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text="制毒工厂"
-            app:layout_constraintBottom_toBottomOf="@id/tv_factory_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_factory_title"
-            app:layout_constraintTop_toTopOf="@id/tv_factory_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

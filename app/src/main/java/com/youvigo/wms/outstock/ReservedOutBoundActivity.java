@@ -53,17 +53,15 @@ import com.youvigo.wms.data.entities.ReservedOutBound;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -135,13 +133,15 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 	private void observeData() {
 		viewModel = new ViewModelProvider.NewInstanceFactory().create(ReservedOutBoundViewModel.class);
 
-		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE :
+				View.GONE));
 
 		viewModel.getMaterialVoucher().observe(this, materialVoucher -> {
 			orderNumber.setText(materialVoucher.orderNumber);
 			internalOrder.setText(materialVoucher.innerOrderDescription);
 
-			MoveType moveType = moveTypes.stream().filter(v -> v.getMoveCode().equals(materialVoucher.moveType)).findFirst().orElse(null);
+			MoveType moveType =
+					moveTypes.stream().filter(v -> v.getMoveCode().equals(materialVoucher.moveType)).findFirst().orElse(null);
 
 			this.moveType.setSelection(moveTypes.indexOf(moveType));
 
@@ -172,7 +172,8 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 		MoveType selectMoveType = (MoveType) moveType.getSelectedItem();
 		String currentRemark = remark.getText().toString();
 
-		String pdaOrderNumber = String.format("%s-%s", retrofitClient.getAccount(), LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
+		String pdaOrderNumber = String.format("%s-%s", retrofitClient.getAccount(),
+				LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
 
 		ReservedOutBoundRequest request = new ReservedOutBoundRequest();
 		request.setControlInfo(new ControlInfo());
@@ -269,22 +270,25 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		BackendApi backendApi = retrofitClient.getBackendApi();
 
-		Call<ApiResponse<List<MoveType>>> call = backendApi.getMoveTypes(retrofitClient.getFactoryCode());
-		call.enqueue(new Callback<ApiResponse<List<MoveType>>>() {
-			@Override
-			public void onResponse(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Response<ApiResponse<List<MoveType>>> response) {
-				if (response.isSuccessful()) {
-					ApiResponse<List<MoveType>> apiResponse = response.body();
-					moveTypes.addAll(apiResponse.getData());
-					moveTypeAdapter.notifyDataSetChanged();
-				}
-			}
+		backendApi.getMoveTypes(retrofitClient.getFactoryCode())
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ApiResponse<List<MoveType>>>() {
+					@Override
+					public void onSuccess(ApiResponse<List<MoveType>> listApiResponse) {
+						if (listApiResponse != null) {
+							moveTypes.clear();
+							moveTypes.addAll(listApiResponse.getData());
+							moveTypeAdapter.notifyDataSetChanged();
+						}
+					}
 
-			@Override
-			public void onFailure(@NotNull Call<ApiResponse<List<MoveType>>> call, @NotNull Throwable t) {
+					@Override
+					public void onError(Throwable e) {
+						showMessage(String.format("移动类型数据加载失败，%s", e.getMessage()));
+					}
+				});
 
-			}
-		});
 	}
 
 	private void showAlertDialog(String title, String message, SapResponseMessage sapResponseMessage) {
@@ -301,6 +305,10 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 
 
 		normalDialog.show();
+	}
+
+	private void showMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
 	@Override

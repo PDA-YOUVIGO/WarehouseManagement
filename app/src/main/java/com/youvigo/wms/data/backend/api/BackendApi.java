@@ -19,12 +19,14 @@ package com.youvigo.wms.data.backend.api;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.dto.response.Material;
+import com.youvigo.wms.data.entities.Employee;
 import com.youvigo.wms.data.entities.MoveType;
+import com.youvigo.wms.data.entities.OrderType;
 import com.youvigo.wms.data.entities.StockLocal;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -36,14 +38,17 @@ public interface BackendApi {
 
 	/**
 	 * 货位验证
+	 *
 	 * @param warehouseCode 仓库编码
 	 * @param cargoLocation 货位编码
 	 */
 	@GET("blade-data/api/cargolocation/detail")
-	Call<ApiResponse<List<CargoLocation>>> verificationCargo(@Query("warehouseCode") String warehouseCode, @Query("cargoLocation") String cargoLocation);
+	Call<ApiResponse<List<CargoLocation>>> verificationCargo(@Query("warehouseCode") String warehouseCode, @Query(
+			"cargoLocation") String cargoLocation);
 
 	/**
 	 * 获取物料单位
+	 *
 	 * @param matnr 物料编码
 	 */
 	@GET("blade-data/api/material/detail")
@@ -51,15 +56,33 @@ public interface BackendApi {
 
 	/**
 	 * 获取移动类型参照
+	 *
 	 * @param factoryCode 工厂编码
 	 */
 	@GET("blade-data/api/movetype/list")
-	Call<ApiResponse<List<MoveType>>> getMoveTypes(@Query("factoryCode") String factoryCode);
+	Single<ApiResponse<List<MoveType>>> getMoveTypes(@Query("factoryCode") String factoryCode);
 
 	/**
 	 * 获取库存地参照
+	 *
 	 * @param factoryCode 工厂编码
 	 */
 	@GET("blade-data/api/stocklocaltion/list")
-	Observable<ApiResponse<StockLocal>> getStockLocal(@Query("factoryCode") String factoryCode);
+	Single<ApiResponse<List<StockLocal>>> getStockLocal(@Query("factoryCode") String factoryCode);
+
+	/**
+	 * 获取员工及部门信息
+	 * @param employeeCode 员工编号
+	 * @param factoryCode 工厂编码
+	 */
+	@GET("blade-data/api/employee/query")
+	Single<ApiResponse<List<Employee>>> getEmployee(@Query("psnCode") String employeeCode,
+													@Query("factoryCode") String factoryCode);
+
+	/**
+	 * 获取内部订单单据类型
+	 * @param factoryCode 工厂编码
+	 */
+	@GET("blade-data/api/ordertype/list")
+	Single<ApiResponse<List<OrderType>>> getOrderType(@Query("factoryCode") String factoryCode);
 }

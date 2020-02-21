@@ -37,15 +37,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/edit_text"
+            android:id="@+id/et_employee_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_2"
-            android:layout_marginTop="@dimen/dp_2"
-            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:maxLength="100"
             android:maxLines="1"
+            android:hint="员工编号"
             android:paddingStart="@dimen/dp_2"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
@@ -57,10 +58,11 @@
             android:id="@+id/recycler_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_text"
+            app:layout_constraintTop_toBottomOf="@id/et_employee_code"
             tools:listitem="@layout/item_employee_search" />
 
         <ProgressBar

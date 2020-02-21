@@ -324,7 +324,7 @@ public class DeliverDetailDialogFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
-        materialCode = view.findViewById(R.id.tv_material_code);
+        materialCode = view.findViewById(R.id.et_material_code);
         materialName = view.findViewById(R.id.tv_material_name);
         specification = view.findViewById(R.id.tv_specification);
         batchNumber = view.findViewById(R.id.tv_batch_number);

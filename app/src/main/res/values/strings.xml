@@ -47,6 +47,7 @@
     <string name="materials_search">物料查询</string>
     <string name="employee_search">员工查询</string>
     <string name="internal_order_search">内部订单查询</string>
+
     <!--shelving-->
     <string name="order_number">单据号</string>
     <string name="query">查询</string>
@@ -151,6 +152,8 @@
     <string name="business_type_title">业务类型</string>
     <string name="sap_interface_account_title">SAP接口账户</string>
     <string name="sap_interface_password_title">SAP接口密码</string>
+    <string name="no_reserved_out_bound_details">出库明细</string>
+    <string name="title_activity_no_reserved_out_bound_detail">NoReservedOutBoundDetailActivity</string>
 
 
 </resources>

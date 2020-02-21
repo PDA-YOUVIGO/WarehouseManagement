@@ -324,7 +324,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     }
 
     private void initViews(View view) {
-        materialCoding = view.findViewById(R.id.tv_material_code);
+        materialCoding = view.findViewById(R.id.et_material_code);
         materialName = view.findViewById(R.id.tv_material_name);
         batchNumber = view.findViewById(R.id.tv_batch_number);
         specification = view.findViewById(R.id.tv_specification);

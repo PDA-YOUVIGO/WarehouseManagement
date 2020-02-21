@@ -33,7 +33,7 @@
         android:paddingBottom="@dimen/dp_4">
 
         <TextView
-            android:id="@+id/tv_material_code"
+            android:id="@+id/et_material_code"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -50,10 +50,10 @@
             android:layout_marginStart="@dimen/dp_4"
             android:gravity="start|center"
             android:text="000001232323"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_code"
+            app:layout_constraintBottom_toBottomOf="@id/et_material_code"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_material_code"
-            app:layout_constraintTop_toTopOf="@id/tv_material_code" />
+            app:layout_constraintStart_toEndOf="@id/et_material_code"
+            app:layout_constraintTop_toTopOf="@id/et_material_code" />
 
         <TextView
             android:id="@+id/tv_material_name"
@@ -66,7 +66,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_material_code" />
+            app:layout_constraintTop_toBottomOf="@id/et_material_code" />
 
         <TextView
             android:id="@+id/tv_material_name_description"
@@ -91,7 +91,7 @@
             android:text="@string/specification"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
+            app:layout_constraintEnd_toEndOf="@id/et_material_code"
             app:layout_constraintTop_toBottomOf="@id/tv_material_name" />
 
         <TextView
@@ -117,7 +117,7 @@
             android:text="@string/batch_number"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
+            app:layout_constraintEnd_toEndOf="@id/et_material_code"
             app:layout_constraintTop_toBottomOf="@id/tv_specification" />
 
         <TextView
@@ -142,7 +142,7 @@
             android:text="@string/demand"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
+            app:layout_constraintEnd_toEndOf="@id/et_material_code"
             app:layout_constraintTop_toBottomOf="@id/tv_batch_number" />
 
         <TextView
@@ -178,7 +178,7 @@
             android:text="@string/picked_quantity"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
+            app:layout_constraintEnd_toEndOf="@id/et_material_code"
             app:layout_constraintTop_toBottomOf="@id/tv_demand_description" />
 
         <TextView
@@ -214,7 +214,7 @@
             android:text="@string/cargo_space"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/dp_14"
-            app:layout_constraintEnd_toEndOf="@id/tv_material_code"
+            app:layout_constraintEnd_toEndOf="@id/et_material_code"
             app:layout_constraintTop_toBottomOf="@id/tv_picked_description" />
 
         <TextView

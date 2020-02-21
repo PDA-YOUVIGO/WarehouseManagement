@@ -34,7 +34,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
@@ -46,6 +45,8 @@ import com.youvigo.wms.util.Constants;
 import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -82,7 +83,6 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 	private Context context;
 
 	private ReservedOutBound reservedOutbound;
-	private ReservedOutBoundViewModel viewModel;
 
 	/**
 	 * 展示详情页面
@@ -107,9 +107,6 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 		super.onAttach(context);
 
 		this.context = context;
-		if (context instanceof ReservedOutBoundActivity) {
-			viewModel = new ViewModelProvider((ReservedOutBoundActivity) context).get(ReservedOutBoundViewModel.class);
-		}
 	}
 
 	@Override
@@ -205,7 +202,7 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 
 
 	private void initViews(View view) {
-		materialCode = view.findViewById(R.id.tv_material_code);
+		materialCode = view.findViewById(R.id.et_material_code);
 		materialName = view.findViewById(R.id.tv_material_name);
 		specification = view.findViewById(R.id.tv_specification);
 		batchNumber = view.findViewById(R.id.et_batch_number);
@@ -252,13 +249,13 @@ public class ReservedOutBoundDetailDialogFragment extends DialogFragment {
 		if (requestCode == REQUEST_CODE) {
 			if (resultCode == Activity.RESULT_OK) {
 				if (data != null) {
-					StockMaterial stockMaterial = data.getParcelableExtra(Constants.MATERIAL_SEARCH_RESULT);
-					if (stockMaterial != null) {
-						storeCargoSpace.setText(stockMaterial.getCargoSpace());
-						batchNumber.setText(stockMaterial.getBatchNumber());
-						reservedOutbound.setVerificationCargoSpace(stockMaterial.getCargoSpace());
-						reservedOutbound.setActualInventory(stockMaterial.getActualInventory());
-						reservedOutbound.setVerificationBatchNumber(stockMaterial.getBatchNumber());
+					List<StockMaterial> stockMaterial = data.getParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT);
+					if (stockMaterial != null && stockMaterial.size() > 0) {
+						storeCargoSpace.setText(stockMaterial.get(0).getCargoSpace());
+						batchNumber.setText(stockMaterial.get(0).getBatchNumber());
+						reservedOutbound.setVerificationCargoSpace(stockMaterial.get(0).getCargoSpace());
+						reservedOutbound.setActualInventory(stockMaterial.get(0).getActualInventory());
+						reservedOutbound.setVerificationBatchNumber(stockMaterial.get(0).getBatchNumber());
 					}
 				}
 			}
