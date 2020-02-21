@@ -216,6 +216,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, position_code);
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, mCode);
         intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,mBatch);
+        intent.putExtra(MaterialsSearchActivity.KKY_CHECKALLMENU,true);
         startActivityForResult(intent, REQUEST_CODE);
     }
 
