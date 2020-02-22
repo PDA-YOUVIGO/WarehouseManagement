@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2020. komamj
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +17,26 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
     <item
-        android:id="@+id/menu_search"
-        android:icon="@drawable/ic_action_search"
-        android:title="@string/search"
+        android:id="@+id/menu_submit"
+        android:icon="@drawable/ic_action_send"
+        android:title="@string/submit"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_employee_search"
+        android:icon="@drawable/ic_action_employee"
+        android:title="领料员查询"
+
+        app:showAsAction="never|ifRoom" />
+
+    <item
+        android:id="@+id/menu_internal_order_search"
+        android:icon="@drawable/ic_action_order"
+        android:title="内部订单查询"
+        app:showAsAction="never" />
+
+
 </menu>

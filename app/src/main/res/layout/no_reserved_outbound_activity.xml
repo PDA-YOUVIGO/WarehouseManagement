@@ -84,35 +84,19 @@
             android:id="@+id/tv_internal_order"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:paddingStart="@dimen/dp_4"
-            android:paddingEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
             android:hint="内部订单..."
             android:maxLines="1"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/tv_internal_order_description"
-            app:layout_constraintEnd_toStartOf="@id/mb_inner_order_query"
-            app:layout_constraintStart_toEndOf="@id/tv_internal_order_description"
-            app:layout_constraintTop_toTopOf="@id/tv_internal_order_description" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_inner_order_query"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
-            android:text="@string/query"
-            android:textAppearance="?android:attr/textAppearance"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp_14"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@id/tv_internal_order_description"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_internal_order_description"
             app:layout_constraintTop_toTopOf="@id/tv_internal_order_description" />
 
         <TextView
@@ -137,29 +121,13 @@
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
-            android:hint="领用人"
             android:gravity="start|center"
+            android:hint="领用人"
             android:maxLines="1"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_employer_description"
-            app:layout_constraintEnd_toStartOf="@id/mb_employee_query"
-            app:layout_constraintStart_toEndOf="@id/tv_employer_description"
-            app:layout_constraintTop_toTopOf="@id/tv_employer_description" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_employee_query"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:paddingStart="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_8"
-            android:text="@string/query"
-            android:textAppearance="?android:attr/textAppearance"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/dp_14"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="@id/tv_employer_description"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_employer_description"
             app:layout_constraintTop_toTopOf="@id/tv_employer_description" />
 
         <TextView
@@ -244,18 +212,20 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
-            android:paddingStart="@dimen/dp_4"
-            android:paddingEnd="@dimen/dp_4"
             android:background="@drawable/bg_rectangle"
             android:gravity="start|center"
             android:hint="备注..."
             android:maxLines="1"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_4"
             android:singleLine="true"
             android:textSize="@dimen/dp_14"
             app:layout_constraintBottom_toBottomOf="@id/tv_remark_description"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/tv_remark_description"
-            app:layout_constraintTop_toTopOf="@id/tv_remark_description" />
+            app:layout_constraintTop_toTopOf="@id/tv_remark_description"
+            app:layout_constraintVertical_bias="0.0" />
 
         <View
             android:id="@+id/divider"

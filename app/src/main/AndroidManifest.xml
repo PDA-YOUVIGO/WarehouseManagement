@@ -15,10 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".outstock.NoReservedOutBoundDetailActivity"
-            android:label="@string/title_activity_no_reserved_out_bound_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,6 +56,10 @@
         <activity
             android:name=".outstock.NoReservedOutBoundActivity"
             android:label="@string/no_reserved_outbound" />
+        <activity
+            android:name=".outstock.NoReservedOutBoundDetailActivity"
+            android:label="@string/title_activity_no_reserved_out_bound_detail">
+        </activity>
         <activity
             android:name=".warehouse.WarehouseInventoryActivity"
             android:label="@string/warehouse_inventory" />

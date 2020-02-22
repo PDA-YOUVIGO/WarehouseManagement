@@ -28,7 +28,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_action_search"
         android:title="@string/search"
         app:showAsAction="always" />
 </menu>

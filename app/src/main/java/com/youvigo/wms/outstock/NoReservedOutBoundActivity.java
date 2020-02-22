@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +43,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.youvigo.wms.R;
-import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -62,14 +63,14 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 无预留出库页面
  */
-public class NoReservedOutBoundActivity extends BaseActivity {
+public class NoReservedOutBoundActivity extends AppCompatActivity {
 	public static final int REQUEST_CODE = 301;
 	public static final int EMPLOYEE_REQUEST_CODE = 302;
 	public static final int INNER_ORDER_REQUEST_CODE = 303;
 	public static final int MATERIAL_REQUEST_CODE = 303;
 
 	private ProgressBar progressBar;
-
+	protected Toolbar toolbar;
 	private Spinner moveType;
 
 	private TextView placeOfReceiptTitle;
@@ -92,13 +93,21 @@ public class NoReservedOutBoundActivity extends BaseActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.submit_menu, menu);
+		getMenuInflater().inflate(R.menu.no_reserved_out_bound_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		setContentView(getLayoutId());
+		toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		initViews();
 		loadSpinnerData();
@@ -133,9 +142,6 @@ public class NoReservedOutBoundActivity extends BaseActivity {
 
 		internalOrder = findViewById(R.id.tv_internal_order);
 
-		innerOrderQuery = findViewById(R.id.mb_inner_order_query);
-		innerOrderQuery.setOnClickListener(v -> launchInternalOrderSearchActivity());
-
 		FloatingActionButton newDelivery = findViewById(R.id.fab_add);
 		newDelivery.setOnClickListener(v -> {
 			// 新增发货
@@ -144,12 +150,6 @@ public class NoReservedOutBoundActivity extends BaseActivity {
 
 		employer = findViewById(R.id.tv_employer);
 		department = findViewById(R.id.tv_department);
-
-		employeeQuery = findViewById(R.id.mb_employee_query);
-		employeeQuery.setOnClickListener(v -> {
-			// 查询领用人
-			launchEmployeeSearchActivity();
-		});
 
 		// 收货地
 		placeOfReceipt = findViewById(R.id.sp_place_of_receipt);
@@ -203,7 +203,6 @@ public class NoReservedOutBoundActivity extends BaseActivity {
 
 	}
 
-	@Override
 	protected int getLayoutId() {
 		return R.layout.no_reserved_outbound_activity;
 	}
@@ -215,14 +214,13 @@ public class NoReservedOutBoundActivity extends BaseActivity {
 			return true;
 		} else if (item.getItemId() == R.id.menu_submit) {
 			onMenuSubmitClicked();
+		} else if (item.getItemId() == R.id.menu_employee_search) {
+			launchEmployeeSearchActivity();
+		} else if (item.getItemId() == R.id.menu_internal_order_search) {
+			launchInternalOrderSearchActivity();
 		}
 
 		return true;
-	}
-
-	@Override
-	protected void onMenuSearchClicked() {
-
 	}
 
 	private void observeData() {
