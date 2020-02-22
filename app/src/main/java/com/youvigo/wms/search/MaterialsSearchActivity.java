@@ -53,10 +53,13 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	public static final String KEY_MATERIAL_COMMONNAME = "key_material_commonname";
 	public static final String KEY_SPECIFICATION = "key_specification";
 	public static final String KEY_CARGOCODE = "key_cargoCode";
+	public static final String KKY_CHECKALLMENU = "key_disPlayCheckALlMen"; //控制全选按钮显示 True 显示，False 不显示
+	public static final String KEY_INITQUERY = "key_InitQuery"; // 控制初始化查询
 
 	private ProgressBar progressBar;
 	private MaterialsSearchAdapter adapter;
 	private MaterialSearchViewModel viewModel;
+	private Boolean disPlayCheckALlMen;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,9 +82,10 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 			String materialCommonName = intent.getStringExtra(KEY_MATERIAL_COMMONNAME);
 			String specification = intent.getStringExtra(KEY_SPECIFICATION);
 			String cargoCode = intent.getStringExtra(KEY_CARGOCODE);
-
-			viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
-
+			disPlayCheckALlMen = intent.getBooleanExtra(KKY_CHECKALLMENU,false);
+			if (intent.getBooleanExtra(KEY_INITQUERY,true)){
+				viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+			}
 		}
 	}
 
@@ -134,7 +138,7 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.check_all_menu, menu);
+		if (disPlayCheckALlMen){getMenuInflater().inflate(R.menu.check_all_menu, menu);}
 		return super.onCreateOptionsMenu(menu);
 	}
 

@@ -146,6 +146,7 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     private void launchInventoryCheckActivity() {
         Intent intent = new Intent(context, MaterialsSearchActivity.class);
+        intent.putExtra(MaterialsSearchActivity.KEY_INITQUERY,false);
         startActivity(intent);
     }
 

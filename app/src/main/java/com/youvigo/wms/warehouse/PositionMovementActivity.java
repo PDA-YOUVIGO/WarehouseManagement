@@ -194,6 +194,8 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
                         if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
                             showMessage(responseDetails.getMSGTXT());
                         } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
+                            viewModel.positions().getValue().clear();
+                            adapter.notifyDataSetChanged();
                             showMessage(responseDetails.getMSGTXT());
                         }
                     }

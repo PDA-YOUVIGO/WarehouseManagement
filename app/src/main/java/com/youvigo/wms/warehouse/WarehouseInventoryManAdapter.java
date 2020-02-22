@@ -96,12 +96,12 @@ public class WarehouseInventoryManAdapter extends ListAdapter<WarehouseInventory
     static class WarehouseInventoryManDiffCallback extends DiffUtil.ItemCallback<WarehouseInventoryModelView> {
         @Override
         public boolean areItemsTheSame(@NonNull WarehouseInventoryModelView oldItem, @NonNull WarehouseInventoryModelView newItem) {
-            return oldItem.getMAKTX().equals(newItem.getMAKTX());
+            return oldItem.getMATNR().equals(newItem.getMATNR());
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull WarehouseInventoryModelView oldItem, @NonNull WarehouseInventoryModelView newItem) {
-            return oldItem.getMAKTX().equals(newItem.getMAKTX());
+            return oldItem.getMATNR().equals(newItem.getMATNR());
         }
     }
 }

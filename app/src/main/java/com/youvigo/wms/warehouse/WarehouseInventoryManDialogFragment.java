@@ -21,8 +21,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,6 +34,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -77,10 +80,18 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
     // 主数量
     private EditText tv_on_put_qty;
     //辅数量
-    private TextView tv_assist_qty;
+    private EditText tv_assist_qty;
 
     // 单位
     private Spinner auxiliaryUnit;
+
+    //合箱
+    private AppCompatCheckBox tv_checkout;
+
+    private TextView tv_master_batch_code; //主批次
+    private TextView tv_master_batch_qty; //主批次数量
+    private TextView tv_auxiliary_batch_code; //辅批次
+    private TextView tv_auxiliary_batch_qty; //辅批次数量
 
     // MaterialUnit中的单位名称
     private List<MaterialUnit> auxiliaryUnits = new ArrayList<>();
@@ -207,8 +218,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
     private  void submit()
     {
         inventoryModekView.setMENGA(Double.valueOf(tv_on_put_qty.getText().toString())); //主数量/盘点数量
-        inventoryModekView.setZZMENGE_AUXILIARY(tv_assist_qty.getText().toString()); // 辅数量
-        inventoryModekView.setADDFLAG("X"); // 盘点标识
+        inventoryModekView.setADDFLAG(inventoryModekView.getMENGA() > inventoryModekView.getNUMBER() ? "X" : ""); // 盘点标识
     }
 
     /**
@@ -247,8 +257,16 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         tv_unit = view.findViewById(R.id.tv_unit); // 单位
         tv_assist_qty = view.findViewById(R.id.tv_assist_qty); // 辅数量
         auxiliaryUnit = view.findViewById(R.id.sp_auxiliary_unit);
+        // 合箱
+        tv_checkout = view.findViewById(R.id.tv_checkout); //合箱
+        tv_master_batch_code = view.findViewById(R.id.tv_master_batch_code); //主批次
+        tv_master_batch_qty = view.findViewById(R.id.tv_master_batch_qty); // 主批次数量
+        tv_auxiliary_batch_code = view.findViewById(R.id.tv_auxiliary_batch_code); // 辅批次
+        tv_auxiliary_batch_qty = view.findViewById(R.id.tv_auxiliary_batch_qty); // 辅批次数量
 
+        // TODO 待完善合箱显示
         String inventoryWay = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context); // 获取盘点方式
+        boolean display_mergebox = SharedPreferenceUtils.getBoolean("display_mergebox",true,context);// 获取是否显示合箱
 
         // 辨别盘点方式
         if (inventoryWay.equals("BrightDisk")){
@@ -262,14 +280,94 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         supplierBatch.setText(inventoryModekView.getZZLICHA());
         cargoCode.setText(inventoryModekView.getLGPLA());
         voucher_code.setText(inventoryModekView.getIVNUM());
-
-        tv_on_put_qty.setText(inventoryModekView.getZZMENGE_MAIN());
         tv_unit.setText(inventoryModekView.getMEINS_TXT());
-        tv_assist_qty.setText(inventoryModekView.getZZMENGE_AUXILIARY());
 
+        if (inventoryModekView.getZZPACKAGING().equals("X")){
+            //合箱
+            tv_checkout.setChecked(true);
+            tv_master_batch_code.setText(inventoryModekView.getZZLICHA_MAIN());
+            tv_master_batch_qty.setText(inventoryModekView.getZZMENGE_MAIN());
+            tv_auxiliary_batch_code.setText(inventoryModekView.getZZLICHA_AUXILIARY());
+            tv_auxiliary_batch_qty.setText(inventoryModekView.getZZMENGE_AUXILIARY());
+        }else {
+              view.findViewById(R.id.constraintLayout).setVisibility(View.GONE);
+        }
         auxiliaryUnitsAdapter = new ArrayAdapter<>(context, R.layout.item_spinner, auxiliaryUnits);
         auxiliaryUnit.setAdapter(auxiliaryUnitsAdapter);
         auxiliaryUnit.setPrompt("请选择辅计量单位");
         auxiliaryUnit.setSelection(0, true);
+        actionListener(tv_on_put_qty, tv_assist_qty);
     }
+
+    /**
+     * 绑定回车监听事件
+     * @param text1 主数量
+     * @param text2 辅数量
+     */
+    private void actionListener(EditText text1,EditText text2){
+        text1.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    computeAuxiliaryValue();
+                }else if(actionId == EditorInfo.IME_ACTION_UNSPECIFIED){
+                    computeAuxiliaryValue();
+                }else if(actionId == EditorInfo.IME_ACTION_DONE){
+                    computeAuxiliaryValue();
+                }else if(actionId == EditorInfo.IME_ACTION_NEXT){
+                    computeAuxiliaryValue();
+                }
+                return false;
+            }
+        });
+        text2.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    computeMainValue();
+                }else if(actionId == EditorInfo.IME_ACTION_UNSPECIFIED){
+                    computeMainValue();
+                }else if(actionId == EditorInfo.IME_ACTION_DONE){
+                    computeMainValue();
+                }
+                else if(actionId == EditorInfo.IME_ACTION_NEXT){
+                    computeMainValue();
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 计算辅数量
+     */
+    private void computeAuxiliaryValue()
+    {
+        MaterialUnit curUnit = (MaterialUnit)auxiliaryUnit.getSelectedItem();
+        if (curUnit == null){return;}
+        Double rate = Double.valueOf(curUnit.getUmrez());
+        if (rate.equals(Double.valueOf("0")))
+            return;
+        Double value =Double.valueOf(tv_on_put_qty.getText().toString());
+        Double resultVal = (double) Math.round(value / rate * 1000) / 1000;
+        tv_assist_qty.setText(String.valueOf(resultVal));
+    }
+
+    /**
+     * 计算主数量
+     */
+    private void computeMainValue()
+    {
+        MaterialUnit curUnit = (MaterialUnit)auxiliaryUnit.getSelectedItem();
+        if (curUnit == null){return;}
+
+        Double rate = Double.valueOf(curUnit.getUmrez());
+        if (rate.equals(Double.valueOf("0")))
+            return;
+        Double value =Double.valueOf(tv_assist_qty.getText().toString());
+        Double resultVal = (double) Math.round(value * rate * 1000) / 1000;
+        tv_on_put_qty.setText(String.valueOf(resultVal));
+    }
+
+
 }
