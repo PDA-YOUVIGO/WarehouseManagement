@@ -176,7 +176,7 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	 * 全选
 	 */
 	protected void onMenuCheckAllClicked() {
-		if (viewModel.materials().getValue() != null && viewModel.materials().getValue().size() <= 0) {
+		if (viewModel.materials().getValue() == null) {
 			return;
 		}
 		Intent intent = new Intent();

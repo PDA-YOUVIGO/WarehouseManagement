@@ -16,6 +16,8 @@
 
 package com.youvigo.wms.warehouse;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +44,8 @@ import com.youvigo.wms.data.dto.request.PositionMovementRequestDetails;
 import com.youvigo.wms.data.dto.response.PositionMovementResponse;
 import com.youvigo.wms.data.dto.response.PositionMovementResponseDetails;
 import com.youvigo.wms.data.entities.PositionMovementModelView;
+import com.youvigo.wms.data.entities.StockMaterial;
+import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
@@ -54,16 +58,18 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * 仓位移动
  */
 public class PositionMovementActivity extends BaseActivity implements PositionMovementDialogFragment.OnPositionInforCompleted{
-
+    protected static final int REQUEST_CODE = 110;
     private ProgressBar progressBar;
     private PositionMovementAdapter adapter;
     private PositionMovementViewModel viewModel;
     private RecyclerView recyclerView;
+    protected List<PositionMovementModelView> positionResult = new ArrayList<>();
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -278,10 +284,65 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
             showMessage("请维护查询参数");
             return;
         }
-        viewModel.query(
-                et_material_coding.getText() == null ? "" : et_material_coding.getText().toString(),
-                et_material_batch.getText() == null ? "" : et_material_batch.getText().toString(),
-                et_position.getText() == null ? "" : et_position.getText().toString());
+        Intent intent = new Intent(this, MaterialsSearchActivity.class);
+        intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, et_position.getText().toString()); // 仓位
+        intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, et_material_coding.getText().toString()); // 物料编码
+        intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,et_material_batch.getText().toString()); // 物料批号
+        intent.putExtra(MaterialsSearchActivity.KEY_CARGOSPACETYPE_FILTER,"^9[\\d]+$");
+        intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    List<StockMaterial> stockMaterial = data.getParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT);
+                    processorData(positionResult,stockMaterial);
+                    Timber.d("onActivityResult material:%s", positionResult.toString());
+                }
+            }
+        }
+        if (positionResult != null) {
+            viewModel.handleData(positionResult);
+        }
+    }
+
+    private void processorData(List<PositionMovementModelView> positionResult, List<StockMaterial> StockMaterials){
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
+        for (StockMaterial m : StockMaterials) {
+            PositionMovementModelView position = new PositionMovementModelView();
+            position.setLGNUM(m.getWarehouseNumber()); //仓库号
+            position.setTAPOS(m.getZZAUFNR()); // 行项目号
+            position.setMATNR(m.getMaterialCode()); // 物料编码
+            position.setZZCOMMONNAME(m.getMaterialCommonName());// 物料通用名称
+            position.setMAKTX(m.getMaterialDescription());// 物料描述
+            position.setWERKS(m.getFactoryCode());// 工厂
+            position.setLGORT(retrofitClient.getStockLocationCode());// 库存地点
+            position.setCHARG( m.getBatchNumber());// 批号
+            position.setMEINS_TXT(m.getBaseUnitTxt()); //基本单位文本
+            position.setMEINS(m.getBaseUnit()); //基本单位
+            position.setVSOLM(""); //基本单位数量
+            position.setALTME(""); //辅助单位
+            position.setVSOLA(""); //辅助单位数量
+            position.setVLTYP(m.getLGTYP()); // 下架仓位类型
+            position.setNLTYP(""); // 上架仓位类型
+            position.setNLPLA(""); // 上架仓位
+            position.setVLPLA(m.getCargoSpace()); // 下架仓位
+            position.setZZPACKAGING(m.getZZPACKAGING()); // 是否合箱
+            position.setZZLICHA_MAIN(m.getZZLICHA_MAIN()); // 主批次
+            position.setZZMENGE_MAIN(m.getZZMENGE_MAIN()); // 主批次数量
+            position.setZZLICHA_AUXILIARY(m.getZZLICHA_AUXILIARY()); // 辅批次
+            position.setZZMENGE_AUXILIARY(m.getZZMENGE_AUXILIARY()); // 辅批次数量
+            position.setZZLICHA(m.getZZLICHA()); // 供应商批次
+            position.setVLTYP(m.getZZLICHA()); // 下架仓位类型
+            position.setVERME(m.getActualInventory()); // 可用库存量
+            position.setZZDRUGSPEC(m.getSpecification()); // 规格
+            position.setBESTQ(m.getBESTQ()); // 库存类别
+            positionResult.add(position);
+        }
     }
 
     /**
