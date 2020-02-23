@@ -35,6 +35,8 @@ import com.youvigo.wms.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class MaterialSearchDialogFragment extends DialogFragment {
 	public static final int REQUEST_CODE = 102;
 	private static final String TAG = "materialSearchDialogFragment";
@@ -104,7 +106,14 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 				materialCommonName = view.findViewById(R.id.et_common_name);
 				specification = view.findViewById(R.id.et_specification);
 				cargoSpace = view.findViewById(R.id.et_position);
-				mOnMaterialSearchInforCompleted.inputMaterialInforCompleted(materialCode.getText() == null ? "" : materialCode.getText().toString(), batchNumber.getText() == null ? "" : batchNumber.getText().toString(), materialDescription.getText() == null ? "" : materialDescription.getText().toString(), materialCommonName.getText() == null ? "" : materialCommonName.getText().toString(), specification.getText() == null ? "" : specification.getText().toString(), cargoSpace.getText() == null ? "" : cargoSpace.getText().toString());
+				mOnMaterialSearchInforCompleted.inputMaterialInforCompleted(materialCode.getText() == null ? "" :
+								materialCode.getText().toString(), batchNumber.getText() == null ? "" :
+								batchNumber.getText().toString(), materialDescription.getText() == null ? "" :
+								materialDescription.getText().toString(), materialCommonName.getText() == null ? "" :
+								materialCommonName.getText().toString(), specification.getText() == null ? "" :
+								specification.getText().toString(), cargoSpace.getText() == null ? "" :
+								cargoSpace.getText().toString(),
+						null, null);
 				dismiss();
 			}
 		});
@@ -113,6 +122,8 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 	}
 
 	public interface OnMaterialSearchInforCompleted {
-		void inputMaterialInforCompleted(String material_coding, String batch_number, String material_description, String common_name, String specification, String position);
+		void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription,
+										 String materialCommonName, String specification, String cargoCode,
+										 List<String> materilaFilter, String cargoSpaceTypeFilter);
 	}
 }

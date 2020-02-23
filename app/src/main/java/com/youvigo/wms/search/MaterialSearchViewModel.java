@@ -27,24 +27,17 @@ import com.youvigo.wms.data.dto.base.Additional;
 import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequestDetails;
-import com.youvigo.wms.data.dto.response.MaterialQueryResult;
 import com.youvigo.wms.data.entities.StockMaterial;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class MaterialSearchViewModel extends BaseViewModel {
 
@@ -62,7 +55,10 @@ public class MaterialSearchViewModel extends BaseViewModel {
 	 * @param specification       规格
 	 * @param cargoCode           仓位
 	 */
-	void query(String materialCode, String batchNumber, String materialDescription, String materialCommonName, String specification, String cargoCode) {
+	void query(String materialCode, String batchNumber, String materialDescription, String materialCommonName,
+			   String specification, String cargoCode, List<String> materilaFilter,
+			   String cargoSpaceTypeFilter) {
+
 		_isLoading.setValue(true);
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		SapService sapService = retrofitClient.getSapService();
@@ -85,48 +81,46 @@ public class MaterialSearchViewModel extends BaseViewModel {
 		materialQueryRequestDetails.setADDITIONAL(new Additional());
 		materialQueryRequest.setMaterialQueryRequestDetails(materialQueryRequestDetails);
 
-		Call<MaterialQueryResult> materials = sapService.materialQuery(materialQueryRequest);
-		materials.enqueue(new Callback<MaterialQueryResult>() {
-			@Override
-			public void onResponse(@NotNull Call<MaterialQueryResult> call, @NotNull Response<MaterialQueryResult> response) {
-				if (response.isSuccessful()) {
-					MaterialQueryResult materialQueryResult = response.body();
-					if (!materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equalsIgnoreCase("S") || materialQueryResult.getMaterialQueryResponse().getData() == null) {
-						queryState.setValue(new ResultState(false, materialQueryResult.getMaterialQueryResponse().getMessage().getMessage()));
+
+		Disposable disposable =
+				sapService.materialQuery(materialQueryRequest).map(materialQueryResult -> {
+
+					if (!materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equals("S") &&
+							materialQueryResult.getMaterialQueryResponse().getData() == null) {
+						queryState.setValue(new ResultState(false,
+								materialQueryResult.getMaterialQueryResponse().getMessage().getMessage()));
 						_isLoading.setValue(false);
-						return;
+						return new ArrayList<StockMaterial>();
 					}
 
-					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<StockMaterial>>) emitter -> {
-						List<StockMaterial> data = materialQueryResult.getMaterialQueryResponse().getData();
-						emitter.onNext(data);
-						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableSubscriber<List<StockMaterial>>() {
-						@Override
-						public void onNext(List<StockMaterial> materials) {
-							_materials.setValue(materials);
-						}
+					// 过滤数据
+					return materialQueryResult.getMaterialQueryResponse().getData()
+							.stream().filter(material -> !materilaFilter.contains(material.getBESTQ()) || Pattern.matches(cargoSpaceTypeFilter, material.getLGTYP()))
+							.collect(Collectors.toList());
 
-						@Override
-						public void onError(Throwable t) {
-							_isLoading.setValue(false);
-						}
+				})
+						.subscribeOn(Schedulers.io())
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribeWith(new DisposableSubscriber<List<StockMaterial>>() {
+							@Override
+							public void onNext(List<StockMaterial> stockMaterials) {
+								if (stockMaterials != null && stockMaterials.size() > 0) {
+									_materials.setValue(stockMaterials);
+								}
+							}
 
-						@Override
-						public void onComplete() {
-							_isLoading.setValue(false);
-						}
-					});
-					addSubscription(disposable);
-				}
-			}
+							@Override
+							public void onError(Throwable t) {
+								_isLoading.setValue(false);
+							}
 
-			@Override
-			public void onFailure(@NotNull Call<MaterialQueryResult> call, @NotNull Throwable t) {
-				queryState.setValue(new ResultState(false, t.getMessage()));
-				Timber.e(t);
-			}
-		});
+							@Override
+							public void onComplete() {
+								_isLoading.setValue(false);
+							}
+						});
+		addSubscription(disposable);
+
 	}
 
 	LiveData<Boolean> isLoading() {

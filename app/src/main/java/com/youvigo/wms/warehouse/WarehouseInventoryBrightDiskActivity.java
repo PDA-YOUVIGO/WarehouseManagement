@@ -120,7 +120,7 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
             voucherNumber.setText(voucher_Number);
             intent = new Intent(this, MaterialsSearchActivity.class);
             intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, position_code);
-            intent.putExtra(MaterialsSearchActivity.KKY_CHECKALLMENU,true);
+            intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
             startActivityForResult(intent, REQUEST_CODE);
         }
     }
@@ -265,7 +265,7 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
         Intent intent = new Intent(this, MaterialsSearchActivity.class);
         intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, position_code);
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, mCode);
-        intent.putExtra(MaterialsSearchActivity.KKY_CHECKALLMENU,true);
+        intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
         startActivityForResult(intent, REQUEST_CODE);
     }
 

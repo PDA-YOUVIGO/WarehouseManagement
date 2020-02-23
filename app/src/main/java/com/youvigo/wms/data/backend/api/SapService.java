@@ -43,6 +43,7 @@ import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponse;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryResponse;
 
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -105,7 +106,7 @@ public interface SapService {
 	 * 获取物料信息
 	 */
 	@POST("RESTAdapter/PDA/Stock_Query")
-	Call<MaterialQueryResult> materialQuery(@Body MaterialQueryRequest request);
+	Flowable<MaterialQueryResult> materialQuery(@Body MaterialQueryRequest request);
 
 	/**
 	 * 仓位移动

@@ -39,6 +39,7 @@ import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.util.Constants;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -53,13 +54,25 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	public static final String KEY_MATERIAL_COMMONNAME = "key_material_commonname";
 	public static final String KEY_SPECIFICATION = "key_specification";
 	public static final String KEY_CARGOCODE = "key_cargoCode";
-	public static final String KKY_CHECKALLMENU = "key_disPlayCheckALlMen"; //控制全选按钮显示 True 显示，False 不显示
-	public static final String KEY_INITQUERY = "key_InitQuery"; // 控制初始化查询
+	public static final String KEY_SELECTALL_MENU = "key_selectall_menu"; //控制全选按钮显示 True 显示，False 不显示
+	public static final String KEY_INITQUERY = "key_initquery"; // 控制初始化查询
+	public static final String KEY_FILTER = "key_filter";
+	public static final String KEY_CARGOSPACETYPE_FILTER = "key_cargospacetype_filter";
+
+	/**
+	 * 过滤规则
+	 */
+	private List<String> filter = null;
+
+	/**
+	 * 仓位类型过滤正则
+	 */
+	private String cargoSpaceTypeFilter = null;
 
 	private ProgressBar progressBar;
 	private MaterialsSearchAdapter adapter;
 	private MaterialSearchViewModel viewModel;
-	private Boolean disPlayCheckALlMen;
+	private Boolean displaySelectALlMenu;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,9 +95,23 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 			String materialCommonName = intent.getStringExtra(KEY_MATERIAL_COMMONNAME);
 			String specification = intent.getStringExtra(KEY_SPECIFICATION);
 			String cargoCode = intent.getStringExtra(KEY_CARGOCODE);
-			disPlayCheckALlMen = intent.getBooleanExtra(KKY_CHECKALLMENU,false);
-			if (intent.getBooleanExtra(KEY_INITQUERY,true)){
-				viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+			displaySelectALlMenu = intent.getBooleanExtra(KEY_SELECTALL_MENU, false);
+
+			// 物料过滤规则
+			filter = intent.getStringArrayListExtra(KEY_FILTER);
+			cargoSpaceTypeFilter = intent.getStringExtra(KEY_CARGOSPACETYPE_FILTER);
+
+			// 初始化过滤参数，如果未传递参数则赋予默认值
+			if (filter == null) {
+				filter = new ArrayList<>();
+			} else if (cargoSpaceTypeFilter == null) {
+				cargoSpaceTypeFilter = "";
+			}
+
+			if (intent.getBooleanExtra(KEY_INITQUERY, true)) {
+
+				viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification,
+						cargoCode, filter, cargoSpaceTypeFilter);
 			}
 		}
 	}
@@ -119,7 +146,9 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 
 	/**
 	 * 点击事件
+	 *
 	 * @param item menu
+	 *
 	 * @return Boolean
 	 */
 	@Override
@@ -127,10 +156,9 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
 			return true;
-		}  else if (item.getItemId() == R.id.menu_search) {
+		} else if (item.getItemId() == R.id.menu_search) {
 			onMenuSearchClicked();
-		}
-		else if (item.getItemId() == R.id.tv_check_all) {
+		} else if (item.getItemId() == R.id.tv_check_all) {
 			onMenuCheckAllClicked();
 		}
 		return true;
@@ -138,19 +166,22 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (disPlayCheckALlMen){getMenuInflater().inflate(R.menu.check_all_menu, menu);}
+		if (displaySelectALlMenu) {
+			getMenuInflater().inflate(R.menu.check_all_menu, menu);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**
 	 * 全选
 	 */
-	protected  void onMenuCheckAllClicked(){
-		if (viewModel.materials().getValue() != null && viewModel.materials().getValue().size() <= 0){
+	protected void onMenuCheckAllClicked() {
+		if (viewModel.materials().getValue() != null && viewModel.materials().getValue().size() <= 0) {
 			return;
 		}
 		Intent intent = new Intent();
-		intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) viewModel.materials().getValue());
+		intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT,
+				(ArrayList<? extends Parcelable>) viewModel.materials().getValue());
 		this.setResult(Activity.RESULT_OK, intent);
 		this.finish();
 	}
@@ -158,22 +189,28 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	/**
 	 * 接口查询
 	 *
-	 * @param materialCode        物料编码
-	 * @param batchNumber         批次号
-	 * @param materialDescription 物料描述
-	 * @param materialCommonName  通用名称
-	 * @param specification       规格
-	 * @param cargoCode           仓位
+	 * @param materialCode         物料编码
+	 * @param batchNumber          批次号
+	 * @param materialDescription  物料描述
+	 * @param materialCommonName   通用名称
+	 * @param specification        规格
+	 * @param cargoCode            仓位
+	 * @param materilaFilter       过滤物料 <p>"" 正常库存， Q 质检控制中的库存， R 退回库存， S 已冻结的库存</p>
+	 * @param cargoSpaceTypeFilter 仓位类型过滤规则
 	 */
 	@Override
-	public void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription, String materialCommonName, String specification, String cargoCode) {
+	public void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription,
+											String materialCommonName, String specification, String cargoCode,
+											List<String> materilaFilter, String cargoSpaceTypeFilter) {
 		Timber.d(materialCode);
-		viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode);
+		viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode,
+				materilaFilter, cargoSpaceTypeFilter);
 	}
 
 	private void observeData() {
 		viewModel = new ViewModelProvider.NewInstanceFactory().create(MaterialSearchViewModel.class);
-		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE :
+				View.GONE));
 
 		viewModel.materials().observe(this, material -> adapter.submitList(material));
 
