@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -36,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.Additional;
@@ -65,7 +67,7 @@ import timber.log.Timber;
 /**
  * 仓位移动
  */
-public class PositionMovementActivity extends BaseActivity implements PositionMovementDialogFragment.OnPositionInforCompleted{
+public class PositionMovementActivity extends BaseActivity implements OnItemCompleted {
     protected static final int REQUEST_CODE = 110;
     private ProgressBar progressBar;
     private PositionMovementAdapter adapter;
@@ -172,7 +174,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         request.setControlInfo(new ControlInfo());
         List<PositionMovementRequestDetails> details_list = new ArrayList<>();
         for (PositionMovementModelView p : list) {
-            details_list.add(ProData(p,retrofitClient));
+            details_list.add(proData(p,retrofitClient));
         }
         request.setData(details_list);
         Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
@@ -183,9 +185,11 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
                     PositionMovementResponse onPositinResponse = response.body();
                     PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
                     if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showMessage(responseDetails.getMSGTXT());
+                        showAlertDialog("提交失败", responseDetails.getMSGTXT(),"确定");
                     } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-                        showMessage(responseDetails.getMSGTXT());
+                        showAlertDialog("提交成功", responseDetails.getMSGTXT(),"确定");
+                        positionResult.clear();
+                        adapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -208,7 +212,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
             PositionMovementRequest request = new  PositionMovementRequest();
             request.setControlInfo(new ControlInfo());
             List<PositionMovementRequestDetails> details_list = new ArrayList<>();
-            details_list.add(ProData(p,retrofitClient));
+            details_list.add(proData(p,retrofitClient));
             request.setData(details_list);
             Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
             onPOsitionResponseCall.enqueue(new Callback<PositionMovementResponse>() {
@@ -218,11 +222,9 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
                         PositionMovementResponse onPositinResponse = response.body();
                         PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
                         if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
-                            showMessage(responseDetails.getMSGTXT());
+
                         } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-                            viewModel.positions().getValue().clear();
-                            adapter.notifyDataSetChanged();
-                            showMessage(responseDetails.getMSGTXT());
+
                         }
                     }
                 }
@@ -232,9 +234,33 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
                 }
             });
         }
+        viewModel.positions().getValue().clear();
+        adapter.notifyDataSetChanged();
+        showAlertDialog("提交完成", "是否查看处理结果","查看");
     }
 
-    private PositionMovementRequestDetails ProData(PositionMovementModelView p,RetrofitClient retrofitClient)
+    /**
+     * 普通弹出框
+     * @param title title
+     * @param message messageg
+     * @param displayName displayName
+     */
+    private void showAlertDialog(String title, String message,String displayName) {
+        AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
+                .setNegativeButton("关闭", (dialog, which) -> {
+                    dialog.dismiss();
+                }).setNeutralButton(displayName, (dialog, which) -> {
+                }).create();
+        normalDialog.show();
+    }
+
+    /**
+     * 构建提交数据
+     * @param p PositionMovementModelView
+     * @param retrofitClient RetrofitClient
+     * @return PositionMovementRequestDetails
+     */
+    private PositionMovementRequestDetails proData(PositionMovementModelView p,RetrofitClient retrofitClient)
     {
         PositionMovementRequestDetails details = new PositionMovementRequestDetails();
         details.setLGNUM(p.getLGNUM()); ;// 仓库号
@@ -273,8 +299,6 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         return details;
     }
 
-
-
     /**
      * 数据校验
      */
@@ -308,7 +332,7 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, et_position.getText().toString()); // 仓位
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, et_material_coding.getText().toString()); // 物料编码
         intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,et_material_batch.getText().toString()); // 物料批号
-        intent.putExtra(MaterialsSearchActivity.KEY_CARGOSPACETYPE_FILTER,"^9[\\d]+$");
+//        intent.putExtra(MaterialsSearchActivity.KEY_CARGOSPACETYPE_FILTER,"^9[\\d]+$");
         intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -330,6 +354,11 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         }
     }
 
+    /**
+     * 构建查询返回数据
+     * @param positionResult
+     * @param StockMaterials
+     */
     private void processorData(List<PositionMovementModelView> positionResult, List<StockMaterial> StockMaterials){
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
         for (StockMaterial m : StockMaterials) {
@@ -366,19 +395,15 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
     }
 
     /**
-     * 更新item
-     * @param adapterPosition adapterPosition位置
-     */
-    @Override
-    public void inputPositionInforCompleted(int adapterPosition) {
-        adapter.notifyItemChanged(adapterPosition);
-    }
-
-    /**
      * 消息提示
      * @param message 消息
      */
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void itemCompleted(int adapterPosition) {
+        adapter.notifyItemChanged(adapterPosition);
     }
 }

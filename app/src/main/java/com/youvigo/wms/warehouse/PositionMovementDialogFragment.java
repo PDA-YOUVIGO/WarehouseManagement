@@ -16,7 +16,6 @@
 
 package com.youvigo.wms.warehouse;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,8 +32,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -78,13 +77,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
     private EditText tv_put_position_main_qty;
     private Context context;
     private PositionMovementModelView position;
-    private OnPositionInforCompleted mOnPositionInforCompleted;
-    private MaterialButton mb_query;
-
-
-    public interface OnPositionInforCompleted {
-        void inputPositionInforCompleted(int adapterPosition);
-    }
+    private OnItemCompleted onItemCompleted;
 
     /**
      * 展示详情页面
@@ -104,11 +97,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-    }
-    @Override
-    public void onAttach(@NotNull Activity activity) {
-        super.onAttach(activity);
-        mOnPositionInforCompleted = (OnPositionInforCompleted) activity;
+        onItemCompleted = (OnItemCompleted) context;
     }
 
     @Override
@@ -143,7 +132,7 @@ public class PositionMovementDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog1, int which) {
                         if(!verify()){return;}
                         submit();
-                        mOnPositionInforCompleted.inputPositionInforCompleted(localtion);
+                        onItemCompleted.itemCompleted(localtion);
                         dismiss();
                     }
                 })
