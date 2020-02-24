@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +48,7 @@ import com.youvigo.wms.data.entities.PositionMovementModelView;
 import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -90,6 +92,24 @@ public class PositionMovementActivity extends BaseActivity implements PositionMo
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                Utils.showDialog(PositionMovementActivity.this, "", "您确认要删除该行数据吗？",
+                        (dialog, which) -> {
+                    viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
+                    adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    Utils.showToast(PositionMovementActivity.this, "删除成功。");
+                });
+
+            }
+        }).attachToRecyclerView(recyclerView);
         adapter = new PositionMovementAdapter();
         recyclerView.setAdapter(adapter);
     }

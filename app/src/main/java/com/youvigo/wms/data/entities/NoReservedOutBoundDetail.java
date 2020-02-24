@@ -64,6 +64,18 @@ public class NoReservedOutBoundDetail implements Parcelable {
     @SerializedName("BDMNG")
     private double quantity;
 
+    @Expose(serialize = false, deserialize = false)
+    private double stockQuantity;
+
+    @Expose(serialize = false, deserialize = false)
+    private String stockUnit;
+
+    @Expose(serialize = false, deserialize = false)
+    private String stockCargoSpace;
+
+    @Expose(serialize = false, deserialize = false)
+    private String supplieBatch;
+
     // 单位
     @SerializedName("MEINS")
     private String baseUnit;
@@ -75,7 +87,11 @@ public class NoReservedOutBoundDetail implements Parcelable {
     private String MEMO;
 
     // 成本中心
-    private String KOSTL;
+    @SerializedName("KOSTL")
+    private String costCenterDescription;
+
+    @Expose(serialize = false, deserialize = false)
+    private String costCenter;
 
     public NoReservedOutBoundDetail() {}
 
@@ -175,12 +191,12 @@ public class NoReservedOutBoundDetail implements Parcelable {
         this.MEMO = MEMO;
     }
 
-    public String getKOSTL() {
-        return KOSTL;
+    public String getCostCenter() {
+        return costCenter;
     }
 
-    public void setKOSTL(String KOSTL) {
-        this.KOSTL = KOSTL;
+    public void setCostCenter(String costCenter) {
+        this.costCenter = costCenter;
     }
 
     public String getSpecification() {
@@ -189,6 +205,46 @@ public class NoReservedOutBoundDetail implements Parcelable {
 
     public void setSpecification(String specification) {
         this.specification = specification;
+    }
+
+    public double getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(double stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
+
+    public String getStockCargoSpace() {
+        return stockCargoSpace;
+    }
+
+    public void setStockCargoSpace(String stockCargoSpace) {
+        this.stockCargoSpace = stockCargoSpace;
+    }
+
+    public String getCostCenterDescription() {
+        return costCenterDescription;
+    }
+
+    public void setCostCenterDescription(String costCenterDescription) {
+        this.costCenterDescription = costCenterDescription;
+    }
+
+    public String getSupplieBatch() {
+        return supplieBatch;
+    }
+
+    public void setSupplieBatch(String supplieBatch) {
+        this.supplieBatch = supplieBatch;
+    }
+
+    public String getStockUnit() {
+        return stockUnit;
+    }
+
+    public void setStockUnit(String stockUnit) {
+        this.stockUnit = stockUnit;
     }
 
     @Override
@@ -206,10 +262,15 @@ public class NoReservedOutBoundDetail implements Parcelable {
         dest.writeString(this.batchNumber);
         dest.writeString(this.specification);
         dest.writeDouble(this.quantity);
+        dest.writeDouble(this.stockQuantity);
+        dest.writeString(this.stockUnit);
+        dest.writeString(this.stockCargoSpace);
+        dest.writeString(this.supplieBatch);
         dest.writeString(this.baseUnit);
         dest.writeString(this.UMLGO);
         dest.writeString(this.MEMO);
-        dest.writeString(this.KOSTL);
+        dest.writeString(this.costCenterDescription);
+        dest.writeString(this.costCenter);
     }
 
     protected NoReservedOutBoundDetail(Parcel in) {
@@ -223,10 +284,15 @@ public class NoReservedOutBoundDetail implements Parcelable {
         this.batchNumber = in.readString();
         this.specification = in.readString();
         this.quantity = in.readDouble();
+        this.stockQuantity = in.readDouble();
+        this.stockUnit = in.readString();
+        this.stockCargoSpace = in.readString();
+        this.supplieBatch = in.readString();
         this.baseUnit = in.readString();
         this.UMLGO = in.readString();
         this.MEMO = in.readString();
-        this.KOSTL = in.readString();
+        this.costCenterDescription = in.readString();
+        this.costCenter = in.readString();
     }
 
     public static final Creator<NoReservedOutBoundDetail> CREATOR = new Creator<NoReservedOutBoundDetail>() {

@@ -50,6 +50,11 @@ public class PositionMovementAdapter extends ListAdapter<PositionMovementModelVi
          holder.bind(getItem(position));
     }
 
+
+    public PositionMovementModelView getItemAt(int position) {
+        return getItem(position);
+    }
+
     /**
      * 列表item的数量
      */

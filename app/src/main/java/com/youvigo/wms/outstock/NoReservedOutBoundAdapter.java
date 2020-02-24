@@ -49,6 +49,10 @@ public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutBoundDet
          holder.bind(getItem(position));
     }
 
+    public NoReservedOutBoundDetail getItemAt(int position) {
+        return getItem(position);
+    }
+
     class NoReservedOutboundVH extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView materialCode;
         private final TextView materialName;

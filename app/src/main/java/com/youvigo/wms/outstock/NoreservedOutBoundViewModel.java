@@ -34,14 +34,21 @@ public class NoreservedOutBoundViewModel extends BaseViewModel {
 	private MutableLiveData<List<NoReservedOutBoundDetail>> _details = new MutableLiveData<>();
 	private MutableLiveData<SapResponseMessage> _sap_result = new MutableLiveData<>();
 
-	void init() {
+	protected void init() {
 		NoReservedOutBound noReservedOutBound = new NoReservedOutBound();
 		List<NoReservedOutBoundDetail> noReservedOutBoundDetails = new ArrayList<>();
-		noReservedOutBound.setDetails(noReservedOutBoundDetails);
 
 		_order.setValue(noReservedOutBound);
+		_details.setValue(noReservedOutBoundDetails);
 
+	}
 
+	public void insert(NoReservedOutBoundDetail noReservedOutBoundDetail) {
+		_details.getValue().add(noReservedOutBoundDetail);
+	}
+
+	public void delete(NoReservedOutBoundDetail noReservedOutBoundDetail) {
+		_details.getValue().remove(noReservedOutBoundDetail);
 	}
 
 	public LiveData<Boolean> isLoading() {
@@ -50,6 +57,10 @@ public class NoreservedOutBoundViewModel extends BaseViewModel {
 
 	public LiveData<NoReservedOutBound> getMaterialVoucher() {
 		return _order;
+	}
+
+	public LiveData<List<NoReservedOutBoundDetail>> details() {
+		return _details;
 	}
 
 	public LiveData<SapResponseMessage> getSapResult() {

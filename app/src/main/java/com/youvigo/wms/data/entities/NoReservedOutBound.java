@@ -59,8 +59,6 @@ public class NoReservedOutBound implements Parcelable {
 	// PDA操作时间
 	private String ZOPERT;
 
-	private List<NoReservedOutBoundDetail> details;
-
 	public NoReservedOutBound() {}
 
 	public String getBWART() {
@@ -159,14 +157,6 @@ public class NoReservedOutBound implements Parcelable {
 		this.ZOPERT = ZOPERT;
 	}
 
-	public List<NoReservedOutBoundDetail> getDetails() {
-		return details;
-	}
-
-	public void setDetails(List<NoReservedOutBoundDetail> details) {
-		this.details = details;
-	}
-
 	@Override
 	public int describeContents() { return 0; }
 
@@ -184,7 +174,6 @@ public class NoReservedOutBound implements Parcelable {
 		dest.writeString(this.ZOPERC);
 		dest.writeString(this.ZOPERN);
 		dest.writeString(this.ZOPERT);
-		dest.writeTypedList(this.details);
 	}
 
 	protected NoReservedOutBound(Parcel in) {
@@ -200,7 +189,6 @@ public class NoReservedOutBound implements Parcelable {
 		this.ZOPERC = in.readString();
 		this.ZOPERN = in.readString();
 		this.ZOPERT = in.readString();
-		this.details = in.createTypedArrayList(NoReservedOutBoundDetail.CREATOR);
 	}
 
 	public static final Creator<NoReservedOutBound> CREATOR = new Creator<NoReservedOutBound>() {

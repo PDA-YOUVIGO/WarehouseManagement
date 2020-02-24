@@ -18,6 +18,7 @@ package com.youvigo.wms.data.backend.api;
 
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.CargoLocation;
+import com.youvigo.wms.data.dto.response.CostCenter;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.entities.Employee;
 import com.youvigo.wms.data.entities.MoveType;
@@ -72,8 +73,9 @@ public interface BackendApi {
 
 	/**
 	 * 获取员工及部门信息
+	 *
 	 * @param employeeCode 员工编号
-	 * @param factoryCode 工厂编码
+	 * @param factoryCode  工厂编码
 	 */
 	@GET("blade-data/api/employee/query")
 	Single<ApiResponse<List<Employee>>> getEmployee(@Query("psnCode") String employeeCode,
@@ -81,8 +83,23 @@ public interface BackendApi {
 
 	/**
 	 * 获取内部订单单据类型
+	 *
 	 * @param factoryCode 工厂编码
 	 */
 	@GET("blade-data/api/ordertype/list")
 	Single<ApiResponse<List<OrderType>>> getOrderType(@Query("factoryCode") String factoryCode);
+
+	/**
+	 * 查询物料成本中心
+	 * @param deptCode 领料部门编码
+	 * @param factoryCode 工厂编码
+	 * @param bwart 移动类型
+	 * @param bklas 评估类
+	 */
+	@GET("blade-data/api/costcenter/query")
+	Single<ApiResponse<CostCenter>> queryCostCenter(@Query("deptCode") String deptCode,
+													@Query("factoryCode") String factoryCode,
+													@Query("bwart") String bwart,
+													@Query("bklas") String bklas);
+
 }

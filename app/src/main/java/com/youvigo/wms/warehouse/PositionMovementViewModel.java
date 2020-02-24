@@ -68,6 +68,10 @@ public class PositionMovementViewModel extends BaseViewModel {
 		addSubscription(disposable);
 	}
 
+	public void delete(PositionMovementModelView detail) {
+		_positions.getValue().remove(detail);
+	}
+
 	LiveData<Boolean> isLoading() {
 		return _isLoading;
 	}

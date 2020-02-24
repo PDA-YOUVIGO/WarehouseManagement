@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.data.backend.api;
 
+import com.youvigo.wms.data.dto.request.AssessmentCategoriesRequest;
 import com.youvigo.wms.data.dto.request.DeliverQueryRequest;
 import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
@@ -29,6 +30,7 @@ import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryQueryRequest;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryRequest;
+import com.youvigo.wms.data.dto.response.AssessmentCategoriesResponse;
 import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
 import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
@@ -101,6 +103,12 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Internal_Order_Query")
 	Single<InternalOrderResponse> queryInternalOrder(@Body InternalOrderRequest request);
+
+	/**
+	 * 查询物料评估类
+	 */
+	@POST("RESTAdapter/PDA/Bklas_Query")
+	Single<AssessmentCategoriesResponse> queryAssessmentCategories(@Body AssessmentCategoriesRequest request);
 
 	/**
 	 * 获取物料信息

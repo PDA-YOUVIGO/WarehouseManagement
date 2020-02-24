@@ -35,6 +35,7 @@ import com.youvigo.wms.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialSearchDialogFragment extends DialogFragment {
@@ -113,7 +114,7 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 								materialCommonName.getText().toString(), specification.getText() == null ? "" :
 								specification.getText().toString(), cargoSpace.getText() == null ? "" :
 								cargoSpace.getText().toString(),
-						null, null);
+						new ArrayList<>(), "");
 				dismiss();
 			}
 		});

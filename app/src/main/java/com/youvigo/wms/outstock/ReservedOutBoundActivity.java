@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.outstock;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -266,6 +267,7 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 	/**
 	 * 加载库存地
 	 */
+	@SuppressLint("CheckResult")
 	private void loadMoveType() {
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		BackendApi backendApi = retrofitClient.getBackendApi();

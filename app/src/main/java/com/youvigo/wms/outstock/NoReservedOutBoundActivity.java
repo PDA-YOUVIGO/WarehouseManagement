@@ -29,7 +29,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,22 +36,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.youvigo.wms.R;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.entities.Employee;
 import com.youvigo.wms.data.entities.InternalOrder;
 import com.youvigo.wms.data.entities.MoveType;
+import com.youvigo.wms.data.entities.NoReservedOutBoundDetail;
 import com.youvigo.wms.data.entities.StockLocal;
 import com.youvigo.wms.search.EmployeeSearchActivity;
 import com.youvigo.wms.search.InternalOrderSearchActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import java.util.List;
 
@@ -63,11 +66,11 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 无预留出库页面
  */
-public class NoReservedOutBoundActivity extends AppCompatActivity {
+public class NoReservedOutBoundActivity extends AppCompatActivity implements OnItemCompleted {
 	public static final int REQUEST_CODE = 301;
 	public static final int EMPLOYEE_REQUEST_CODE = 302;
 	public static final int INNER_ORDER_REQUEST_CODE = 303;
-	public static final int MATERIAL_REQUEST_CODE = 303;
+	public static final int MATERIAL_REQUEST_CODE = 304;
 
 	private ProgressBar progressBar;
 	protected Toolbar toolbar;
@@ -127,7 +130,7 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 				if (adapterItem.getMoveCode().equals("311")) {
 					placeOfReceiptTitle.setVisibility(View.VISIBLE);
 					placeOfReceipt.setVisibility(View.VISIBLE);
-				}else {
+				} else {
 					// 默认隐藏收货地
 					placeOfReceiptTitle.setVisibility(View.GONE);
 					placeOfReceipt.setVisibility(View.GONE);
@@ -162,6 +165,25 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+		// 滑动删除
+		new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+			@Override
+			public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+								  @NonNull RecyclerView.ViewHolder target) {
+				return false;
+			}
+
+			@Override
+			public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+				Utils.showDialog(NoReservedOutBoundActivity.this, "", "您确认要删除该行数据吗？",
+						(dialog, which) -> {
+							viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
+							adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+							Utils.showToast(NoReservedOutBoundActivity.this, "删除成功。");
+						});
+			}
+		}).attachToRecyclerView(recyclerView);
+
 		adapter = new NoReservedOutBoundAdapter();
 		recyclerView.setAdapter(adapter);
 	}
@@ -195,6 +217,10 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 					// todo 逻辑
 					InternalOrder currentInternalOrder = data.getParcelableExtra(Constants.INTERNAL_ORDER_RESULT);
 					internalOrder.setText(currentInternalOrder.getDescription());
+				} else if (requestCode == MATERIAL_REQUEST_CODE) {
+					NoReservedOutBoundDetail noReservedOutBoundDetail =
+							data.getParcelableExtra(NoReservedOutBoundDetailActivity.NO_RESERVED_OUT_BOUND_DETAIL_RESULT);
+					viewModel.insert(noReservedOutBoundDetail);
 				}
 			}
 		}
@@ -225,6 +251,15 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 
 	private void observeData() {
 		viewModel = new ViewModelProvider.NewInstanceFactory().create(NoreservedOutBoundViewModel.class);
+		viewModel.init();
+
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE :
+				View.GONE));
+
+		viewModel.details().observe(this, noReservedOutBoundDetails -> {
+			adapter.submitList(noReservedOutBoundDetails);
+			adapter.notifyDataSetChanged();
+		});
 	}
 
 	private void onMenuSubmitClicked() {
@@ -250,7 +285,8 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 
 					@Override
 					public void onError(Throwable e) {
-						showMessage(String.format("移动类型数据加载失败，%s", e.getMessage()));
+						Utils.showToast(NoReservedOutBoundActivity.this, String.format("移动类型数据加载失败，%s",
+								e.getMessage()));
 					}
 				});
 
@@ -270,13 +306,15 @@ public class NoReservedOutBoundActivity extends AppCompatActivity {
 
 					@Override
 					public void onError(Throwable e) {
-						showMessage(String.format("目的库存地数据加载失败，%s", e.getMessage()));
+						Utils.showToast(NoReservedOutBoundActivity.this, String.format("目的库存地数据加载失败，%s",
+								e.getMessage()));
 					}
 				});
 	}
 
-	private void showMessage(String message) {
-		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-	}
 
+	@Override
+	public void itemCompleted(int adapterPosition) {
+		adapter.notifyItemChanged(adapterPosition);
+	}
 }
