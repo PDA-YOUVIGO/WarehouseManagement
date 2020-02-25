@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,12 +46,12 @@ import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestDetails;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundRequestHead;
-import com.youvigo.wms.data.dto.response.SapResponseMessage;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.MoveType;
 import com.youvigo.wms.data.entities.ReservedOutBound;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -157,9 +156,13 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 			}
 		});
 
+		// TODO 打印逻辑
 		viewModel.getSapResult().observe(this, sapResponseMessage -> {
 			if (sapResponseMessage.getSuccess().equals("S")) {
-				showAlertDialog("返回结果", sapResponseMessage.getMessage(), sapResponseMessage);
+				Utils.showDialog(ReservedOutBoundActivity.this,
+						"返回结果",
+						"确认",
+						sapResponseMessage.getMessage(), (dialog, which) -> dialog.dismiss());
 			} else {
 				Toast.makeText(this, sapResponseMessage.getMessage(), Toast.LENGTH_LONG).show();
 			}
@@ -291,22 +294,6 @@ public class ReservedOutBoundActivity extends BaseActivity implements OnItemComp
 					}
 				});
 
-	}
-
-	private void showAlertDialog(String title, String message, SapResponseMessage sapResponseMessage) {
-		AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
-				//.setPositiveButton("确定", (dialog, which) -> {
-				//	dialog.dismiss();
-				//	// 确认
-				//})
-				.setNegativeButton("关闭", (dialog, which) -> {
-					dialog.dismiss();
-				}).setNeutralButton("打印", (dialog, which) -> {
-
-				}).create();
-
-
-		normalDialog.show();
 	}
 
 	private void showMessage(String message) {

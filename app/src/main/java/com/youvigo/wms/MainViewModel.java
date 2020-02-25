@@ -16,8 +16,18 @@
 
 package com.youvigo.wms;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.youvigo.wms.data.entities.StoreLocationReference;
+
+import java.util.List;
+
 public class MainViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+	private MutableLiveData<List<StoreLocationReference>> _storeLocations = new MutableLiveData<>();
+
+	public LiveData<List<StoreLocationReference>> getStoreLocations() {
+		return _storeLocations;
+	}
 }

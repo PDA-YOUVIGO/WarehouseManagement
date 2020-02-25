@@ -16,21 +16,23 @@
 
 package com.youvigo.wms.data.entities;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 /**
  * 登录页面工厂下拉选择数据源对象
  */
-public class FactoryReferenceModel implements Serializable, Comparable<FactoryReferenceModel> {
-
-	private static final long serialVersionUID = 1L;
+public class FactoryReference implements Parcelable, Comparable<FactoryReference> {
 
 	private String companyCode;
 	private String companyName;
 	private String factoryCode;
 	private String factoryName;
-	private List<StoreReferenceModel> stores;
+	private List<StoreLocationReference> stores;
 
 	public String getCompanyCode() {
 		return companyCode;
@@ -64,19 +66,22 @@ public class FactoryReferenceModel implements Serializable, Comparable<FactoryRe
 		this.factoryName = factoryName;
 	}
 
-	public List<StoreReferenceModel> getStores() {
+	public List<StoreLocationReference> getStores() {
 		return stores;
 	}
 
-	public void setStores(List<StoreReferenceModel> stores) {
+	public void setStores(List<StoreLocationReference> stores) {
 		this.stores = stores;
 	}
 
-	public String getFactoryDisplayName() {
+	@NonNull
+	@Override
+	public String toString() {
 		return String.format("%s - %s", getFactoryCode(), getFactoryName());
 	}
 
-	public FactoryReferenceModel(String companyCode, String companyName, String factoryCode, String factoryName, List<StoreReferenceModel> stores) {
+	public FactoryReference(String companyCode, String companyName, String factoryCode, String factoryName,
+							List<StoreLocationReference> stores) {
 		this.companyCode = companyCode;
 		this.companyName = companyName;
 		this.factoryCode = factoryCode;
@@ -84,12 +89,40 @@ public class FactoryReferenceModel implements Serializable, Comparable<FactoryRe
 		this.stores = stores;
 	}
 
-	public FactoryReferenceModel() {
+	public FactoryReference() {
 	}
 
 
 	@Override
-	public int compareTo(FactoryReferenceModel factoryReferenceModel) {
-		return Integer.parseInt(getFactoryCode()) - Integer.parseInt(factoryReferenceModel.getFactoryCode());
+	public int compareTo(FactoryReference factoryReference) {
+		return Integer.parseInt(getFactoryCode()) - Integer.parseInt(factoryReference.getFactoryCode());
 	}
+
+	@Override
+	public int describeContents() { return 0; }
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.companyCode);
+		dest.writeString(this.companyName);
+		dest.writeString(this.factoryCode);
+		dest.writeString(this.factoryName);
+		dest.writeTypedList(this.stores);
+	}
+
+	protected FactoryReference(Parcel in) {
+		this.companyCode = in.readString();
+		this.companyName = in.readString();
+		this.factoryCode = in.readString();
+		this.factoryName = in.readString();
+		this.stores = in.createTypedArrayList(StoreLocationReference.CREATOR);
+	}
+
+	public static final Creator<FactoryReference> CREATOR = new Creator<FactoryReference>() {
+		@Override
+		public FactoryReference createFromParcel(Parcel source) {return new FactoryReference(source);}
+
+		@Override
+		public FactoryReference[] newArray(int size) {return new FactoryReference[size];}
+	};
 }

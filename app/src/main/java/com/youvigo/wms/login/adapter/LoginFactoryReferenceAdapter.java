@@ -24,7 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.FactoryReferenceModel;
+import com.youvigo.wms.data.entities.FactoryReference;
 
 import java.util.List;
 
@@ -32,22 +32,22 @@ import java.util.List;
  * 库存地点适配器
  */
 public class LoginFactoryReferenceAdapter extends BaseAdapter {
-	private List<FactoryReferenceModel> mFactoryReferenceModels;
+	private List<FactoryReference> mFactoryReferences;
 	private Context mContext;
 
-	public LoginFactoryReferenceAdapter(List<FactoryReferenceModel> mFactoryReferenceModels, Context mContext) {
-		this.mFactoryReferenceModels = mFactoryReferenceModels;
+	public LoginFactoryReferenceAdapter(List<FactoryReference> mFactoryReferences, Context mContext) {
+		this.mFactoryReferences = mFactoryReferences;
 		this.mContext = mContext;
 	}
 
 	@Override
 	public int getCount() {
-		return mFactoryReferenceModels.size();
+		return mFactoryReferences.size();
 	}
 
 	@Override
 	public Object getItem(int i) {
-		return mFactoryReferenceModels.get(i);
+		return mFactoryReferences.get(i);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class LoginFactoryReferenceAdapter extends BaseAdapter {
 
 		TextView stockLocationTv = view.findViewById(R.id.factoryTv);
 
-		stockLocationTv.setText(mFactoryReferenceModels.get(i).getFactoryDisplayName());
+		//stockLocationTv.setText(mFactoryReferenceModels.get(i).getFactoryDisplayName());
 
 		return view;
 	}

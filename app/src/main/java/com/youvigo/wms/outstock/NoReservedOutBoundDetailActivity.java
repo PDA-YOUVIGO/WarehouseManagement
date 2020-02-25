@@ -198,6 +198,7 @@ public class NoReservedOutBoundDetailActivity extends AppCompatActivity {
 						noReservedOutBoundDetail.setLGORT(material.getInventoryLocation());
 						noReservedOutBoundDetail.setSupplieBatch(material.getZZLICHA());
 						noReservedOutBoundDetail.setStockUnit(material.getBaseUnitTxt());
+						noReservedOutBoundDetail.setBaseUnit(material.getBaseUnit());
 
 						batchNumber.setText(material.getBatchNumber());
 						materialCode.setText(material.getMaterialCode());
@@ -334,11 +335,16 @@ public class NoReservedOutBoundDetailActivity extends AppCompatActivity {
 										.orElse(null);
 
 						if (detail != null) {
-							processCostCenter(detail.getKOSTL());
+							if (!detail.getMSGTYPE().equals("S")) {
+								Utils.showToast(NoReservedOutBoundDetailActivity.this, detail.getMSGTXT());
+							} else if (detail.getMSGTYPE().equals("S") && !TextUtils.isEmpty(detail.getKOSTL())) {
+								processCostCenter(detail.getKOSTL());
+							}
 						} else {
 							Utils.showDialog(NoReservedOutBoundDetailActivity.this,
 									"错误",
 									"获取物料评估类失败，是否重新获取？",
+									"确认",
 									(dialog, which) -> proceeAssessmentCategories(materialCode));
 						}
 					}
@@ -348,6 +354,7 @@ public class NoReservedOutBoundDetailActivity extends AppCompatActivity {
 						Utils.showDialog(NoReservedOutBoundDetailActivity.this,
 								"错误",
 								"获取物料评估类失败，是否重新获取？" + "\n" + e.getMessage(),
+								"确认",
 								(dialog, which) -> proceeAssessmentCategories(materialCode));
 					}
 				});
@@ -372,7 +379,11 @@ public class NoReservedOutBoundDetailActivity extends AppCompatActivity {
 						if (costCenterApiResponse.getCode() != 200) {
 							Utils.showToast(NoReservedOutBoundDetailActivity.this, costCenterApiResponse.getMessage());
 							return;
+						} else if (TextUtils.isEmpty(costCenter.getKOSTL())) {
+							Utils.showToast(NoReservedOutBoundDetailActivity.this, costCenterApiResponse.getMessage());
+							return;
 						}
+
 						noReservedOutBoundDetail.setCostCenter(costCenter.getKOSTL());
 						noReservedOutBoundDetail.setCostCenterDescription(costCenter.getKTEXT());
 					}
@@ -382,6 +393,7 @@ public class NoReservedOutBoundDetailActivity extends AppCompatActivity {
 						Utils.showDialog(NoReservedOutBoundDetailActivity.this,
 								"错误",
 								"获取成本中心失败，是否重新获取？" + "\n" + e.getMessage(),
+								"确认",
 								(dialog, which) -> processCostCenter(kostl));
 					}
 				});

@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.common;
+package com.youvigo.wms.data.dto.response;
 
-import android.annotation.SuppressLint;
-import android.app.Application;
-import android.content.Context;
+import com.google.gson.annotations.SerializedName;
 
-public class WarehouseManagementApplication extends Application {
+public class NoReservedOutBoundResponse {
 
-	@SuppressLint("StaticFieldLeak")
-	private static Context mContext;
+	@SerializedName("MT_Common_SAP_2_PDA_Response")
+	private SapResponseMessage responseMessage;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mContext = getApplicationContext();
-//		CrashCatchHandler.getInstance().init(this);
+	public SapResponseMessage getResponseMessage() {
+		return responseMessage;
 	}
 
-	public static Context getInstance() {
-		return mContext;
+	public void setResponseMessage(SapResponseMessage responseMessage) {
+		this.responseMessage = responseMessage;
 	}
 
+	public NoReservedOutBoundResponse(SapResponseMessage responseMessage) {
+		this.responseMessage = responseMessage;
+	}
+
+	public NoReservedOutBoundResponse() {
+	}
 }

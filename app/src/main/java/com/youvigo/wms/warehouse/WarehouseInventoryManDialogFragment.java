@@ -39,7 +39,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.common.SharedPreferenceUtils;
+import com.youvigo.wms.util.SharedPreferenceUtils;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;

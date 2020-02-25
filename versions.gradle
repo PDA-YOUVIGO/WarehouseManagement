@@ -15,7 +15,7 @@
  */
 
 ext {
-    gradlePluginVersion = '3.5.3'
+    gradlePluginVersion = '3.6.0'
 
     appcompatVersion = '1.1.0'
     materialVersion = '1.0.0'

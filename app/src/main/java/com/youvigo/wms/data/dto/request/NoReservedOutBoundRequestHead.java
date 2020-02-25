@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.entities;
+package com.youvigo.wms.data.dto.request;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.google.gson.annotations.Expose;
-
-public class NoReservedOutBound implements Parcelable {
-
+public class NoReservedOutBoundRequestHead {
 	// 移动类型
 	private String BWART;
 
@@ -58,11 +52,6 @@ public class NoReservedOutBound implements Parcelable {
 
 	// PDA操作时间
 	private String ZOPERT;
-
-	@Expose(serialize = false, deserialize = false)
-	private StockLocal stockLocal;
-
-	public NoReservedOutBound() {}
 
 	public String getBWART() {
 		return BWART;
@@ -160,56 +149,23 @@ public class NoReservedOutBound implements Parcelable {
 		this.ZOPERT = ZOPERT;
 	}
 
-	public StockLocal getStockLocal() {
-		return stockLocal;
+	public NoReservedOutBoundRequestHead(String BWART, String AUFNR, String ZZLLR, String NACHN, String ORGEH,
+										 String ORGTX, String GMCODE, String DESCS, String PDAOUTORDER, String ZOPERC,
+										 String ZOPERN, String ZOPERT) {
+		this.BWART = BWART;
+		this.AUFNR = AUFNR;
+		this.ZZLLR = ZZLLR;
+		this.NACHN = NACHN;
+		this.ORGEH = ORGEH;
+		this.ORGTX = ORGTX;
+		this.GMCODE = GMCODE;
+		this.DESCS = DESCS;
+		this.PDAOUTORDER = PDAOUTORDER;
+		this.ZOPERC = ZOPERC;
+		this.ZOPERN = ZOPERN;
+		this.ZOPERT = ZOPERT;
 	}
 
-	public void setStockLocal(StockLocal stockLocal) {
-		this.stockLocal = stockLocal;
+	public NoReservedOutBoundRequestHead() {
 	}
-
-	@Override
-	public int describeContents() { return 0; }
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(this.BWART);
-		dest.writeString(this.AUFNR);
-		dest.writeString(this.ZZLLR);
-		dest.writeString(this.NACHN);
-		dest.writeString(this.ORGEH);
-		dest.writeString(this.ORGTX);
-		dest.writeString(this.GMCODE);
-		dest.writeString(this.DESCS);
-		dest.writeString(this.PDAOUTORDER);
-		dest.writeString(this.ZOPERC);
-		dest.writeString(this.ZOPERN);
-		dest.writeString(this.ZOPERT);
-		dest.writeParcelable(this.stockLocal, flags);
-	}
-
-	protected NoReservedOutBound(Parcel in) {
-		this.BWART = in.readString();
-		this.AUFNR = in.readString();
-		this.ZZLLR = in.readString();
-		this.NACHN = in.readString();
-		this.ORGEH = in.readString();
-		this.ORGTX = in.readString();
-		this.GMCODE = in.readString();
-		this.DESCS = in.readString();
-		this.PDAOUTORDER = in.readString();
-		this.ZOPERC = in.readString();
-		this.ZOPERN = in.readString();
-		this.ZOPERT = in.readString();
-		this.stockLocal = in.readParcelable(StockLocal.class.getClassLoader());
-	}
-
-	public static final Creator<NoReservedOutBound> CREATOR = new Creator<NoReservedOutBound>() {
-		@Override
-		public NoReservedOutBound createFromParcel(Parcel source) {return new NoReservedOutBound(source);}
-
-		@Override
-		public NoReservedOutBound[] newArray(int size) {return new NoReservedOutBound[size];}
-	};
-
 }

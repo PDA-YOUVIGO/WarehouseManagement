@@ -22,6 +22,7 @@ import com.youvigo.wms.data.dto.request.DeliverRequest;
 import com.youvigo.wms.data.dto.request.FinishedProductsQueryRequest;
 import com.youvigo.wms.data.dto.request.InternalOrderRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
+import com.youvigo.wms.data.dto.request.NoReservedOutBoundRequest;
 import com.youvigo.wms.data.dto.request.OnShevingRequest;
 import com.youvigo.wms.data.dto.request.PositionMovementRequest;
 import com.youvigo.wms.data.dto.request.PrintRequest;
@@ -36,6 +37,7 @@ import com.youvigo.wms.data.dto.response.DeliverResponse;
 import com.youvigo.wms.data.dto.response.FinishedProductsQueryResponse;
 import com.youvigo.wms.data.dto.response.InternalOrderResponse;
 import com.youvigo.wms.data.dto.response.MaterialQueryResult;
+import com.youvigo.wms.data.dto.response.NoReservedOutBoundResponse;
 import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.PositionMovementResponse;
 import com.youvigo.wms.data.dto.response.PrintResponse;
@@ -109,6 +111,12 @@ public interface SapService {
 	 */
 	@POST("RESTAdapter/PDA/Bklas_Query")
 	Single<AssessmentCategoriesResponse> queryAssessmentCategories(@Body AssessmentCategoriesRequest request);
+
+	/**
+	 * 提交无预留出库到SAP
+	 */
+	@POST("RESTAdapter/PDA/GI_WO_Reservaton")
+	Single<NoReservedOutBoundResponse> submitNoreservedOutBound(@Body NoReservedOutBoundRequest request);
 
 	/**
 	 * 获取物料信息

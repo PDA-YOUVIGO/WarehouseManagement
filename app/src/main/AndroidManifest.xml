@@ -16,16 +16,17 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".login.LoginActivity"
+            android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".login.LoginActivity"
-            android:label="@string/title_activity_login" />
+
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/action_settings" />
@@ -58,8 +59,7 @@
             android:label="@string/no_reserved_outbound" />
         <activity
             android:name=".outstock.NoReservedOutBoundDetailActivity"
-            android:label="@string/title_activity_no_reserved_out_bound_detail">
-        </activity>
+            android:label="@string/title_activity_no_reserved_out_bound_detail" />
         <activity
             android:name=".warehouse.WarehouseInventoryActivity"
             android:label="@string/warehouse_inventory" />

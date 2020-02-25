@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.dto.login;
+package com.youvigo.wms.data.entities;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
+/**
+ * 库存地及仓库
+ */
 public class StoreEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,7 +39,6 @@ public class StoreEntity implements Serializable {
 	private String stockLocation;
 
 	@SerializedName("storeLocaltionName")
-	@Expose
 	private String storeLocationName;
 
 	private String storeCode;

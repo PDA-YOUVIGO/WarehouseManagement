@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.login;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,60 +32,60 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.PreferenceManager;
 
-import com.google.gson.Gson;
+import com.youvigo.wms.MainActivity;
 import com.youvigo.wms.R;
 import com.youvigo.wms.SettingsActivity;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.entities.StoreEntity;
+import com.youvigo.wms.data.entities.FactoryReference;
+import com.youvigo.wms.data.entities.StoreLocationReference;
 import com.youvigo.wms.login.adapter.LoginFactoryReferenceAdapter;
 import com.youvigo.wms.login.adapter.LoginStoreReferenceAdapter;
-import com.youvigo.wms.data.entities.FactoryReferenceModel;
-import com.youvigo.wms.data.entities.StoreReferenceModel;
-import com.youvigo.wms.data.dto.login.StoreEntity;
-import com.youvigo.wms.data.dto.login.StoreResponseEntity;
+import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
 
 	private LoginViewModel loginViewModel;
 	private Spinner factorySp;
-	private List<FactoryReferenceModel> mFactoryReferenceModelList;
-	private List<StoreReferenceModel> mStoreReferenceModelList = new ArrayList<>();
+	private List<FactoryReference> mFactoryReferenceList;
+	private List<StoreLocationReference> mStoreLocationReferenceList = new ArrayList<>();
 	protected Toolbar toolbar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
-		loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory()).get(LoginViewModel.class);
+
+		loginViewModel = new ViewModelProvider.NewInstanceFactory().create(LoginViewModel.class);
+
 		final EditText usernameEditText = findViewById(R.id.username);
 		final EditText passwordEditText = findViewById(R.id.password);
 		final Button loginButton = findViewById(R.id.loginBt);
 		final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 		factorySp = findViewById(R.id.factorySp);
-		final Spinner storeSp = findViewById(R.id.stockLocationSp);
-		LoginStoreReferenceAdapter loginStoreReferenceAdapter = new LoginStoreReferenceAdapter(mStoreReferenceModelList, getApplicationContext());
-		storeSp.setAdapter(loginStoreReferenceAdapter);
+		final Spinner storeLocationSp = findViewById(R.id.stockLocationSp);
+
+		LoginStoreReferenceAdapter loginStoreReferenceAdapter =
+				new LoginStoreReferenceAdapter(mStoreLocationReferenceList, getApplicationContext());
+		storeLocationSp.setAdapter(loginStoreReferenceAdapter);
 
 		init();
 		loadSpinnerData();
@@ -93,9 +94,9 @@ public class LoginActivity extends AppCompatActivity {
 		factorySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-				FactoryReferenceModel factoryReferenceModel = mFactoryReferenceModelList.get(i);
-				mStoreReferenceModelList.clear();
-				mStoreReferenceModelList.addAll(factoryReferenceModel.getStores());
+				FactoryReference factoryReference = mFactoryReferenceList.get(i);
+				mStoreLocationReferenceList.clear();
+				mStoreLocationReferenceList.addAll(factoryReference.getStores());
 				loginStoreReferenceAdapter.notifyDataSetChanged();
 			}
 
@@ -124,16 +125,17 @@ public class LoginActivity extends AppCompatActivity {
 				return;
 			}
 			loadingProgressBar.setVisibility(View.GONE);
+
 			if (loginResult.getError() != null) {
-				showLoginFailed(loginResult.getError().getMessage());
+				Utils.showToast(LoginActivity.this, loginResult.getError().getMessage());
+				return;
 			}
 			if (loginResult.getSuccess() != null) {
 				loginSuccess(loginResult.getSuccess());
+				setResult(Activity.RESULT_OK);
+				//Complete and destroy login activity once successful
+				finish();
 			}
-			setResult(Activity.RESULT_OK);
-
-			//Complete and destroy login activity once successful
-			finish();
 		});
 
 		TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -149,7 +151,8 @@ public class LoginActivity extends AppCompatActivity {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				loginViewModel.loginDataChanged(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+				loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
+						passwordEditText.getText().toString());
 			}
 		};
 		usernameEditText.addTextChangedListener(afterTextChangedListener);
@@ -159,13 +162,13 @@ public class LoginActivity extends AppCompatActivity {
 		passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-				FactoryReferenceModel factoryReferenceModel = (FactoryReferenceModel) factorySp.getSelectedItem();
-				StoreReferenceModel storeReferenceModel = (StoreReferenceModel) storeSp.getSelectedItem();
+				FactoryReference factoryReference = (FactoryReference) factorySp.getSelectedItem();
+				StoreLocationReference storeLocationReference = (StoreLocationReference) storeLocationSp.getSelectedItem();
 
 				loginViewModel.loginIn(usernameEditText.getText().toString(),
 						passwordEditText.getText().toString(),
-						factoryReferenceModel.getFactoryCode(),
-						storeReferenceModel.getStockLocationCode());
+						factoryReference.getFactoryCode(),
+						storeLocationReference.getStockLocationCode());
 			}
 
 			return false;
@@ -174,12 +177,12 @@ public class LoginActivity extends AppCompatActivity {
 		//登录按钮监听事件
 		loginButton.setOnClickListener(v -> {
 			loadingProgressBar.setVisibility(View.VISIBLE);
-			FactoryReferenceModel factoryReferenceModel = (FactoryReferenceModel) factorySp.getSelectedItem();
-			StoreReferenceModel storeReferenceModel = (StoreReferenceModel) storeSp.getSelectedItem();
+			FactoryReference factoryReference = (FactoryReference) factorySp.getSelectedItem();
+			StoreLocationReference storeLocationReference = (StoreLocationReference) storeLocationSp.getSelectedItem();
 			loginViewModel.loginIn(usernameEditText.getText().toString(),
 					passwordEditText.getText().toString(),
-					factoryReferenceModel.getFactoryCode(),
-					storeReferenceModel.getStockLocationCode()
+					factoryReference.getFactoryCode(),
+					storeLocationReference.getStockLocationCode()
 			);
 		});
 	}
@@ -196,102 +199,101 @@ public class LoginActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * 错误信息
-	 * @param errorString
-	 */
-	private void showLoginFailed(String errorString) {
-		Toast.makeText(LoginActivity.this, errorString, Toast.LENGTH_SHORT).show();
-	}
-
-	/**
 	 * 用户登陆成功处理方法
+	 *
 	 * @param loggedInUser 登陆成功的用户对象
 	 */
 	private void loginSuccess(LoggedInUser loggedInUser) {
-		PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("loginState", true).apply();
+
+		Utils.setLoggedInPreferences(LoginActivity.this, loggedInUser);
+
 		String msg = String.format("Login Success %s", loggedInUser.getDisplayName());
-		Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+		Utils.showToast(LoginActivity.this, msg);
+
+		Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+		intent.putParcelableArrayListExtra(Constants.FACTORY_SELECT_ITEMS, new ArrayList<>(mStoreLocationReferenceList));
+		startActivity(intent);
+
+		setResult(Activity.RESULT_OK);
+		finish();
 	}
 
 	/***
 	 * 获取登录状态
-	 * @param context
+	 * @param context Activity
 	 * @return 登录状态
 	 */
 	public static boolean isLogin(Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean("loginState", false);
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Constants.LOGIN_STATE, false);
 	}
 
 	/**
 	 * 异步加载库存地参照数据
 	 */
+	@SuppressLint("CheckResult")
 	private void loadSpinnerData() {
 
-		OkHttpClient okHttpClient = new OkHttpClient();
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		retrofitClient.getBackendApi().getStores()
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ApiResponse<List<StoreEntity>>>() {
+					@Override
+					public void onSuccess(ApiResponse<List<StoreEntity>> listApiResponse) {
+						List<StoreEntity> stores = listApiResponse.getData();
 
-		String pda_interface_address = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("pda_interface_address", "");
-		if (pda_interface_address.equals("")){return;};
-		String interfaceUrl = String.format("http://%s/blade-data/api/store/list", pda_interface_address);
-
-		Request request = new Request.Builder().get().url(interfaceUrl).build();
-
-		okHttpClient.newCall(request).enqueue(new Callback() {
-
-			@Override
-			public void onFailure(@NotNull Call call, @NotNull IOException e) {
-				runOnUiThread(() -> Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show());
-			}
-
-			@Override
-			public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-				try (ResponseBody responseBody = response.body()) {
-					if (!response.isSuccessful())
-						throw new IOException("Unexpected code " + response);
-
-					final Gson gson = new Gson();
-					StoreResponseEntity storeRespEntity;
-					if (responseBody != null) {
-
-						storeRespEntity = gson.fromJson(responseBody.charStream(), StoreResponseEntity.class);
+						if (listApiResponse.getCode() != 200 || stores.size() == 0) {
+							Utils.showToast(LoginActivity.this, "加载库存地数据失败。");
+						}
 
 						// 将获取的数据按工厂进行分组
-						Map<String, FactoryReferenceModel> groupFactoryMap = new HashMap<>();
-						for (StoreEntity storeEntity : storeRespEntity.getData()) {
+						Map<String, FactoryReference> groupFactoryMap = new HashMap<>();
+						for (StoreEntity storeEntity : stores) {
 
-							FactoryReferenceModel factoryReferenceModel = groupFactoryMap.get(storeEntity.getFactoryCode());
+							FactoryReference factoryReference =
+									groupFactoryMap.get(storeEntity.getFactoryCode());
 
-							if (factoryReferenceModel == null) {
-								factoryReferenceModel = new FactoryReferenceModel();
-								factoryReferenceModel.setCompanyCode(storeEntity.getCompanyCode());
-								factoryReferenceModel.setCompanyName(storeEntity.getCompanyName());
-								factoryReferenceModel.setFactoryCode(storeEntity.getFactoryCode());
-								factoryReferenceModel.setFactoryName(storeEntity.getFactoryName());
+							if (factoryReference == null) {
+								factoryReference = new FactoryReference();
+								factoryReference.setCompanyCode(storeEntity.getCompanyCode());
+								factoryReference.setCompanyName(storeEntity.getCompanyName());
+								factoryReference.setFactoryCode(storeEntity.getFactoryCode());
+								factoryReference.setFactoryName(storeEntity.getFactoryName());
 
-								List<StoreReferenceModel> storeList = new ArrayList<>();
-								storeList.add(new StoreReferenceModel(storeEntity.getStockLocation(), storeEntity.getStoreLocationName(), storeEntity.getStoreCode(), storeEntity.getStoreName()));
-								factoryReferenceModel.setStores(storeList);
+								List<StoreLocationReference> storeList = new ArrayList<>();
+								storeList.add(new StoreLocationReference(storeEntity.getStockLocation(),
+										storeEntity.getStoreLocationName(), storeEntity.getStoreCode(),
+										storeEntity.getStoreName()));
+								factoryReference.setStores(storeList);
 
-								groupFactoryMap.put(storeEntity.getFactoryCode(), factoryReferenceModel);
+								groupFactoryMap.put(storeEntity.getFactoryCode(), factoryReference);
 							} else {
-								factoryReferenceModel.getStores().add(new StoreReferenceModel(storeEntity.getStockLocation(), storeEntity.getStoreLocationName(), storeEntity.getStoreCode(), storeEntity.getStoreName()));
+								factoryReference.getStores().add(new StoreLocationReference(
+										storeEntity.getStockLocation(),
+										storeEntity.getStoreLocationName(),
+										storeEntity.getStoreCode(),
+										storeEntity.getStoreName()));
 							}
 						}
 
 						// 将分组后的数据转为List
-						mFactoryReferenceModelList = new ArrayList<>(groupFactoryMap.values());
+						mFactoryReferenceList = new ArrayList<>(groupFactoryMap.values());
 
 						// 排序，具体可以修改实体类的 compareTo 方法
-						Collections.sort(mFactoryReferenceModelList);
+						Collections.sort(mFactoryReferenceList);
 
-						runOnUiThread(() -> {
-							LoginFactoryReferenceAdapter mLoginFactoryReferenceAdapter = new LoginFactoryReferenceAdapter(mFactoryReferenceModelList, getApplicationContext());
-							factorySp.setAdapter(mLoginFactoryReferenceAdapter);
-						});
+						LoginFactoryReferenceAdapter mLoginFactoryReferenceAdapter = new LoginFactoryReferenceAdapter(
+								mFactoryReferenceList,
+								getApplicationContext()
+						);
+						factorySp.setAdapter(mLoginFactoryReferenceAdapter);
 					}
-				}
-			}
-		});
+
+					@Override
+					public void onError(Throwable e) {
+						Utils.showToast(LoginActivity.this, "加载库存地数据失败。\n" + e.getMessage());
+					}
+				});
 	}
 
 	/**
@@ -302,6 +304,7 @@ public class LoginActivity extends AppCompatActivity {
 		getMenuInflater().inflate(R.menu.login_menu, menu);
 		return true;
 	}
+
 	/**
 	 * 添加ToolBar设置按钮事件
 	 */

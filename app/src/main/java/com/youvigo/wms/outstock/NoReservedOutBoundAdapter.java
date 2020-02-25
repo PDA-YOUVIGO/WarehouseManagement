@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.outstock;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,12 @@ public class NoReservedOutBoundAdapter extends ListAdapter<NoReservedOutBoundDet
     public void onBindViewHolder(@NonNull NoReservedOutboundVH holder, int position) {
         // 绑定数据在UI上显示
          holder.bind(getItem(position));
+
+        // 设置背景颜色
+        NoReservedOutBoundDetail item = getItem(position);
+        if (item.isSuccess()) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#98F898"));
+        }
     }
 
     public NoReservedOutBoundDetail getItemAt(int position) {

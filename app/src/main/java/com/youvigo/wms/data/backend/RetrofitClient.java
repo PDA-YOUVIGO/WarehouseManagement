@@ -1,10 +1,13 @@
 package com.youvigo.wms.data.backend;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import androidx.preference.PreferenceManager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.youvigo.wms.BaseApplication;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.backend.api.SapService;
@@ -40,19 +43,20 @@ public class RetrofitClient {
 	}
 
 	public static RetrofitClient getInstance(String sapUrl, String sapAccount, String sapPassword, String pdaUrl) {
-		return new RetrofitClient(sapUrl,sapAccount, sapPassword, pdaUrl);
+		return new RetrofitClient(sapUrl, sapAccount, sapPassword, pdaUrl);
 	}
 
 	private RetrofitClient() {
-		this(null, null,null,null);
+		this(null, null, null, null);
 	}
 
 	/**
 	 * 初始化RetrofitClient
-	 * @param sapUrl sap地址
-	 * @param sapAccount sap用户
+	 *
+	 * @param sapUrl      sap地址
+	 * @param sapAccount  sap用户
 	 * @param sapPassword sap密码
-	 * @param pdaUrl PDA地址
+	 * @param pdaUrl      PDA地址
 	 */
 	private RetrofitClient(String sapUrl, String sapAccount, String sapPassword, String pdaUrl) {
 
@@ -80,14 +84,14 @@ public class RetrofitClient {
 				.client(okHttpClient)
 				.addConverterFactory(GsonConverterFactory.create())
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.baseUrl(TextUtils.isEmpty(sapUrl)?getSapUrl():sapUrl)
+				.baseUrl(TextUtils.isEmpty(sapUrl) ? getSapUrl() : sapUrl)
 				.build();
 
 		Retrofit retrofitBackend = new Retrofit.Builder()
 				.client(okHttpClientBackend)
 				.addConverterFactory(GsonConverterFactory.create())
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.baseUrl(TextUtils.isEmpty(pdaUrl)?getPdaUrl():pdaUrl)
+				.baseUrl(TextUtils.isEmpty(pdaUrl) ? getPdaUrl() : pdaUrl)
 				.build();
 
 		sapService = retrofit.create(SapService.class);
@@ -107,6 +111,10 @@ public class RetrofitClient {
 		return PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 	}
 
+	private Gson getGson() {
+		return new GsonBuilder().create();
+	}
+
 	/** SAP接口地址 */
 	private String getSapUrl() {
 		return getSharedPreferences().getString(Constants.SAP_URL, "http://52.82.87.90:50000");
@@ -114,7 +122,8 @@ public class RetrofitClient {
 
 	/** SAP Credentials */
 	private String getCredentials(String sapAccount, String sapPassword) {
-		return Credentials.basic(TextUtils.isEmpty(sapAccount) ? getSapAccount() : sapAccount, TextUtils.isEmpty(sapPassword) ? getSapPassword() : sapPassword);
+		return Credentials.basic(TextUtils.isEmpty(sapAccount) ? getSapAccount() : sapAccount,
+				TextUtils.isEmpty(sapPassword) ? getSapPassword() : sapPassword);
 	}
 
 	/** SAP账户 */
@@ -134,11 +143,13 @@ public class RetrofitClient {
 
 	/**
 	 * 打印预留单
+	 *
 	 * @param pdaOrderNumber Pda生成的单据号
 	 */
 	public Call<PrintResponse> printOrder(String pdaOrderNumber) {
 		SapService sapService = getSapService();
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
+		SharedPreferences sharedPreferences =
+				PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 
 		PrintRequest request = new PrintRequest();
 		request.setControlInfo(new ControlInfo());
@@ -154,50 +165,57 @@ public class RetrofitClient {
 	}
 
 	// 获取用户登录信息
+
+	private SharedPreferences getLoggedPreferences() {
+		return BaseApplication.getContext().getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
+				Context.MODE_PRIVATE);
+	}
+
 	/** 登录工厂 */
 	public String getFactoryCode() {
-		return getSharedPreferences().getString(Constants.FACTORYCODE, "1010");
+		return getLoggedPreferences().getString(Constants.FACTORYCODE, "1010");
 	}
 
 	/** 登录库存地 */
 	public String getStockLocationCode() {
-		return getSharedPreferences().getString(Constants.STOCKLOCATION, "FZ01");
+		return getLoggedPreferences().getString(Constants.STOCKLOCATION, "FZ01");
 	}
 
 	/** 登录仓库 */
 	public String getWarehouseNumber() {
-		return getSharedPreferences().getString(Constants.WAREHOUSE_NUMBER, "X01");
+		return getLoggedPreferences().getString(Constants.WAREHOUSE_NUMBER, "X01");
 	}
 
 	/** 登录用户账号 */
 	public String getAccount() {
-		return getSharedPreferences().getString(Constants.ACCOUNT, "unknow");
+		return getLoggedPreferences().getString(Constants.ACCOUNT, "unknow");
 	}
 
 	/** 登录用户名称 */
 	public String getUserName() {
-		return getSharedPreferences().getString(Constants.USERNAME, "unknow");
+		return getLoggedPreferences().getString(Constants.USERNAME, "unknow");
 	}
 
 	// 获取设置信息
+
 	/** 业务类型 */
 	public String getBusinessType() {
-		return getSharedPreferences().getString(Constants.BUSINESS_TYPE, null);
+		return getLoggedPreferences().getString(Constants.BUSINESS_TYPE, null);
 	}
 
 	/** 混批存储 */
 	public boolean getHybridStorage() {
-		return getSharedPreferences().getBoolean(Constants.HYBRID_STORAGE, false);
+		return getLoggedPreferences().getBoolean(Constants.HYBRID_STORAGE, false);
 	}
 
 	/** 混批存储策略 */
 	public String getHybridStorageStrategy() {
-		return getSharedPreferences().getString(Constants.HYBRID_STORAGE_STRATEGY, null);
+		return getLoggedPreferences().getString(Constants.HYBRID_STORAGE_STRATEGY, null);
 	}
 
 	/** 盘点方式 */
 	private String getInventoryMethod() {
-		return getSharedPreferences().getString(Constants.INVENTORY_METHOD, null);
+		return getLoggedPreferences().getString(Constants.INVENTORY_METHOD, null);
 	}
 
 }

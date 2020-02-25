@@ -87,11 +87,17 @@ public class NoReservedOutBoundDetail implements Parcelable {
     private String MEMO;
 
     // 成本中心
-    @SerializedName("KOSTL")
+    @Expose(serialize = false, deserialize = false)
     private String costCenterDescription;
 
-    @Expose(serialize = false, deserialize = false)
+    @SerializedName("KOSTL")
     private String costCenter;
+
+    /**
+     * 数据提交成功标志
+     */
+    @Expose(serialize = false, deserialize = false)
+    private boolean success = false;
 
     public NoReservedOutBoundDetail() {}
 
@@ -247,6 +253,14 @@ public class NoReservedOutBoundDetail implements Parcelable {
         this.stockUnit = stockUnit;
     }
 
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
     @Override
     public int describeContents() { return 0; }
 
@@ -271,6 +285,7 @@ public class NoReservedOutBoundDetail implements Parcelable {
         dest.writeString(this.MEMO);
         dest.writeString(this.costCenterDescription);
         dest.writeString(this.costCenter);
+        dest.writeByte(this.success ? (byte) 1 : (byte) 0);
     }
 
     protected NoReservedOutBoundDetail(Parcel in) {
@@ -293,6 +308,7 @@ public class NoReservedOutBoundDetail implements Parcelable {
         this.MEMO = in.readString();
         this.costCenterDescription = in.readString();
         this.costCenter = in.readString();
+        this.success = in.readByte() != 0;
     }
 
     public static final Creator<NoReservedOutBoundDetail> CREATOR = new Creator<NoReservedOutBoundDetail>() {

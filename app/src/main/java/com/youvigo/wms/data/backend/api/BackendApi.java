@@ -17,6 +17,7 @@
 package com.youvigo.wms.data.backend.api;
 
 import com.youvigo.wms.data.dto.base.ApiResponse;
+import com.youvigo.wms.data.entities.StoreEntity;
 import com.youvigo.wms.data.dto.response.CargoLocation;
 import com.youvigo.wms.data.dto.response.CostCenter;
 import com.youvigo.wms.data.dto.response.Material;
@@ -24,6 +25,7 @@ import com.youvigo.wms.data.entities.Employee;
 import com.youvigo.wms.data.entities.MoveType;
 import com.youvigo.wms.data.entities.OrderType;
 import com.youvigo.wms.data.entities.StockLocal;
+import com.youvigo.wms.login.LoggedInUser;
 
 import java.util.List;
 
@@ -38,14 +40,36 @@ import retrofit2.http.Query;
 public interface BackendApi {
 
 	/**
+	 * 获取登录库存地信息
+	 */
+	@GET("blade-data/api/store/list")
+	Single<ApiResponse<List<StoreEntity>>> getStores();
+
+	/**
+	 * 用户登录
+	 *
+	 * @param account       账户
+	 * @param password      密码
+	 * @param factoryCode   工厂
+	 * @param stocklocation 库存地
+	 *
+	 * @return
+	 */
+	@GET("blade-data/login")
+	Single<ApiResponse<LoggedInUser>> login(@Query("account") String account,
+											@Query("password") String password,
+											@Query("factoryCode") String factoryCode,
+											@Query("stocklocation") String stocklocation);
+
+	/**
 	 * 货位验证
 	 *
 	 * @param warehouseCode 仓库编码
 	 * @param cargoLocation 货位编码
 	 */
 	@GET("blade-data/api/cargolocation/detail")
-	Call<ApiResponse<List<CargoLocation>>> verificationCargo(@Query("warehouseCode") String warehouseCode, @Query(
-			"cargoLocation") String cargoLocation);
+	Call<ApiResponse<List<CargoLocation>>> verificationCargo(@Query("warehouseCode") String warehouseCode,
+															 @Query("cargoLocation") String cargoLocation);
 
 	/**
 	 * 获取物料单位
@@ -91,10 +115,11 @@ public interface BackendApi {
 
 	/**
 	 * 查询物料成本中心
-	 * @param deptCode 领料部门编码
+	 *
+	 * @param deptCode    领料部门编码
 	 * @param factoryCode 工厂编码
-	 * @param bwart 移动类型
-	 * @param bklas 评估类
+	 * @param bwart       移动类型
+	 * @param bklas       评估类
 	 */
 	@GET("blade-data/api/costcenter/query")
 	Single<ApiResponse<CostCenter>> queryCostCenter(@Query("deptCode") String deptCode,

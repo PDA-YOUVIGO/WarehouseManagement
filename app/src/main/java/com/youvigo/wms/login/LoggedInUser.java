@@ -17,7 +17,6 @@
 package com.youvigo.wms.login;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -30,9 +29,7 @@ public class LoggedInUser {
 	private String authority;
 
 	@SerializedName("userName")
-	@Expose
 	private String displayName;
-
 	private String account;
 	private String companyCode;
 	private String factoryCode;
@@ -40,7 +37,6 @@ public class LoggedInUser {
 	private String stockCode;
 
 	@SerializedName("dateTime")
-	@Expose
 	private String loginInDateTime;
 
 	private List<RemarkReferenceModel> remarkReference;
@@ -54,7 +50,7 @@ public class LoggedInUser {
 		this.authority = authority;
 	}
 
-	String getDisplayName() {
+	public String getDisplayName() {
 		return displayName;
 	}
 
@@ -126,7 +122,9 @@ public class LoggedInUser {
 		this.license = license;
 	}
 
-	public LoggedInUser(String authority, String displayName, String account, String companyCode, String factoryCode, String stockLocation, String stockCode, String loginInDateTime, List<RemarkReferenceModel> remarkReference, String license) {
+	public LoggedInUser(String authority, String displayName, String account, String companyCode, String factoryCode,
+						String stockLocation, String stockCode, String loginInDateTime,
+						List<RemarkReferenceModel> remarkReference, String license) {
 		this.authority = authority;
 		this.displayName = displayName;
 		this.account = account;

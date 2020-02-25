@@ -19,8 +19,11 @@ package com.youvigo.wms.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.widget.Toast;
+
+import com.youvigo.wms.login.LoggedInUser;
 
 import java.util.regex.Pattern;
 
@@ -61,17 +64,48 @@ public class Utils {
 	 * @param context  Activity
 	 * @param title    标题
 	 * @param message  消息
+	 * @param buttonTitle 按钮标题
 	 * @param listener 确认事件
 	 */
-	public static void showDialog(Context context, String title, String message,
+	public static void showDialog(Context context, String title, String message, String buttonTitle,
 								  DialogInterface.OnClickListener listener) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		builder.setTitle(TextUtils.isEmpty(title) ? "确认" : title);
 		builder.setMessage(message);
-		builder.setPositiveButton("确认", listener);
+		builder.setPositiveButton(buttonTitle, listener);
 
 		builder.setNegativeButton("取消", (dialog, which) -> {
-			dialog.dismiss();
+			dialog.cancel();
 		});
+
+		builder.show();
 	}
+
+	/**
+	 * 设置登录后的用户信息
+	 */
+	public static void setLoggedInPreferences(Context context, LoggedInUser loggedInUser) {
+		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
+				Context.MODE_PRIVATE);
+		SharedPreferences.Editor edit = sharedPreferences.edit();
+		edit.putBoolean(Constants.LOGIN_STATE, true);
+		edit.putString(Constants.FACTORYCODE, loggedInUser.getFactoryCode());
+		edit.putString(Constants.STOCKLOCATION, loggedInUser.getStockLocation());
+		edit.putString(Constants.WAREHOUSE_NUMBER, loggedInUser.getStockCode());
+		edit.putString(Constants.ACCOUNT, loggedInUser.getAccount());
+		edit.putString(Constants.USERNAME, loggedInUser.getDisplayName());
+		edit.apply();
+	}
+
+	/**
+	 * 清除用户登录信息
+	 * @param context
+	 */
+	public static void clearLoggedInPreferences(Context context) {
+		SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
+				Context.MODE_PRIVATE);
+		sharedPreferences.edit().clear().apply();
+
+	}
+
 }

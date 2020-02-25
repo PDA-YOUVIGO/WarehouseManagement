@@ -24,16 +24,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.StoreReferenceModel;
+import com.youvigo.wms.data.entities.StoreLocationReference;
 
 import java.util.List;
 
 public class LoginStoreReferenceAdapter extends BaseAdapter {
 
-	private List<StoreReferenceModel> mStoreEntity;
+	private List<StoreLocationReference> mStoreEntity;
 	private Context mContext;
 
-	public LoginStoreReferenceAdapter(List<StoreReferenceModel> mStoreEntity, Context mContext) {
+	public LoginStoreReferenceAdapter(List<StoreLocationReference> mStoreEntity, Context mContext) {
 		this.mStoreEntity = mStoreEntity;
 		this.mContext = mContext;
 	}
@@ -62,7 +62,7 @@ public class LoginStoreReferenceAdapter extends BaseAdapter {
 		}
 
 		TextView storeTv = view.findViewById(R.id.stockLocationTv);
-		storeTv.setText(mStoreEntity.get(i).getStockLocationDisplayName());
+		//storeTv.setText(mStoreEntity.get(i).getStockLocationDisplayName());
 
 		return view;
 	}

@@ -88,6 +88,7 @@ public class ReservedOutBoundViewModel extends BaseViewModel {
 			@Override
 			public void onResponse(@NotNull Call<ReservedOutBoundResponse> call, @NotNull Response<ReservedOutBoundResponse> response) {
 				if (response.isSuccessful()) {
+					_isLoading.setValue(false);
 					ReservedOutBoundResponse reservedOutBoundResponse = response.body();
 					if (reservedOutBoundResponse != null) {
 						_sap_result.setValue(reservedOutBoundResponse.getMessage());
@@ -97,7 +98,7 @@ public class ReservedOutBoundViewModel extends BaseViewModel {
 
 			@Override
 			public void onFailure(@NotNull Call<ReservedOutBoundResponse> call, @NotNull Throwable t) {
-
+				_isLoading.setValue(false);
 			}
 		});
 

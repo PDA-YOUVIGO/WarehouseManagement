@@ -16,7 +16,7 @@
 
 package com.youvigo.wms.inventory;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,85 +31,82 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.SwitchStockLocation;
-
-import java.util.concurrent.TimeUnit;
+import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.util.Constants;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class SwitchStockLocationAdapter extends ListAdapter<SwitchStockLocation, SwitchStockLocationAdapter.SwitchStockLocationVH> {
-    public SwitchStockLocationAdapter() {
-        super(new SwitchStockLocationDiffCallback());
-    }
+public class SwitchStockLocationAdapter extends ListAdapter<StoreLocationReference,
+		SwitchStockLocationAdapter.SwitchStockLocationVH> {
+	public SwitchStockLocationAdapter() {
+		super(new SwitchStockLocationDiffCallback());
+	}
 
-    @NonNull
-    @Override
-    public SwitchStockLocationVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_switch_stock_location, parent, false);
-        return new SwitchStockLocationVH(view);
-    }
+	@NonNull
+	@Override
+	public SwitchStockLocationVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_switch_stock_location, parent,
+				false);
+		return new SwitchStockLocationVH(view);
+	}
 
-    @Override
-    public void onBindViewHolder(@NonNull SwitchStockLocationVH holder, int position) {
-        holder.bind(getItem(position));
-    }
+	@Override
+	public void onBindViewHolder(@NonNull SwitchStockLocationVH holder, int position) {
+		holder.bind(getItem(position));
+	}
 
-    class SwitchStockLocationVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView repository;
+	class SwitchStockLocationVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+		private TextView storelocationCode;
+		private TextView storelocationName;
 
-        SwitchStockLocationVH(@NonNull View itemView) {
-            super(itemView);
+		SwitchStockLocationVH(@NonNull View itemView) {
+			super(itemView);
 
-            itemView.setOnClickListener(this);
+			itemView.setOnClickListener(this);
 
-            repository = itemView.findViewById(R.id.tv_repository);
-        }
+			storelocationCode = itemView.findViewById(R.id.tv_storelocation_code);
+			storelocationName = itemView.findViewById(R.id.tv_storelocation_name);
+		}
 
-        @Override
-        public void onClick(View v) {
-            SwitchStockLocation switchStockLocation = getItem(getAdapterPosition());
+		@Override
+		public void onClick(View v) {
+			StoreLocationReference switchStockLocation = getItem(getAdapterPosition());
 
-            new AlertDialog.Builder(itemView.getContext())
-                    .setTitle("库存地")
-                    .setMessage("切换到该库存地？")
-                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(itemView.getContext(), "成功切换库存地。", Toast.LENGTH_SHORT).show();
+			new AlertDialog.Builder(itemView.getContext())
+					.setTitle("库存地")
+					.setMessage("切换到该库存地？")
+					.setPositiveButton(R.string.ok, (dialog, which) -> {
 
-                            if (itemView.getContext() instanceof AppCompatActivity) {
-                                AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        ((AppCompatActivity) itemView.getContext()).finish();
-                                    }
-                                }, 1, TimeUnit.SECONDS);
-                            }
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+						itemView.getContext().getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
+                                Context.MODE_PRIVATE).edit().putString(Constants.FACTORYCODE,
+                                switchStockLocation.getStockLocationCode()).apply();
 
-                        }
-                    })
-                    .show();
-        }
+						Toast.makeText(itemView.getContext(), "成功切换库存地。", Toast.LENGTH_SHORT).show();
 
-        void bind(SwitchStockLocation switchStockLocation) {
-            repository.setText(switchStockLocation.repositoryName);
-        }
-    }
+						if (itemView.getContext() instanceof AppCompatActivity) {
+							AndroidSchedulers.mainThread().scheduleDirect(() -> ((AppCompatActivity) itemView.getContext()).finish());
+						}
+					})
+					.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel()).show();
+		}
 
-    static class SwitchStockLocationDiffCallback extends DiffUtil.ItemCallback<SwitchStockLocation> {
-        @Override
-        public boolean areItemsTheSame(@NonNull SwitchStockLocation oldItem, @NonNull SwitchStockLocation newItem) {
-            return oldItem.repositoryId.equals(newItem.repositoryId);
-        }
+		void bind(StoreLocationReference switchStockLocation) {
+			storelocationCode.setText(switchStockLocation.getStockLocationCode());
+			storelocationName.setText(switchStockLocation.getStoreLocationName());
+		}
+	}
 
-        @Override
-        public boolean areContentsTheSame(@NonNull SwitchStockLocation oldItem, @NonNull SwitchStockLocation newItem) {
-            return oldItem.repositoryName.equals(newItem.repositoryName);
-        }
-    }
+	static class SwitchStockLocationDiffCallback extends DiffUtil.ItemCallback<StoreLocationReference> {
+		@Override
+		public boolean areItemsTheSame(@NonNull StoreLocationReference oldItem,
+                                       @NonNull StoreLocationReference newItem) {
+			return oldItem.getStoreCode().equals(newItem.getStoreCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
+		}
+
+		@Override
+		public boolean areContentsTheSame(@NonNull StoreLocationReference oldItem,
+                                          @NonNull StoreLocationReference newItem) {
+			return oldItem.getStoreCode().equals(newItem.getStoreCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
+		}
+	}
 }

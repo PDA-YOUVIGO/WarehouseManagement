@@ -20,8 +20,9 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_4"
     android:ellipsize="marquee"
-    android:textSize="14sp"
-    android:paddingLeft="@dimen/dp_2"
-    android:paddingRight="@dimen/dp_2"
+    android:layout_marginLeft="@dimen/dp_4"
+    android:layout_marginRight="@dimen/dp_4"
+    android:padding="@dimen/dp_8"
     android:singleLine="true"
-    android:textAlignment="inherit" />
+    android:textAlignment="inherit"
+    android:textSize="14sp" />

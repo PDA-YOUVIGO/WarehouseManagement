@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.common;
+package com.youvigo.wms.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -16,38 +16,63 @@
 
 package com.youvigo.wms;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceManager;
 
-import com.youvigo.wms.activityresult.ActivityResult;
+import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
-//@InterceptWith(LoginInterceptor.class)
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
+    private long firstTime=0;
     protected Toolbar toolbar;
-    protected ActivityResult mActivityResult;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.base_activity);
-        mActivityResult = new ActivityResult(this);
-        mActivityResult.intercept(() -> Toast.makeText(getApplicationContext(), "请先登录系统", Toast.LENGTH_LONG).show());
-        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("loginState", false).apply();
         init(savedInstanceState);
     }
 
     private void init(Bundle savedInstanceState) {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent intent = getIntent();
+        ArrayList<StoreLocationReference> data =
+                intent.getParcelableArrayListExtra(Constants.FACTORY_SELECT_ITEMS);
         if (savedInstanceState == null) {
+            MainFragment fragment = MainFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("storeLocalData", data);
+            fragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, fragment)
                     .commitNow();
         }
     }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {//点击返回键
+            long secondTime = System.currentTimeMillis();//以毫秒为单位
+            if (secondTime - firstTime > 2000) {
+                Toast.makeText(this, "再按一次返回退出程序", Toast.LENGTH_SHORT).show();
+                firstTime = secondTime;
+            } else {
+                Utils.clearLoggedInPreferences(getApplicationContext());
+                finish();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
 }

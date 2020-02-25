@@ -16,22 +16,25 @@
 
 package com.youvigo.wms.login;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.common.SharedPreferenceUtils;
-import com.youvigo.wms.common.WarehouseManagementApplication;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.backend.api.BackendApi;
+import com.youvigo.wms.data.dto.base.ApiResponse;
 
-class LoginViewModel extends ViewModel {
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+
+public class LoginViewModel extends ViewModel {
 
 	private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
 	private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-
-	LoginViewModel() {}
 
 	LiveData<LoginFormState> getLoginFormState() {
 		return loginFormState;
@@ -59,25 +62,31 @@ class LoginViewModel extends ViewModel {
 	 * @param factoryCode   工厂编码
 	 * @param stockLocation 库存地编码
 	 */
+	@SuppressLint("CheckResult")
 	void loginIn(String account, String password, String factoryCode, String stockLocation) {
-		Context context = WarehouseManagementApplication.getInstance();
-		String pda_interface_address = SharedPreferenceUtils.getString("pda_interface_address", "", context);
-		LoginTask loginTask = new LoginTask(pda_interface_address, account, password, factoryCode, stockLocation);
+		RetrofitClient retrofitClient = RetrofitClient.getInstance();
+		BackendApi backendApi = retrofitClient.getBackendApi();
 
-		loginTask.setOnDataFinishedListener(new OnDataFinishedListener() {
-			@Override
-			public void onDataSuccessfully(LoggedInUser data) {
-				loginResult.setValue(new LoginResult(data));
-			}
+		backendApi.login(account,
+				password, factoryCode, stockLocation)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ApiResponse<LoggedInUser>>() {
+					@Override
+					public void onSuccess(ApiResponse<LoggedInUser> loggedInUserApiResponse) {
+						if (loggedInUserApiResponse.isSuccess()) {
+							LoggedInUser data = loggedInUserApiResponse.getData();
+							loginResult.setValue(new LoginResult(data));
+						} else {
+							loginResult.setValue(new LoginResult(new Exception(loggedInUserApiResponse.getMessage())));
+						}
+					}
 
-			@Override
-			public void onDataFailed(Exception ex) {
-				loginResult.setValue(new LoginResult(ex));
-			}
-		});
-
-		loginTask.execute();
-
+					@Override
+					public void onError(Throwable e) {
+						loginResult.setValue(new LoginResult(new Exception(e.getMessage())));
+					}
+				});
 	}
 
 	// A placeholder username validation check

@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.inventory;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -29,11 +30,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.SwitchStockLocation;
+import com.youvigo.wms.data.entities.StoreLocationReference;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -45,9 +44,14 @@ public class SwitchStockLocationActivity extends AppCompatActivity {
 
     private SwitchStockLocationAdapter adapter;
 
+    private List<StoreLocationReference> storeLocationReferenceList;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        storeLocationReferenceList = intent.getParcelableArrayListExtra("data");
 
         setContentView(R.layout.switch_stock_location_activity);
 
@@ -62,13 +66,8 @@ public class SwitchStockLocationActivity extends AppCompatActivity {
         }
         refreshLayout = findViewById(R.id.refresh_layout);
         refreshLayout.setRefreshing(true);
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // 下拉刷新
-                refresh();
-            }
-        });
+        // 下拉刷新
+        refreshLayout.setOnRefreshListener(this::refresh);
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -80,25 +79,10 @@ public class SwitchStockLocationActivity extends AppCompatActivity {
     }
 
     private void refresh() {
-        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
-            @Override
-            public void run() {
-                adapter.submitList(produceMockData());
-                refreshLayout.setRefreshing(false);
-            }
-        }, 2, TimeUnit.SECONDS);
-    }
-
-    private List<SwitchStockLocation> produceMockData() {
-        List<SwitchStockLocation> result = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            SwitchStockLocation switchStockLocation = new SwitchStockLocation();
-            switchStockLocation.repositoryName = "WL01 川科伦物料库" + i;
-            switchStockLocation.repositoryId = "100" + i;
-            result.add(switchStockLocation);
-        }
-
-        return result;
+        AndroidSchedulers.mainThread().scheduleDirect(() -> {
+            adapter.submitList(storeLocationReferenceList);
+            refreshLayout.setRefreshing(false);
+        });
     }
 
     @Override

@@ -16,15 +16,49 @@
 
 package com.youvigo.wms.data.entities;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class StoreReferenceModel implements Serializable {
-	private static final long serialVersionUID = 1L;
+import androidx.annotation.NonNull;
+
+public class StoreLocationReference implements Parcelable {
 
 	private String stockLocationCode;
 	private String storeLocationName;
 	private String storeCode;
 	private String storeName;
+
+	protected StoreLocationReference(Parcel in) {
+		stockLocationCode = in.readString();
+		storeLocationName = in.readString();
+		storeCode = in.readString();
+		storeName = in.readString();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(stockLocationCode);
+		dest.writeString(storeLocationName);
+		dest.writeString(storeCode);
+		dest.writeString(storeName);
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public static final Creator<StoreLocationReference> CREATOR = new Creator<StoreLocationReference>() {
+		@Override
+		public StoreLocationReference createFromParcel(Parcel in) {
+			return new StoreLocationReference(in);
+		}
+
+		@Override
+		public StoreLocationReference[] newArray(int size) {
+			return new StoreLocationReference[size];
+		}
+	};
 
 	public String getStockLocationCode() {
 		return stockLocationCode;
@@ -58,17 +92,19 @@ public class StoreReferenceModel implements Serializable {
 		this.storeName = storeName;
 	}
 
-	public String getStockLocationDisplayName() {
+	@NonNull
+	@Override
+	public String toString() {
 		return String.format("%s - %s", getStockLocationCode(), getStoreLocationName());
 	}
 
-	public StoreReferenceModel(String stockLocationCode, String storeLocationName, String storeCode, String storeName) {
+	public StoreLocationReference(String stockLocationCode, String storeLocationName, String storeCode, String storeName) {
 		this.stockLocationCode = stockLocationCode;
 		this.storeLocationName = storeLocationName;
 		this.storeCode = storeCode;
 		this.storeName = storeName;
 	}
 
-	public StoreReferenceModel() {
+	public StoreLocationReference() {
 	}
 }

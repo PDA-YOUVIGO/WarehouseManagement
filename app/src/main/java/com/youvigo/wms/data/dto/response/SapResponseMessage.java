@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.data.dto.response;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -57,6 +58,17 @@ public class SapResponseMessage {
 	 */
 	@SerializedName("MJAHR")
 	private String year;
+
+	public String getPdaOrderNumber() {
+		return pdaOrderNumber;
+	}
+
+	public void setPdaOrderNumber(String pdaOrderNumber) {
+		this.pdaOrderNumber = pdaOrderNumber;
+	}
+
+	@Expose(serialize = false, deserialize = false)
+	private String pdaOrderNumber;
 
 	public String getSuccess() {
 		return success;

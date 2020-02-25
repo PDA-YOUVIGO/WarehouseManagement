@@ -16,10 +16,16 @@
 
 package com.youvigo.wms.data.entities;
 
-public class StockLocal {
-	public String localCode;
-	public String localName;
-	public String factoryCode;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+/**
+ * 无预留出库目的库存地Spinner参照
+ */
+public class StockLocal implements Parcelable {
+	private String localCode;
+	private String localName;
+	private String factoryCode;
 
 	@Override
 	public String toString() {
@@ -58,4 +64,28 @@ public class StockLocal {
 		this.localName = localName;
 		this.factoryCode = factoryCode;
 	}
+
+	@Override
+	public int describeContents() { return 0; }
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(this.localCode);
+		dest.writeString(this.localName);
+		dest.writeString(this.factoryCode);
+	}
+
+	protected StockLocal(Parcel in) {
+		this.localCode = in.readString();
+		this.localName = in.readString();
+		this.factoryCode = in.readString();
+	}
+
+	public static final Creator<StockLocal> CREATOR = new Creator<StockLocal>() {
+		@Override
+		public StockLocal createFromParcel(Parcel source) {return new StockLocal(source);}
+
+		@Override
+		public StockLocal[] newArray(int size) {return new StockLocal[size];}
+	};
 }

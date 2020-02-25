@@ -20,6 +20,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +41,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.OnItemCompleted;
@@ -85,9 +85,6 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 
 	private EditText remark;
 
-	private MaterialButton innerOrderQuery;
-	private MaterialButton employeeQuery;
-
 	private NoReservedOutBoundAdapter adapter;
 	private NoreservedOutBoundViewModel viewModel;
 
@@ -127,14 +124,23 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				MoveType adapterItem = moveTypeAdapter.getItem(position);
+
+				// 内部订单需要显示
+				if (adapterItem.isInnerOrderNo()) {
+					internalOrder.setVisibility(View.VISIBLE);
+				} else {
+					internalOrder.setVisibility(View.GONE);
+				}
+
+				// 收货地需要显示
 				if (adapterItem.getMoveCode().equals("311")) {
 					placeOfReceiptTitle.setVisibility(View.VISIBLE);
 					placeOfReceipt.setVisibility(View.VISIBLE);
 				} else {
-					// 默认隐藏收货地
 					placeOfReceiptTitle.setVisibility(View.GONE);
 					placeOfReceipt.setVisibility(View.GONE);
 				}
+				viewModel.setMovetype(adapterItem);
 			}
 
 			@Override
@@ -175,12 +181,9 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 
 			@Override
 			public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-				Utils.showDialog(NoReservedOutBoundActivity.this, "", "您确认要删除该行数据吗？",
-						(dialog, which) -> {
-							viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
-							adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-							Utils.showToast(NoReservedOutBoundActivity.this, "删除成功。");
-						});
+				viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
+				adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+				Utils.showToast(NoReservedOutBoundActivity.this, "删除成功。");
 			}
 		}).attachToRecyclerView(recyclerView);
 
@@ -188,14 +191,36 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 		recyclerView.setAdapter(adapter);
 	}
 
+	/**
+	 * 启动物料添加界面
+	 */
 	private void launchMaterialActivity() {
-		//FragmentManager fragmentManager = this.getSupportFragmentManager();
-		//NoReservedOutBoundDetailDialogFragment.show(fragmentManager, null, -1);
+
+		MoveType selectedItem = (MoveType) moveType.getSelectedItem();
+		if (selectedItem == null
+				|| TextUtils.isEmpty(employer.getText().toString())
+				|| TextUtils.isEmpty(department.getText().toString())) {
+			Utils.showToast(NoReservedOutBoundActivity.this, "请先维护领用信息。");
+			return;
+		}
+
+		String departmentCode = viewModel.getMaterialVoucher().getValue().getORGEH();
+		String employeeCode = viewModel.getMaterialVoucher().getValue().getZZLLR();
+
 		Intent intent = new Intent(this, NoReservedOutBoundDetailActivity.class);
+		intent.putExtra(NoReservedOutBoundDetailActivity.KEY_MOVETYPE_CODE, selectedItem.getMoveCode());
+		intent.putExtra(NoReservedOutBoundDetailActivity.KEY_DEPARTMENT, departmentCode);
+		intent.putExtra(NoReservedOutBoundDetailActivity.KEY_EMPLOYEE_CODE, employeeCode);
 		startActivityForResult(intent, MATERIAL_REQUEST_CODE);
 	}
 
 	private void launchEmployeeSearchActivity() {
+
+		if (viewModel.getDetails().getValue().size() > 0) {
+			Utils.showToast(NoReservedOutBoundActivity.this, "您已添加出库数据，不允许修改领用人信息。");
+			return;
+		}
+
 		Intent intent = new Intent(this, EmployeeSearchActivity.class);
 		startActivityForResult(intent, EMPLOYEE_REQUEST_CODE);
 	}
@@ -213,14 +238,19 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 					Employee currentEmployee = data.getParcelableExtra(Constants.EMPLOYEE_RESULT);
 					employer.setText(currentEmployee.getEmployeeName());
 					department.setText(currentEmployee.getDepartmentName());
+					viewModel.setUseInfo(currentEmployee.getEmployeeCode(),
+							currentEmployee.getEmployeeName(),
+							currentEmployee.getDepartmentCode(),
+							currentEmployee.getDepartmentName());
 				} else if (requestCode == INNER_ORDER_REQUEST_CODE) {
-					// todo 逻辑
 					InternalOrder currentInternalOrder = data.getParcelableExtra(Constants.INTERNAL_ORDER_RESULT);
 					internalOrder.setText(currentInternalOrder.getDescription());
+					viewModel.setInternalOrder(currentInternalOrder.getNumber());
 				} else if (requestCode == MATERIAL_REQUEST_CODE) {
 					NoReservedOutBoundDetail noReservedOutBoundDetail =
 							data.getParcelableExtra(NoReservedOutBoundDetailActivity.NO_RESERVED_OUT_BOUND_DETAIL_RESULT);
 					viewModel.insert(noReservedOutBoundDetail);
+					adapter.notifyDataSetChanged();
 				}
 			}
 		}
@@ -256,14 +286,46 @@ public class NoReservedOutBoundActivity extends AppCompatActivity implements OnI
 		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE :
 				View.GONE));
 
-		viewModel.details().observe(this, noReservedOutBoundDetails -> {
-			adapter.submitList(noReservedOutBoundDetails);
-			adapter.notifyDataSetChanged();
+		viewModel.getDetails().observe(this, details -> {
+			adapter.submitList(details);
 		});
+
+		viewModel.getSapResult().observe(this, sapResponseMessages -> adapter.notifyDataSetChanged());
+
 	}
 
+	/**
+	 * 提交前数据校验
+	 */
+	private boolean verification() {
+		boolean flag = true;
+		MoveType currentMoveType = (MoveType) moveType.getSelectedItem();
+		String currentInternalOrder = internalOrder.getText().toString();
+
+		if (viewModel.getDetails().getValue().size() == 0) {
+			Utils.showToast(NoReservedOutBoundActivity.this, "您还未添加出库物料");
+			flag = false;
+		} else if (viewModel.getDetails().getValue().stream().allMatch(NoReservedOutBoundDetail::isSuccess)) {
+			flag = false;
+			Utils.showToast(NoReservedOutBoundActivity.this, "请勿重复提交");
+		} else if (currentMoveType.isInnerOrderNo() && (TextUtils.isEmpty(currentInternalOrder)
+				|| TextUtils.isEmpty(viewModel.getMaterialVoucher().getValue().getAUFNR()))) {
+			Utils.showToast(NoReservedOutBoundActivity.this, "内部订单必须维护");
+			flag = false;
+		}
+
+		return flag;
+	}
+
+	/**
+	 * 提交
+	 */
 	private void onMenuSubmitClicked() {
-		// 提交
+		if (!verification()) return;
+		viewModel.setRemark(remark.getText().toString().trim());
+		StockLocal placeOfReceiptSelectedItem = (StockLocal) placeOfReceipt.getSelectedItem();
+		viewModel.setStockLocal(placeOfReceiptSelectedItem);
+		viewModel.submit();
 	}
 
 	@SuppressLint("CheckResult")
