@@ -17,13 +17,16 @@
 package com.youvigo.wms.warehouse;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -74,6 +77,10 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     private PositionMovementViewModel viewModel;
     private RecyclerView recyclerView;
     protected List<PositionMovementModelView> positionResult = new ArrayList<>();
+    private BroadcastReceiver mReceiver;
+    private EditText et_material_coding;
+    private EditText et_material_batch;
+    private EditText et_position;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,9 +93,44 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
         super.onCreate(savedInstanceState);
         initViews();
         observeData();
+        initReceiver();
+    }
+
+    /**
+     * 初始化扫描程序
+     */
+    private void initReceiver(){
+        // 扫描获取数据
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
+                final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
+                final String scanStatus = intent.getStringExtra("SCAN_STATE");
+
+                if ("ok".equals(scanStatus)) {
+                    if (et_material_coding.hasFocus()){
+                        et_material_coding.setText(scanResult);
+                        onMenuSearchClicked();
+                    }else if (et_material_batch.hasFocus()){
+                        et_material_batch.setText(scanResult);
+                        onMenuSearchClicked();
+                    }
+                    else if(et_position.hasFocus()){
+                        et_position.setText(scanResult);
+                        onMenuSearchClicked();
+                    }
+                } else {
+                    showMessage("获取扫描数据失败");
+                }
+            }
+        };
     }
 
     private void initViews() {
+        et_material_coding = findViewById(R.id.et_material_coding);
+        et_material_batch = findViewById(R.id.et_material_batch);
+        et_position = findViewById(R.id.et_position);
         progressBar = findViewById(R.id.progress_bar);
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -234,9 +276,10 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
                 }
             });
         }
+        showAlertDialog("提交完成", "是否查看处理结果","查看");
         viewModel.positions().getValue().clear();
         adapter.notifyDataSetChanged();
-        showAlertDialog("提交完成", "是否查看处理结果","查看");
+
     }
 
     /**
@@ -305,13 +348,23 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     private boolean verify() {
         List<PositionMovementModelView> list = viewModel.positions().getValue();
         if (list == null){
-            showMessage("无数据提交");
+            showAlertDialog("数据校验", "无数据提交","确定");
             return false;
         }
         for (int i= 0; i < list.size();i++){
-            if (list.get(i).VSOLM.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架数量再提交"); return false;}
-            if (list.get(i).NLPLA.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架货位再提交");return false;}
-            if (list.get(i).NLTYP.isEmpty()){showMessage("请维护" + i+1 +"行明细数据的上架货位类型再提交");return false;}
+
+            if (list.get(i).VSOLM.isEmpty()){
+                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架数量再提交","确定");
+                return false;
+            }
+            if (list.get(i).NLPLA.isEmpty()){
+                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架货位再提交","确定");
+                return false;
+            }
+            if (list.get(i).NLTYP.isEmpty()){
+                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架货位类型再提交","确定");
+                return false;
+            }
         }
         return true;
     }
@@ -321,18 +374,17 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
      */
     @Override
     protected void onMenuSearchClicked() {
-        TextView et_material_coding = findViewById(R.id.et_material_coding);
-        TextView et_material_batch = findViewById(R.id.et_material_batch);
-        TextView et_position = findViewById(R.id.et_position);
         if (et_material_coding.getText().toString().isEmpty() && et_material_batch.getText().toString().isEmpty()&&et_position.getText().toString().isEmpty()){
-            showMessage("请维护查询参数");
+            showAlertDialog("数据校验", "请维护查询参数","确定");
             return;
         }
+        et_position.clearFocus();
+        et_material_batch.clearFocus();
+        et_material_coding.clearFocus();
         Intent intent = new Intent(this, MaterialsSearchActivity.class);
         intent.putExtra(MaterialsSearchActivity.KEY_CARGOCODE, et_position.getText().toString()); // 仓位
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, et_material_coding.getText().toString()); // 物料编码
         intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,et_material_batch.getText().toString()); // 物料批号
-//        intent.putExtra(MaterialsSearchActivity.KEY_CARGOSPACETYPE_FILTER,"^9[\\d]+$");
         intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
         startActivityForResult(intent, REQUEST_CODE);
     }
@@ -356,8 +408,8 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
 
     /**
      * 构建查询返回数据
-     * @param positionResult
-     * @param StockMaterials
+     * @param positionResult positionResult
+     * @param StockMaterials StockMaterials
      */
     private void processorData(List<PositionMovementModelView> positionResult, List<StockMaterial> StockMaterials){
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
@@ -405,5 +457,38 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     @Override
     public void itemCompleted(int adapterPosition) {
         adapter.notifyItemChanged(adapterPosition);
+    }
+
+    private void registerReceiver()
+    {
+        IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
+        registerReceiver(mReceiver, mFilter);
+    }
+
+    private void unRegisterReceiver()
+    {
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            showMessage(e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unRegisterReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mReceiver = null;
+        super.onDestroy();
     }
 }

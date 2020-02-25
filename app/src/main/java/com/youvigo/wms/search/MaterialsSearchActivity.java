@@ -36,6 +36,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnCommonSearchCompleted;
+import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.util.Constants;
 
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ import timber.log.Timber;
 /**
  * 物料查询
  */
-public class MaterialsSearchActivity extends BaseActivity implements MaterialSearchDialogFragment.OnMaterialSearchInforCompleted {
+public class MaterialsSearchActivity extends BaseActivity implements OnCommonSearchCompleted {
 
 	public static final String KEY_MATERIAL_CODE = "key_material_code";
 	public static final String KEY_BATCH_NUMBER = "key_batch_number";
@@ -73,11 +75,11 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	private MaterialsSearchAdapter adapter;
 	private MaterialSearchViewModel viewModel;
 	private Boolean displaySelectALlMenu;
+	protected RecyclerView recyclerView;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		initViews();
 		observeData();
 		initIntent();
@@ -96,34 +98,30 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 			String specification = intent.getStringExtra(KEY_SPECIFICATION);
 			String cargoCode = intent.getStringExtra(KEY_CARGOCODE);
 			displaySelectALlMenu = intent.getBooleanExtra(KEY_SELECTALL_MENU, false);
-
 			// 物料过滤规则
 			filter = intent.getStringArrayListExtra(KEY_FILTER);
 			cargoSpaceTypeFilter = intent.getStringExtra(KEY_CARGOSPACETYPE_FILTER);
-
 			// 初始化过滤参数，如果未传递参数则赋予默认值
 			if (filter == null) {
 				filter = new ArrayList<>();
 			} else if (cargoSpaceTypeFilter == null) {
 				cargoSpaceTypeFilter = "";
 			}
-
 			if (intent.getBooleanExtra(KEY_INITQUERY, true)) {
-
 				viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification,
 						cargoCode, filter, cargoSpaceTypeFilter);
+			}else {
+				onMenuSearchClicked();
 			}
 		}
 	}
 
 	private void initViews() {
 		progressBar = findViewById(R.id.progress_bar);
-
-		RecyclerView recyclerView = findViewById(R.id.recycler_view);
+		recyclerView = findViewById(R.id.recycler_view);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setItemAnimator(new DefaultItemAnimator());
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 		adapter = new MaterialsSearchAdapter();
 		recyclerView.setAdapter(adapter);
 	}
@@ -131,7 +129,6 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
 		Timber.d("onActivityResult");
 	}
 
@@ -146,9 +143,7 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 
 	/**
 	 * 点击事件
-	 *
 	 * @param item menu
-	 *
 	 * @return Boolean
 	 */
 	@Override
@@ -199,7 +194,7 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 	 * @param cargoSpaceTypeFilter 仓位类型过滤规则
 	 */
 	@Override
-	public void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription,
+	public void materialParameterForCompleted(String materialCode, String batchNumber, String materialDescription,
 											String materialCommonName, String specification, String cargoCode,
 											List<String> materilaFilter, String cargoSpaceTypeFilter) {
 		Timber.d(materialCode);
@@ -222,5 +217,27 @@ public class MaterialsSearchActivity extends BaseActivity implements MaterialSea
 		});
 	}
 
+	/**
+	 * 消息提示
+	 * @param message 消息
+	 */
+	private void showMessage(String message) {
+		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+	}
 
+	/**
+	 * item点击事件
+	 * @param view View
+	 */
+	public void itemClick(View view){
+		if (getIntent().getBooleanExtra(KEY_INITQUERY, true)){
+			List<StockMaterial> list = new ArrayList<>();
+			int position = recyclerView.getChildAdapterPosition(view);
+			list.add(viewModel.materials().getValue().get(position));
+			Intent intent = new Intent();
+			intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) list);
+			this.setResult(Activity.RESULT_OK, intent);
+			this.finish();
+		}
+	}
 }
