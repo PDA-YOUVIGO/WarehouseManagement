@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package com.youvigo.wms.data.dto.response;
+package com.youvigo.wms.base;
 
-public class PositionMovementProcessResult {
+import java.util.List;
 
+public interface OnCommonSearchCompleted {
 
+	void materialParameterForCompleted(String materialCode, String batchNumber, String materialDescription,
+									 String materialCommonName, String specification, String cargoCode,
+									 List<String> materilaFilter, String cargoSpaceTypeFilter);
 
 }

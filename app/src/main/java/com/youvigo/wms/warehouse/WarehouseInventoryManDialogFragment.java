@@ -16,7 +16,6 @@
 
 package com.youvigo.wms.warehouse;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,7 +38,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.util.SharedPreferenceUtils;
+import com.youvigo.wms.base.OnItemCompleted;
+import com.youvigo.wms.common.SharedPreferenceUtils;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -98,12 +98,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
     private ArrayAdapter<MaterialUnit> auxiliaryUnitsAdapter;
     private Context context;
     private WarehouseInventoryModelView inventoryModekView;
-    private OnPositionInforCompleted mOnPositionInforCompleted;
-
-
-    public interface OnPositionInforCompleted {
-        void inputPositionInforCompleted(int adapterPosition);
-    }
+    private OnItemCompleted onItemCompleted;
 
     /**
      * 展示详情页面
@@ -123,11 +118,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-    }
-    @Override
-    public void onAttach(@NotNull Activity activity) {
-        super.onAttach(activity);
-        mOnPositionInforCompleted = (OnPositionInforCompleted) activity;
+        onItemCompleted = (OnItemCompleted)context;
     }
 
     @Override
@@ -204,7 +195,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
                         verify();
                         if(!verify()){return;}
                         submit();
-                        mOnPositionInforCompleted.inputPositionInforCompleted(localtion);
+                        onItemCompleted.itemCompleted(localtion);
                         dismiss();
                     }
                 })

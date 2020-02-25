@@ -16,14 +16,16 @@
 
 package com.youvigo.wms.search;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,24 +34,49 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.base.OnCommonSearchCompleted;
+import com.youvigo.wms.util.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MaterialSearchDialogFragment extends DialogFragment {
 	public static final int REQUEST_CODE = 102;
 	private static final String TAG = "materialSearchDialogFragment";
 	private View view;
 	private Context context;
-	private OnMaterialSearchInforCompleted mOnMaterialSearchInforCompleted;
-	private TextView materialCode;
-	private TextView batchNumber;
-	private TextView materialDescription;
-	private TextView materialCommonName;
-	private TextView specification;
-	private TextView cargoSpace;
+	private OnCommonSearchCompleted SearchCompleted;
+	private EditText materialCode;
+	private EditText batchNumber;
+	private EditText materialDescription;
+	private EditText materialCommonName;
+	private EditText specification;
+	private EditText cargoSpace;
+	private BroadcastReceiver mReceiver;
+
+	/**
+	 * 初始化扫描程序
+	 */
+	private void initReceiver(){
+		mReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
+				final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
+				final String scanStatus = intent.getStringExtra("SCAN_STATE");
+				if ("ok".equals(scanStatus)) {
+					if (materialCode.hasFocus()){
+						materialCode.setText(scanResult);
+					}else if (batchNumber.hasFocus()){
+						batchNumber.setText(scanResult);
+					}else if (cargoSpace.hasFocus()){
+						cargoSpace.setText(scanResult);
+					}
+				}
+			}
+		};
+	}
 
 	/**
 	 * Dialog Show
@@ -59,6 +86,15 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 		Bundle bundle = new Bundle();
 		dialogFragment.setArguments(bundle);
 		dialogFragment.show(fragmentManager, TAG);
+	}
+
+	private void initView(){
+		materialCode = view.findViewById(R.id.et_material_coding);
+		batchNumber = view.findViewById(R.id.et_batch_number);
+		materialDescription = view.findViewById(R.id.et_item);
+		materialCommonName = view.findViewById(R.id.et_common_name);
+		specification = view.findViewById(R.id.et_specification);
+		cargoSpace = view.findViewById(R.id.et_position);
 	}
 
 	@Override
@@ -71,18 +107,16 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
 		this.context = context;
-	}
-
-	@Override
-	public void onAttach(@NotNull Activity activity) {
-		super.onAttach(activity);
-		mOnMaterialSearchInforCompleted = (OnMaterialSearchInforCompleted) activity;
+		SearchCompleted = (OnCommonSearchCompleted) context;
 	}
 
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 		view = LayoutInflater.from(context).inflate(R.layout.material_search_dialog_fragment, null);
+		initView();
+		initReceiver();
+		registerReceiver();
 		return buildDialog(view);
 	}
 
@@ -101,13 +135,7 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 		builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog1, int which) {
-				materialCode = view.findViewById(R.id.et_material_coding);
-				batchNumber = view.findViewById(R.id.et_batch_number);
-				materialDescription = view.findViewById(R.id.et_item);
-				materialCommonName = view.findViewById(R.id.et_common_name);
-				specification = view.findViewById(R.id.et_specification);
-				cargoSpace = view.findViewById(R.id.et_position);
-				mOnMaterialSearchInforCompleted.inputMaterialInforCompleted(materialCode.getText() == null ? "" :
+				SearchCompleted.materialParameterForCompleted(materialCode.getText() == null ? "" :
 								materialCode.getText().toString(), batchNumber.getText() == null ? "" :
 								batchNumber.getText().toString(), materialDescription.getText() == null ? "" :
 								materialDescription.getText().toString(), materialCommonName.getText() == null ? "" :
@@ -122,9 +150,34 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 		return builder.create();
 	}
 
-	public interface OnMaterialSearchInforCompleted {
-		void inputMaterialInforCompleted(String materialCode, String batchNumber, String materialDescription,
-										 String materialCommonName, String specification, String cargoCode,
-										 List<String> materilaFilter, String cargoSpaceTypeFilter);
+	private void showAlertDialog(String title, String message,String displayName) {
+		AlertDialog normalDialog = new AlertDialog.Builder(context).setTitle(title).setMessage(message)
+				.setNegativeButton("关闭", (dialog, which) -> {
+					dialog.dismiss();
+				}).setNeutralButton(displayName, (dialog, which) -> {
+				}).create();
+		normalDialog.show();
 	}
+
+	private void registerReceiver()
+	{
+		IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
+		getContext().registerReceiver(mReceiver, mFilter);
+	}
+
+	private void unRegisterReceiver()
+	{
+		try {
+			getContext().unregisterReceiver(mReceiver);
+		} catch (Exception e) {
+			showAlertDialog("错误信息",e.getMessage(),"确定");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		unRegisterReceiver();
+	}
+
 }

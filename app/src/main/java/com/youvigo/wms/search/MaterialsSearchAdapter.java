@@ -16,9 +16,6 @@
 
 package com.youvigo.wms.search;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +28,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.entities.StockMaterial;
-import com.youvigo.wms.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import timber.log.Timber;
 
 public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, MaterialsSearchAdapter.MaterialSearchVH> {
 	public MaterialsSearchAdapter() {
@@ -59,7 +50,7 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 	/**
 	 * 列表item的数量
 	 */
-	class MaterialSearchVH extends RecyclerView.ViewHolder implements View.OnClickListener {
+	class MaterialSearchVH extends RecyclerView.ViewHolder {
 		private final TextView tv_material_code; // 物料编码
 		private final TextView tv_material_name; // 物料名称
 		private final TextView tv_specification; // 规格
@@ -71,9 +62,6 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 
 		MaterialSearchVH(@NonNull View itemView) {
 			super(itemView);
-
-			itemView.setOnClickListener(this);
-
 			tv_material_code = itemView.findViewById(R.id.et_material_code);
 			tv_material_name = itemView.findViewById(R.id.tv_material_name);
 			tv_specification = itemView.findViewById(R.id.tv_specification);
@@ -95,19 +83,19 @@ public class MaterialsSearchAdapter extends ListAdapter<StockMaterial, Materials
 			tv_supplier.setText(StockMaterial.getZZSUPP_NAME());
 		}
 
-		@Override
-		public void onClick(View v) {
-			List<StockMaterial> list = new ArrayList<>();
-			list.add(getItem(getAdapterPosition()));
-			Timber.d("onClick > %s", list.toString());
-			// 点击数据返回到调用到Activity
-			if (itemView.getContext() instanceof MaterialsSearchActivity) {
-				Intent intent = new Intent();
-				intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) list);
-				((MaterialsSearchActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
-				((MaterialsSearchActivity) itemView.getContext()).finish();
-			}
-		}
+//		@Override
+//		public void onClick(View v) {
+//			List<StockMaterial> list = new ArrayList<>();
+//			list.add(getItem(getAdapterPosition()));
+//			Timber.d("onClick > %s", list.toString());
+//			// 点击数据返回到调用到Activity
+//			if (itemView.getContext() instanceof MaterialsSearchActivity) {
+////				Intent intent = new Intent();
+////				intent.putParcelableArrayListExtra(Constants.MATERIAL_SEARCH_RESULT, (ArrayList<? extends Parcelable>) list);
+////				((MaterialsSearchActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
+////				((MaterialsSearchActivity) itemView.getContext()).finish();
+//			}
+//		}
 	}
 
 	static class MaterialCheckDiffCallback extends DiffUtil.ItemCallback<StockMaterial> {

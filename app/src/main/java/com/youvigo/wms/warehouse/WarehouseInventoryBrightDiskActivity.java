@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.SapService;
 import com.youvigo.wms.data.dto.base.Additional;
@@ -61,7 +63,7 @@ import timber.log.Timber;
 /**
  * 明盘
  */
-public class WarehouseInventoryBrightDiskActivity extends BaseActivity implements WarehouseInventoryManDialogFragment.OnPositionInforCompleted{
+public class WarehouseInventoryBrightDiskActivity extends BaseActivity implements OnItemCompleted {
     public static final int REQUEST_CODE = 200;
     public static final String KEY_CARGO_CODE = "key_cargoCode";
     public static final String KEY_VOUCHER_NUM = "key_voucherNumber";
@@ -239,11 +241,11 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
                     WarehouseInventoryResponse Response = response.body();
                     WarehouseInventoryResponseResult responseResult = Response.getData();
                     if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showMessage(responseResult.getMSGTXT());
+                        showAlertDialog("提交失败", responseResult.getMSGTXT());
                     } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
+                        showAlertDialog("提交成功", responseResult.getMSGTXT());
                         inventoryResult.clear();
                         adapter.notifyDataSetChanged();
-                        showMessage(responseResult.getMSGTXT());
                     }
                 }
             }
@@ -254,6 +256,20 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
         });
     }
 
+    /**
+     * 弹出框
+     * @param title title
+     * @param message message
+     */
+    private void showAlertDialog(String title, String message) {
+        AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
+
+                .setNegativeButton("关闭", (dialog, which) -> {
+                    dialog.dismiss();
+                }).setNeutralButton("确定", (dialog, which) -> {
+                }).create();
+        normalDialog.show();
+    }
 
     /**
      * 查询
@@ -282,7 +298,7 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
      * @param adapterPosition Item位置
      */
     @Override
-    public void inputPositionInforCompleted(int adapterPosition) {
+    public void itemCompleted(int adapterPosition) {
         adapter.notifyItemChanged(adapterPosition);
     }
 }

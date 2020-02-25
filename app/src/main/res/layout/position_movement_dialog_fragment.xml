@@ -217,14 +217,15 @@
         app:layout_constraintTop_toBottomOf="@id/tv_position_number_description" />
 
     <EditText
-        android:id="@+id/tv_on_put_qty"
+        android:id="@+id/tv_on_put_space"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="1dp"
-        android:paddingLeft="@dimen/dp_4"
         android:background="@drawable/bg_rectangle"
+        android:paddingLeft="@dimen/dp_4"
         android:text="15645615"
+        android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_listed"
         app:layout_constraintEnd_toStartOf="@+id/tv_on_put_qty_type"
         app:layout_constraintStart_toEndOf="@+id/tv_listed"
@@ -232,15 +233,13 @@
 
     <TextView
         android:id="@+id/tv_on_put_qty_type"
-        android:layout_width="72dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="4dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:paddingLeft="@dimen/dp_4"
-        android:background="@drawable/bg_rectangle"
         android:text="16513"
+        android:textSize="@dimen/dp_14"
         app:layout_constraintBottom_toBottomOf="@id/tv_listed"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tv_on_put_qty"
         app:layout_constraintTop_toTopOf="@id/tv_listed" />
 
     <TextView
