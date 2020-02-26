@@ -45,6 +45,7 @@ import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.dto.response.Material;
 import com.youvigo.wms.data.dto.response.MaterialUnit;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -164,7 +165,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
 
             @Override
             public void onFailure(@NotNull Call<ApiResponse<List<Material>>> call, @NotNull Throwable t) {
-
+                Utils.showToast(context,t.getMessage());
             }
         });
 
@@ -216,20 +217,12 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
      */
     private boolean verify() {
         if (tv_on_put_qty.getText().toString().isEmpty()) {
-            showMessage("请输入盘点主数量。");
+            Utils.showDialog(context,"数据校验","请输入盘点主数量","确定",(dialog, which) -> dialog.dismiss());
             return false;
         }
         return true;
     }
 
-
-    /**
-     * 消息提示
-     * @param message 消息
-     */
-    private void showMessage(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-    }
 
     /**
      * 初始化界面数据
