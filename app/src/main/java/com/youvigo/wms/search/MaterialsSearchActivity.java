@@ -190,16 +190,16 @@ public class MaterialsSearchActivity extends BaseActivity implements OnCommonSea
 	 * @param materialCommonName   通用名称
 	 * @param specification        规格
 	 * @param cargoCode            仓位
-	 * @param materilaFilter       过滤物料 <p>"" 正常库存， Q 质检控制中的库存， R 退回库存， S 已冻结的库存</p>
+	 * @param materialFilter       过滤物料 <p>"" 正常库存， Q 质检控制中的库存， R 退回库存， S 已冻结的库存</p>
 	 * @param cargoSpaceTypeFilter 仓位类型过滤规则
 	 */
 	@Override
 	public void materialParameterForCompleted(String materialCode, String batchNumber, String materialDescription,
 											String materialCommonName, String specification, String cargoCode,
-											List<String> materilaFilter, String cargoSpaceTypeFilter) {
+											List<String> materialFilter, String cargoSpaceTypeFilter) {
 		Timber.d(materialCode);
 		viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode,
-				materilaFilter, cargoSpaceTypeFilter);
+				materialFilter, cargoSpaceTypeFilter);
 	}
 
 	private void observeData() {

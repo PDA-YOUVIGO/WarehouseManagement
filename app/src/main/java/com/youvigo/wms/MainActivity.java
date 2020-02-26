@@ -19,6 +19,8 @@ package com.youvigo.wms;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -39,6 +41,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.base_activity);
         init(savedInstanceState);
+    }
+
+    /**
+     * 添加 ToolBar按钮
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_settings, menu);
+        return true;
+    }
+
+    /**
+     * 添加ToolBar设置按钮事件
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_settings) {
+            Intent mainIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(mainIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void init(Bundle savedInstanceState) {

@@ -39,7 +39,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.OnItemCompleted;
-import com.youvigo.wms.common.SharedPreferenceUtils;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.dto.base.ApiResponse;
@@ -255,9 +254,10 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         tv_auxiliary_batch_code = view.findViewById(R.id.tv_auxiliary_batch_code); // 辅批次
         tv_auxiliary_batch_qty = view.findViewById(R.id.tv_auxiliary_batch_qty); // 辅批次数量
 
+        RetrofitClient retrofitClient = RetrofitClient.getInstance();
         // TODO 待完善合箱显示
-        String inventoryWay = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context); // 获取盘点方式
-        boolean display_mergebox = SharedPreferenceUtils.getBoolean("display_mergebox",true,context);// 获取是否显示合箱
+        String inventoryWay = retrofitClient.getInventoryMethod(); // 获取盘点方式
+        boolean display_mergebox = retrofitClient.getDisplayMergeBox();// 获取是否显示合箱
 
         // 辨别盘点方式
         if (inventoryWay.equals("BrightDisk")){

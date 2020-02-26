@@ -145,7 +145,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Utils.showDialog(PositionMovementActivity.this, "", "您确认要删除该行数据吗？",
+                Utils.showDialog(PositionMovementActivity.this, "", "您确认要删除该行数据吗？","确定",
                         (dialog, which) -> {
                     viewModel.delete(adapter.getItemAt(viewHolder.getAdapterPosition()));
                     adapter.notifyItemRemoved(viewHolder.getAdapterPosition());

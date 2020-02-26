@@ -22,6 +22,6 @@ public interface OnCommonSearchCompleted {
 
 	void materialParameterForCompleted(String materialCode, String batchNumber, String materialDescription,
 									 String materialCommonName, String specification, String cargoCode,
-									 List<String> materilaFilter, String cargoSpaceTypeFilter);
+									 List<String> materialFilter, String cargoSpaceTypeFilter);
 
 }
