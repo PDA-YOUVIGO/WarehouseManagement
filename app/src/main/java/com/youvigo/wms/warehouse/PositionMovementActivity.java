@@ -224,12 +224,12 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
             @Override
             public void onResponse(@NotNull Call<PositionMovementResponse> call, @NotNull Response<PositionMovementResponse> response) {
                 if (response.isSuccessful()) {
-                    PositionMovementResponse onPositinResponse = response.body();
-                    PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
+                    PositionMovementResponse onPositionResponse = response.body();
+                    PositionMovementResponseDetails responseDetails = onPositionResponse.getPositionMovementResponseDetails();
                     if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showAlertDialog("提交失败", responseDetails.getMSGTXT(),"确定");
+                        Utils.showDialog(PositionMovementActivity.this,"提交失败",responseDetails.getMSGTXT(),"确定",(dialog, which) -> dialog.dismiss());
                     } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-                        showAlertDialog("提交成功", responseDetails.getMSGTXT(),"确定");
+                        Utils.showDialog(PositionMovementActivity.this,"提交成功",responseDetails.getMSGTXT(),"确定",(dialog, which) -> dialog.dismiss());
                         positionResult.clear();
                         adapter.notifyDataSetChanged();
                     }
@@ -276,25 +276,9 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
                 }
             });
         }
-        showAlertDialog("提交完成", "是否查看处理结果","查看");
         viewModel.positions().getValue().clear();
         adapter.notifyDataSetChanged();
 
-    }
-
-    /**
-     * 普通弹出框
-     * @param title title
-     * @param message messageg
-     * @param displayName displayName
-     */
-    private void showAlertDialog(String title, String message,String displayName) {
-        AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
-                .setNegativeButton("关闭", (dialog, which) -> {
-                    dialog.dismiss();
-                }).setNeutralButton(displayName, (dialog, which) -> {
-                }).create();
-        normalDialog.show();
     }
 
     /**
@@ -348,21 +332,20 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     private boolean verify() {
         List<PositionMovementModelView> list = viewModel.positions().getValue();
         if (list == null){
-            showAlertDialog("数据校验", "无数据提交","确定");
+            Utils.showDialog(this,"数据校验","无数据提交","确定",(dialog, which) -> dialog.dismiss());
             return false;
         }
         for (int i= 0; i < list.size();i++){
-
             if (list.get(i).VSOLM.isEmpty()){
-                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架数量再提交","确定");
+                Utils.showDialog(this,"数据校验","请维护" + i+1 +"行明细数据的上架数量再提交","确定",(dialog, which) -> dialog.dismiss());
                 return false;
             }
             if (list.get(i).NLPLA.isEmpty()){
-                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架货位再提交","确定");
+                Utils.showDialog(this, "数据校验" ,"请维护" + i+1 +"行明细数据的上架货位再提交","确定",(dialog, which) -> dialog.dismiss());
                 return false;
             }
             if (list.get(i).NLTYP.isEmpty()){
-                showAlertDialog("数据校验", "请维护" + i+1 +"行明细数据的上架货位类型再提交","确定");
+                Utils.showDialog(this, "数据校验","请维护" + i+1 +"行明细数据的上架货位类型再提交","确定",(dialog, which) -> dialog.dismiss());
                 return false;
             }
         }
@@ -375,7 +358,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     @Override
     protected void onMenuSearchClicked() {
         if (et_material_coding.getText().toString().isEmpty() && et_material_batch.getText().toString().isEmpty()&&et_position.getText().toString().isEmpty()){
-            showAlertDialog("数据校验", "请维护查询参数","确定");
+            Utils.showDialog(this, "数据校验","请维护查询参数","确定",(dialog, which) -> dialog.dismiss());
             return;
         }
         et_position.clearFocus();

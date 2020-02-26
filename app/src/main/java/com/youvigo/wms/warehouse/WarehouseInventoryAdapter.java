@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.util.SharedPreferenceUtils;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
 
@@ -73,8 +74,9 @@ public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQue
         @Override
         public void onClick(View view) {
             WarehouseInventoryQueryResponseDetails details = getItem(getAdapterPosition());
+            RetrofitClient retrofitClient = RetrofitClient.getInstance();
+            String inventoryWay = retrofitClient.getInventoryMethod(); // 获取盘点方式
 
-            String inventoryWay = SharedPreferenceUtils.getString("inventory_method", "BrightDisk", context); // 获取盘点方式
             if (inventoryWay.equals("BrightDisk")){
                 //明盘
                 Intent intent = new Intent(context, WarehouseInventoryBrightDiskActivity.class);

@@ -215,14 +215,14 @@ public class RetrofitClient {
 
 	/** 盘点方式 */
 	public String getInventoryMethod() {
-		return getLoggedPreferences().getString(Constants.INVENTORY_METHOD, null);
+		return getSharedPreferences().getString(Constants.INVENTORY_METHOD, null);
 	}
 
 	/**
 	 * 是否显示合箱
 	 */
 	public Boolean getDisplayMergeBox(){
-		return getLoggedPreferences().getBoolean(Constants.DISPLAY_MERGEBOX, false);
+		return getSharedPreferences().getBoolean(Constants.DISPLAY_MERGEBOX, false);
 	}
 
 }

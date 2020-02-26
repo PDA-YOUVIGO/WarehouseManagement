@@ -49,6 +49,7 @@ import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -220,16 +221,6 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         submit(data);
     }
 
-    private void showAlertDialog(String title, String message) {
-        AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
-
-                .setNegativeButton("关闭", (dialog, which) -> {
-                    dialog.dismiss();
-                }).setNeutralButton("确定", (dialog, which) -> {
-                }).create();
-        normalDialog.show();
-    }
-
     /**
      * 提交数据
      */
@@ -247,9 +238,9 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
                     WarehouseInventoryResponse Response = response.body();
                     WarehouseInventoryResponseResult responseResult = Response.getData();
                     if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showAlertDialog("提交失败", responseResult.getMSGTXT());
+                        Utils.showDialog(WarehouseInventoryBlindDiskActivity.this,"提交失败",responseResult.getMSGTXT(),"确定", (dialog, which) -> {dialog.dismiss();});
                     } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
-                        showAlertDialog("提交成功", responseResult.getMSGTXT());
+                        Utils.showDialog(WarehouseInventoryBlindDiskActivity.this,"提交成功",responseResult.getMSGTXT(),"确定", (dialog, which) -> {dialog.dismiss();});
                         inventoryResult.clear();
                         adapter.notifyDataSetChanged();
                     }
@@ -257,7 +248,7 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
             }
             @Override
             public void onFailure(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Throwable t) {
-                showMessage(t.getMessage());
+                Utils.showToast(WarehouseInventoryBlindDiskActivity.this,t.getMessage());
             }
         });
     }
@@ -276,14 +267,6 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
         intent.putExtra(MaterialsSearchActivity.KEY_BATCH_NUMBER,mBatch);
         intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
         startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    /**
-     * 消息提示
-     * @param message 消息
-     */
-    private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     /**

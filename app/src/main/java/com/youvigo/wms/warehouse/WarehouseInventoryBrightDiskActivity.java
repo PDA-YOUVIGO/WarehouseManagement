@@ -49,6 +49,7 @@ import com.youvigo.wms.data.entities.StockMaterial;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 import com.youvigo.wms.search.MaterialsSearchActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -241,9 +242,19 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
                     WarehouseInventoryResponse Response = response.body();
                     WarehouseInventoryResponseResult responseResult = Response.getData();
                     if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showAlertDialog("提交失败", responseResult.getMSGTXT());
+                        Utils.showDialog(
+                                WarehouseInventoryBrightDiskActivity.this,
+                                "提交失败",
+                                responseResult.getMSGTXT(),
+                                "确定",
+                                (dialog, which) -> {dialog.dismiss();});
                     } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
-                        showAlertDialog("提交成功", responseResult.getMSGTXT());
+                        Utils.showDialog(
+                                WarehouseInventoryBrightDiskActivity.this,
+                                "提交成功",
+                                responseResult.getMSGTXT(),
+                                "确定",
+                                (dialog, which) -> {dialog.dismiss();});
                         inventoryResult.clear();
                         adapter.notifyDataSetChanged();
                     }
@@ -251,24 +262,9 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
             }
             @Override
             public void onFailure(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Throwable t) {
-                showMessage(t.getMessage());
+                Utils.showToast(WarehouseInventoryBrightDiskActivity.this,t.getMessage());
             }
         });
-    }
-
-    /**
-     * 弹出框
-     * @param title title
-     * @param message message
-     */
-    private void showAlertDialog(String title, String message) {
-        AlertDialog normalDialog = new AlertDialog.Builder(this).setTitle(title).setMessage(message)
-
-                .setNegativeButton("关闭", (dialog, which) -> {
-                    dialog.dismiss();
-                }).setNeutralButton("确定", (dialog, which) -> {
-                }).create();
-        normalDialog.show();
     }
 
     /**
@@ -283,14 +279,6 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
         intent.putExtra(MaterialsSearchActivity.KEY_MATERIAL_CODE, mCode);
         intent.putExtra(MaterialsSearchActivity.KEY_SELECTALL_MENU,true);
         startActivityForResult(intent, REQUEST_CODE);
-    }
-
-    /**
-     * 消息提示
-     * @param message 消息
-     */
-    private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     /**

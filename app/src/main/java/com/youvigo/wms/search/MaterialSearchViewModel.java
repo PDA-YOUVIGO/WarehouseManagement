@@ -16,6 +16,8 @@
 
 package com.youvigo.wms.search;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,6 +30,7 @@ import com.youvigo.wms.data.dto.base.ControlInfo;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequest;
 import com.youvigo.wms.data.dto.request.MaterialQueryRequestDetails;
 import com.youvigo.wms.data.entities.StockMaterial;
+import com.youvigo.wms.util.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +60,7 @@ public class MaterialSearchViewModel extends BaseViewModel {
 	 */
 	void query(String materialCode, String batchNumber, String materialDescription, String materialCommonName,
 			   String specification, String cargoCode, List<String> materilaFilter,
-			   String cargoSpaceTypeFilter) {
-
+			   String cargoSpaceTypeFilter,Context context) {
 		_isLoading.setValue(true);
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		SapService sapService = retrofitClient.getSapService();
@@ -84,9 +86,9 @@ public class MaterialSearchViewModel extends BaseViewModel {
 
 		Disposable disposable =
 				sapService.materialQuery(materialQueryRequest).map(materialQueryResult -> {
-
-					if (!materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equals("S") &&
+					if (materialQueryResult.getMaterialQueryResponse().getMessage().getSuccess().equals("S") &&
 							materialQueryResult.getMaterialQueryResponse().getData() == null) {
+						Utils.showToast(context,materialQueryResult.getMaterialQueryResponse().getMessage().getMessage());
 						queryState.setValue(new ResultState(false,
 								materialQueryResult.getMaterialQueryResponse().getMessage().getMessage()));
 						_isLoading.setValue(false);

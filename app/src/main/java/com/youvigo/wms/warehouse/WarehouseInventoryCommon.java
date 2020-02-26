@@ -24,6 +24,7 @@ import com.youvigo.wms.data.dto.base.Additional;
 import com.youvigo.wms.data.dto.request.WarehouseInventoryRequestDetails;
 import com.youvigo.wms.data.entities.WarehouseInventoryModelView;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -37,6 +38,7 @@ public class WarehouseInventoryCommon {
     public WarehouseInventoryCommon(Context context) {
         this.context = context;
     }
+
     /**
      * 构建数据
      * @param retrofitClient 通用处理类
@@ -82,25 +84,17 @@ public class WarehouseInventoryCommon {
     public boolean verify(List<WarehouseInventoryModelView> data) {
         boolean flag = true;
         if (data == null){
-            showMessage("无数据提交");
+            Utils.showDialog(context, "数据校验","无数据提交","确定",(dialog, which) -> dialog.dismiss());
             flag = false;
         }
         for (int i= 0; i < data.size();i++){
             if (data.get(i).getMENGA()==0){
                 flag = false;
-                showMessage("请维护" + i+1 +"行明细数据的盘点数量再提交");
+                Utils.showDialog(context, "数据校验","请维护" + i+1 +"行明细数据的盘点数量再提交","确定",(dialog, which) -> dialog.dismiss());
                 break;
             }
         }
         return flag;
-    }
-
-    /**
-     * 消息提示
-     * @param message 消息
-     */
-    private void showMessage(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
 }

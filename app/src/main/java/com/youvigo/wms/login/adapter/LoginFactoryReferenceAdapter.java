@@ -57,7 +57,6 @@ public class LoginFactoryReferenceAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
-
 		if (view == null) {
 			LayoutInflater _layoutInflater = LayoutInflater.from(mContext);
 			view = _layoutInflater.inflate(R.layout.login_factory_item, null);
@@ -65,7 +64,7 @@ public class LoginFactoryReferenceAdapter extends BaseAdapter {
 
 		TextView stockLocationTv = view.findViewById(R.id.factoryTv);
 
-		//stockLocationTv.setText(mFactoryReferenceModels.get(i).getFactoryDisplayName());
+		stockLocationTv.setText(mFactoryReferences.get(i).toString());
 
 		return view;
 	}

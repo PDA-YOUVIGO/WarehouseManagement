@@ -273,7 +273,7 @@ public class WarehouseInventoryManDialogFragment extends DialogFragment {
         voucher_code.setText(inventoryModekView.getIVNUM());
         tv_unit.setText(inventoryModekView.getMEINS_TXT());
 
-        if (inventoryModekView.getZZPACKAGING().equals("X")){
+        if (inventoryModekView.getZZPACKAGING().equals("X") && display_mergebox){
             //合箱
             tv_checkout.setChecked(true);
             tv_master_batch_code.setText(inventoryModekView.getZZLICHA_MAIN());

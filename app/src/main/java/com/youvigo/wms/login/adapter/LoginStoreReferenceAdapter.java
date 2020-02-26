@@ -62,7 +62,7 @@ public class LoginStoreReferenceAdapter extends BaseAdapter {
 		}
 
 		TextView storeTv = view.findViewById(R.id.stockLocationTv);
-		//storeTv.setText(mStoreEntity.get(i).getStockLocationDisplayName());
+		storeTv.setText(mStoreEntity.get(i).toString());
 
 		return view;
 	}

@@ -109,7 +109,7 @@ public class MaterialsSearchActivity extends BaseActivity implements OnCommonSea
 			}
 			if (intent.getBooleanExtra(KEY_INITQUERY, true)) {
 				viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification,
-						cargoCode, filter, cargoSpaceTypeFilter);
+						cargoCode, filter, cargoSpaceTypeFilter,this);
 			}else {
 				onMenuSearchClicked();
 			}
@@ -199,7 +199,7 @@ public class MaterialsSearchActivity extends BaseActivity implements OnCommonSea
 											List<String> materialFilter, String cargoSpaceTypeFilter) {
 		Timber.d(materialCode);
 		viewModel.query(materialCode, batchNumber, materialDescription, materialCommonName, specification, cargoCode,
-				materialFilter, cargoSpaceTypeFilter);
+				materialFilter, cargoSpaceTypeFilter,this);
 	}
 
 	private void observeData() {
