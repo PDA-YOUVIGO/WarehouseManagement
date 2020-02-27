@@ -117,7 +117,7 @@ public class RetrofitClient {
 
 	/** SAP接口地址 */
 	private String getSapUrl() {
-		return getSharedPreferences().getString(Constants.SAP_URL, "http://52.82.87.90:50000");
+		return getSharedPreferences().getString(Constants.SAP_URL, "http://172.30.5.11:50000");
 	}
 
 	/** SAP Credentials */
@@ -138,7 +138,7 @@ public class RetrofitClient {
 
 	/** PDA接口地址 */
 	private String getPdaUrl() {
-		return getSharedPreferences().getString(Constants.PDA_URL, "http://52.83.32.16:8081");
+		return getSharedPreferences().getString(Constants.PDA_URL, "http://172.30.16.16:8081");
 	}
 
 	/**

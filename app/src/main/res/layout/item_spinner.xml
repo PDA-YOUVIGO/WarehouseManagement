@@ -22,7 +22,6 @@
     android:ellipsize="marquee"
     android:layout_marginLeft="@dimen/dp_4"
     android:layout_marginRight="@dimen/dp_4"
-    android:padding="@dimen/dp_8"
     android:singleLine="true"
     android:textAlignment="inherit"
     android:textSize="14sp" />
