@@ -17,7 +17,10 @@
 package com.youvigo.wms.warehouse;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,6 +77,7 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
     private TextView voucherNumber;
     private TextView cargoCode;
     private EditText materialCode;
+    private BroadcastReceiver mReceiver;
     @Nullable
     protected List<WarehouseInventoryModelView> inventoryResult = new ArrayList<>();
 
@@ -88,8 +92,34 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
         super.onCreate(savedInstanceState);
         initViews();
         observeData();
+        initReceiver();
         initIntent();
     }
+
+    /**
+     * 初始化扫描程序
+     */
+    private void initReceiver(){
+        // 扫描获取数据
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String scanResult = intent.getStringExtra("SCAN_BARCODE1");
+                final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
+                final String scanStatus = intent.getStringExtra("SCAN_STATE");
+
+                if ("ok".equals(scanStatus)) {
+                    if (materialCode.hasFocus()){
+                        materialCode.setText(scanResult);
+                        onMenuSearchClicked();
+                    }
+                } else {
+                    Utils.showToast(context,"获取扫描数据失败");
+                }
+            }
+        };
+    }
+
 
     private void initViews() {
         voucherNumber = findViewById(R.id.inventory_code); //凭证号
@@ -288,5 +318,38 @@ public class WarehouseInventoryBrightDiskActivity extends BaseActivity implement
     @Override
     public void itemCompleted(int adapterPosition) {
         adapter.notifyItemChanged(adapterPosition);
+    }
+
+    private void registerReceiver()
+    {
+        IntentFilter mFilter= new IntentFilter(Constants.BROADCAST_RESULT);
+        registerReceiver(mReceiver, mFilter);
+    }
+
+    private void unRegisterReceiver()
+    {
+        try {
+            unregisterReceiver(mReceiver);
+        } catch (Exception e) {
+            Utils.showToast(WarehouseInventoryBrightDiskActivity.this,e.getMessage());
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unRegisterReceiver();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mReceiver = null;
+        super.onDestroy();
     }
 }

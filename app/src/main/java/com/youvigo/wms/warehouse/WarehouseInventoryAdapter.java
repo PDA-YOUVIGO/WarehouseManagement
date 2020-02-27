@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.data.backend.RetrofitClient;
-import com.youvigo.wms.util.SharedPreferenceUtils;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
 
 public class WarehouseInventoryAdapter extends ListAdapter<WarehouseInventoryQueryResponseDetails, WarehouseInventoryAdapter.WarehouseInventoryCheckVH> {

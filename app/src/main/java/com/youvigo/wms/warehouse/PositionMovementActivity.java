@@ -121,7 +121,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
                         onMenuSearchClicked();
                     }
                 } else {
-                    showMessage("获取扫描数据失败");
+                    Utils.showToast(context,"获取扫描数据失败");
                 }
             }
         };
@@ -237,7 +237,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
             }
             @Override
             public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
-                showMessage(t.getMessage());
+                Utils.showToast(PositionMovementActivity.this,t.getMessage());
             }
         });
     }
@@ -272,7 +272,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
                 }
                 @Override
                 public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
-                    showMessage(t.getMessage());
+                    Utils.showToast(PositionMovementActivity.this,t.getMessage());
                 }
             });
         }
@@ -429,14 +429,6 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
         }
     }
 
-    /**
-     * 消息提示
-     * @param message 消息
-     */
-    private void showMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
     @Override
     public void itemCompleted(int adapterPosition) {
         adapter.notifyItemChanged(adapterPosition);
@@ -453,7 +445,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
         try {
             unregisterReceiver(mReceiver);
         } catch (Exception e) {
-            showMessage(e.getMessage());
+            Utils.showToast(PositionMovementActivity.this,e.getMessage());
         }
     }
 
