@@ -146,7 +146,11 @@ public class WarehouseInventorySearchActivity extends AppCompatActivity {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(Constants.DATE_PATTERN);
         LocalDate startDate = LocalDate.parse(this.startDate.getText().toString());
         LocalDate endDate = LocalDate.parse(this.endDate.getText().toString());
-        viewModel.query(startDate.format(dateTimeFormatter), endDate.format(dateTimeFormatter), voucherNumber.getText() == null ? "" : voucherNumber.getText().toString());
+        viewModel.query(
+                startDate.format(dateTimeFormatter),
+                endDate.format(dateTimeFormatter),
+                voucherNumber.getText() == null ? "" : voucherNumber.getText().toString(),
+                WarehouseInventorySearchActivity.this);
     }
 
 }

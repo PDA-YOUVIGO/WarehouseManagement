@@ -128,13 +128,13 @@ public interface SapService {
 	 * 仓位移动
 	 */
 	@POST("RESTAdapter/PDA/Stock_Transfer")
-	Call<PositionMovementResponse> submitPositionTransfer(@Body PositionMovementRequest request);
+	Single<PositionMovementResponse> submitPositionTransfer(@Body PositionMovementRequest request);
 
 	/**
 	 * 盘点凭证查询
 	 */
 	@POST("RESTAdapter/PDA/Stock_Checking_Query")
-	Call<WarehouseInventoryQueryResponse> queryWarehouseInventory(@Body WarehouseInventoryQueryRequest request);
+	Flowable<WarehouseInventoryQueryResponse> queryWarehouseInventory(@Body WarehouseInventoryQueryRequest request);
 
 	/**
 	 * 打印有（无）预留出库单据
@@ -146,6 +146,6 @@ public interface SapService {
 	 * 盘点提交
 	 */
 	@POST("RESTAdapter/PDA/Stock_Checking_Input")
-	Call<WarehouseInventoryResponse> submitWarehouseInventory(@Body WarehouseInventoryRequest request);
+	Single<WarehouseInventoryResponse> submitWarehouseInventory(@Body WarehouseInventoryRequest request);
 
 }

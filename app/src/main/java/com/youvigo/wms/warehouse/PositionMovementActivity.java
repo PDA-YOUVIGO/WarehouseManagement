@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.warehouse;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -62,6 +63,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -109,8 +113,13 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
                 final String scanStatus = intent.getStringExtra("SCAN_STATE");
 
                 if ("ok".equals(scanStatus)) {
-                    if (et_material_coding.hasFocus()){
-                        et_material_coding.setText(scanResult);
+                    if(scanResult.contains("-")){
+                        String[] split = scanResult.split("-");
+                        et_material_coding.setText(split[0]);
+                        et_material_batch.setText(split[1]);
+                    }
+                    else if (et_material_coding.hasFocus()){
+                        et_material_coding.setText(scanResult.trim());
                         onMenuSearchClicked();
                     }else if (et_material_batch.hasFocus()){
                         et_material_batch.setText(scanResult);
@@ -208,6 +217,7 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
     /**
      * 批量提交数据
      */
+    @SuppressLint("CheckResult")
     private void positionSubmitBatchData(){
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
         SapService sapService = retrofitClient.getSapService();
@@ -219,32 +229,41 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
             details_list.add(proData(p,retrofitClient));
         }
         request.setData(details_list);
-        Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
-        onPOsitionResponseCall.enqueue(new Callback<PositionMovementResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<PositionMovementResponse> call, @NotNull Response<PositionMovementResponse> response) {
-                if (response.isSuccessful()) {
-                    PositionMovementResponse onPositionResponse = response.body();
-                    PositionMovementResponseDetails responseDetails = onPositionResponse.getPositionMovementResponseDetails();
-                    if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
-                        Utils.showDialog(PositionMovementActivity.this,"提交失败",responseDetails.getMSGTXT(),"确定",(dialog, which) -> dialog.dismiss());
-                    } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-                        Utils.showDialog(PositionMovementActivity.this,"提交成功",responseDetails.getMSGTXT(),"确定",(dialog, which) -> dialog.dismiss());
-                        positionResult.clear();
-                        adapter.notifyDataSetChanged();
+        sapService.submitPositionTransfer(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<PositionMovementResponse>() {
+                    @Override
+                    public void onSuccess(PositionMovementResponse response) {
+                        if (response.getPositionMovementResponseDetails().getMSGTYPE().equalsIgnoreCase("E")) {
+                            Utils.showDialog(
+                                    PositionMovementActivity.this,
+                                    "提交失败",
+                                    response.getPositionMovementResponseDetails().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> dialog.dismiss());
+                        } else if (response.getPositionMovementResponseDetails().getMSGTYPE().equalsIgnoreCase("S")) {
+                            Utils.showDialog(
+                                    PositionMovementActivity.this,
+                                    "提交成功",
+                                    response.getPositionMovementResponseDetails().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> dialog.dismiss());
+                            positionResult.clear();
+                            adapter.notifyDataSetChanged();
+                        }
                     }
-                }
-            }
-            @Override
-            public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
-                Utils.showToast(PositionMovementActivity.this,t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Utils.showToast(PositionMovementActivity.this,e.toString());
+                    }
+                });
     }
 
     /**
      * 循环提交数据
      */
+    @SuppressLint("CheckResult")
     private void positionSubmitData()
     {
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
@@ -256,25 +275,22 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
             List<PositionMovementRequestDetails> details_list = new ArrayList<>();
             details_list.add(proData(p,retrofitClient));
             request.setData(details_list);
-            Call<PositionMovementResponse> onPOsitionResponseCall = sapService.submitPositionTransfer(request);
-            onPOsitionResponseCall.enqueue(new Callback<PositionMovementResponse>() {
-                @Override
-                public void onResponse(@NotNull Call<PositionMovementResponse> call, @NotNull Response<PositionMovementResponse> response) {
-                    if (response.isSuccessful()) {
-                        PositionMovementResponse onPositinResponse = response.body();
-                        PositionMovementResponseDetails responseDetails = onPositinResponse.getPositionMovementResponseDetails();
-                        if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
+            sapService.submitPositionTransfer(request)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableSingleObserver<PositionMovementResponse>() {
+                        @Override
+                        public void onSuccess(PositionMovementResponse response) {
+                            if (response.getPositionMovementResponseDetails().getMSGTYPE().equalsIgnoreCase("E")) {
 
-                        } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-
+                            } else if (response.getPositionMovementResponseDetails().getMSGTYPE().equalsIgnoreCase("S")) {
+                            }
                         }
-                    }
-                }
-                @Override
-                public void onFailure(@NotNull Call<PositionMovementResponse> call, @NotNull Throwable t) {
-                    Utils.showToast(PositionMovementActivity.this,t.getMessage());
-                }
-            });
+                        @Override
+                        public void onError(Throwable e) {
+                            Utils.showToast(PositionMovementActivity.this,e.toString());
+                        }
+                    });
         }
         viewModel.positions().getValue().clear();
         adapter.notifyDataSetChanged();
