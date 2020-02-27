@@ -114,9 +114,11 @@ public class PositionMovementActivity extends BaseActivity implements OnItemComp
 
                 if ("ok".equals(scanStatus)) {
                     if(scanResult.contains("-")){
-                        String[] split = scanResult.split("-");
-                        et_material_coding.setText(split[0]);
-                        et_material_batch.setText(split[1]);
+                        if (et_material_coding.hasFocus() || et_material_batch.hasFocus()){
+                            String[] split = scanResult.split("-");
+                            et_material_coding.setText(split[0]);
+                            et_material_batch.setText(split[1]);
+                        }
                     }
                     else if (et_material_coding.hasFocus()){
                         et_material_coding.setText(scanResult.trim());

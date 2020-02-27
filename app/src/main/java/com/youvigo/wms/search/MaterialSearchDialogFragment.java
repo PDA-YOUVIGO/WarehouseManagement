@@ -66,7 +66,14 @@ public class MaterialSearchDialogFragment extends DialogFragment {
 				final String scanResultWithQrcode = intent.getStringExtra("SCAN_BARCODE2");
 				final String scanStatus = intent.getStringExtra("SCAN_STATE");
 				if ("ok".equals(scanStatus)) {
-					if (materialCode.hasFocus()){
+					if (scanResult.contains("-")){
+						if (materialCode.hasFocus() || batchNumber.hasFocus()){
+							String[] split = scanResult.split("-");
+							materialCode.setText(split[0]);
+							batchNumber.setText(split[1]);
+						}
+					}
+					else if (materialCode.hasFocus()){
 						materialCode.setText(scanResult);
 					}else if (batchNumber.hasFocus()){
 						batchNumber.setText(scanResult);
