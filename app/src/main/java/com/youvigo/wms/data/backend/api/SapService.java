@@ -62,7 +62,7 @@ public interface SapService {
 	 * 获取SAP入库上架单据
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender")
-	Call<ShelvingResult> queryOnShelvings(@Body ShelvingQueryRequest request);
+	Single<ShelvingResult> queryOnShelvings(@Body ShelvingQueryRequest request);
 
 	/**
 	 * 入库上架

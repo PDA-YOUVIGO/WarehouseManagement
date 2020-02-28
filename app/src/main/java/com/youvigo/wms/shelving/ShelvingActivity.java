@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
 import com.youvigo.wms.search.SearchActivity;
@@ -60,14 +59,6 @@ public class ShelvingActivity extends BaseActivity {
     }
 
     private void init() {
-        MaterialButton materialButton = findViewById(R.id.mbt_query);
-
-        materialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-
         sourceUnit = findViewById(R.id.tv_source_unit_description);
         date = findViewById(R.id.tv_date_description);
         orderNumber = findViewById(R.id.tv_materials_description);

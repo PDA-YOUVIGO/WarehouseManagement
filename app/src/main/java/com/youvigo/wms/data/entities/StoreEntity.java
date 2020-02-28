@@ -17,16 +17,25 @@
 package com.youvigo.wms.data.entities;
 
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
 /**
- * 库存地及仓库
+ * 工厂库存地及仓库信息
  */
+@Entity(tableName = "store")
 public class StoreEntity implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	@Expose(serialize = false, deserialize = false)
+	@PrimaryKey(autoGenerate = true)
+	private int uid;
 
 	private String companyCode;
 
@@ -36,7 +45,8 @@ public class StoreEntity implements Serializable {
 
 	private String factoryName;
 
-	private String stockLocation;
+	@SerializedName("stockLocation")
+	private String stockLocationCode;
 
 	@SerializedName("storeLocaltionName")
 	private String storeLocationName;
@@ -77,12 +87,12 @@ public class StoreEntity implements Serializable {
 		this.factoryName = factoryName;
 	}
 
-	public String getStockLocation() {
-		return stockLocation;
+	public String getStockLocationCode() {
+		return stockLocationCode;
 	}
 
-	public void setStockLocation(String stockLocation) {
-		this.stockLocation = stockLocation;
+	public void setStockLocationCode(String stockLocationCode) {
+		this.stockLocationCode = stockLocationCode;
 	}
 
 	public String getStoreLocationName() {
@@ -109,18 +119,12 @@ public class StoreEntity implements Serializable {
 		this.storeName = storeName;
 	}
 
-	public StoreEntity(String companyCode, String companyName, String factoryCode, String factoryName, String stockLocation, String storeLocationName, String storeCode, String storeName) {
-		this.companyCode = companyCode;
-		this.companyName = companyName;
-		this.factoryCode = factoryCode;
-		this.factoryName = factoryName;
-		this.stockLocation = stockLocation;
-		this.storeLocationName = storeLocationName;
-		this.storeCode = storeCode;
-		this.storeName = storeName;
+	public int getUid() {
+		return uid;
 	}
 
-	public StoreEntity() {
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 
 }

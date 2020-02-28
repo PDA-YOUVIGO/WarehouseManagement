@@ -24,30 +24,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.FactoryReference;
+import com.youvigo.wms.data.entities.StoreEntity;
 
 import java.util.List;
 
-/**
- * 库存地点适配器
- */
-public class LoginFactoryReferenceAdapter extends BaseAdapter {
-	private List<FactoryReference> mFactoryReferences;
+public class LoginFactoryAdapter extends BaseAdapter {
+
+	private List<StoreEntity> mFactorys;
 	private Context mContext;
 
-	public LoginFactoryReferenceAdapter(List<FactoryReference> mFactoryReferences, Context mContext) {
-		this.mFactoryReferences = mFactoryReferences;
+	public LoginFactoryAdapter(List<StoreEntity> mStores, Context mContext) {
+		this.mFactorys = mStores;
 		this.mContext = mContext;
 	}
 
 	@Override
 	public int getCount() {
-		return mFactoryReferences.size();
+		return mFactorys.size();
 	}
 
 	@Override
 	public Object getItem(int i) {
-		return mFactoryReferences.get(i);
+		return mFactorys.get(i);
 	}
 
 	@Override
@@ -57,14 +55,16 @@ public class LoginFactoryReferenceAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
+
 		if (view == null) {
 			LayoutInflater _layoutInflater = LayoutInflater.from(mContext);
-			view = _layoutInflater.inflate(R.layout.login_factory_item, null);
+			view = _layoutInflater.inflate(R.layout.login_spinner, null);
 		}
 
-		TextView stockLocationTv = view.findViewById(R.id.factoryTv);
+		TextView tvItem = view.findViewById(R.id.tv_item);
 
-		stockLocationTv.setText(mFactoryReferences.get(i).toString());
+		StoreEntity item = (StoreEntity) getItem(i);
+		tvItem.setText(String.format("%s - %s", item.getFactoryCode(), item.getFactoryName()));
 
 		return view;
 	}

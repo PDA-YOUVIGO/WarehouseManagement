@@ -41,21 +41,19 @@ import androidx.preference.PreferenceManager;
 import com.youvigo.wms.MainActivity;
 import com.youvigo.wms.R;
 import com.youvigo.wms.SettingsActivity;
+import com.youvigo.wms.data.AppDatabase;
+import com.youvigo.wms.data.LocalRepository;
 import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.dao.StoreDao;
 import com.youvigo.wms.data.dto.base.ApiResponse;
 import com.youvigo.wms.data.entities.StoreEntity;
-import com.youvigo.wms.data.entities.FactoryReference;
-import com.youvigo.wms.data.entities.StoreLocationReference;
-import com.youvigo.wms.login.adapter.LoginFactoryReferenceAdapter;
-import com.youvigo.wms.login.adapter.LoginStoreReferenceAdapter;
+import com.youvigo.wms.login.adapter.LoginStockLocationAdapter;
+import com.youvigo.wms.login.adapter.LoginFactoryAdapter;
 import com.youvigo.wms.util.Constants;
 import com.youvigo.wms.util.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -65,14 +63,21 @@ public class LoginActivity extends AppCompatActivity {
 
 	private LoginViewModel loginViewModel;
 	private Spinner factorySp;
-	private List<FactoryReference> mFactoryReferenceList;
-	private List<StoreLocationReference> mStoreLocationReferenceList = new ArrayList<>();
+	private Spinner storeLocationSp;
 	protected Toolbar toolbar;
+
+	private LoginStockLocationAdapter stockLocationAdapter;
+	private LoginFactoryAdapter factoryAdapter;
+
+	private List<StoreEntity> stockLocationEntity = new ArrayList<>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_activity);
+		init();
+
+		InitApplication();
 
 		loginViewModel = new ViewModelProvider.NewInstanceFactory().create(LoginViewModel.class);
 
@@ -81,43 +86,26 @@ public class LoginActivity extends AppCompatActivity {
 		final Button loginButton = findViewById(R.id.loginBt);
 		final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 		factorySp = findViewById(R.id.factorySp);
-		final Spinner storeLocationSp = findViewById(R.id.stockLocationSp);
+		storeLocationSp = findViewById(R.id.stockLocationSp);
 
-		LoginStoreReferenceAdapter loginStoreReferenceAdapter =
-				new LoginStoreReferenceAdapter(mStoreLocationReferenceList, getApplicationContext());
-		storeLocationSp.setAdapter(loginStoreReferenceAdapter);
-
-		init();
-		loadSpinnerData();
-
-		// 工厂选择按钮监听点击
-		factorySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-				FactoryReference factoryReference = mFactoryReferenceList.get(i);
-				mStoreLocationReferenceList.clear();
-				mStoreLocationReferenceList.addAll(factoryReference.getStores());
-				loginStoreReferenceAdapter.notifyDataSetChanged();
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> adapterView) {
-
-			}
-		});
+		processSpinner();
 
 		// 处理用户密码字段验证
 		loginViewModel.getLoginFormState().observe(this, loginFormState -> {
 			if (loginFormState == null) {
 				return;
 			}
+
 			loginButton.setEnabled(loginFormState.isDataValid());
+
 			if (loginFormState.getUsernameError() != null) {
 				usernameEditText.setError(getString(loginFormState.getUsernameError()));
 			}
+
 			if (loginFormState.getPasswordError() != null) {
 				passwordEditText.setError(getString(loginFormState.getPasswordError()));
 			}
+
 		});
 
 		loginViewModel.getLoginResult().observe(this, loginResult -> {
@@ -130,9 +118,11 @@ public class LoginActivity extends AppCompatActivity {
 				Utils.showToast(LoginActivity.this, loginResult.getError().getMessage());
 				return;
 			}
+
 			if (loginResult.getSuccess() != null) {
 				loginSuccess(loginResult.getSuccess());
 				setResult(Activity.RESULT_OK);
+
 				//Complete and destroy login activity once successful
 				finish();
 			}
@@ -162,13 +152,12 @@ public class LoginActivity extends AppCompatActivity {
 		passwordEditText.setOnEditorActionListener((v, actionId, event) -> {
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
 
-				FactoryReference factoryReference = (FactoryReference) factorySp.getSelectedItem();
-				StoreLocationReference storeLocationReference = (StoreLocationReference) storeLocationSp.getSelectedItem();
+				StoreEntity storeEntity = (StoreEntity) storeLocationSp.getSelectedItem();
 
 				loginViewModel.loginIn(usernameEditText.getText().toString(),
 						passwordEditText.getText().toString(),
-						factoryReference.getFactoryCode(),
-						storeLocationReference.getStockLocationCode());
+						storeEntity.getFactoryCode(),
+						storeEntity.getStockLocationCode());
 			}
 
 			return false;
@@ -177,13 +166,41 @@ public class LoginActivity extends AppCompatActivity {
 		//登录按钮监听事件
 		loginButton.setOnClickListener(v -> {
 			loadingProgressBar.setVisibility(View.VISIBLE);
-			FactoryReference factoryReference = (FactoryReference) factorySp.getSelectedItem();
-			StoreLocationReference storeLocationReference = (StoreLocationReference) storeLocationSp.getSelectedItem();
+			StoreEntity storeEntity = (StoreEntity) storeLocationSp.getSelectedItem();
 			loginViewModel.loginIn(usernameEditText.getText().toString(),
 					passwordEditText.getText().toString(),
-					factoryReference.getFactoryCode(),
-					storeLocationReference.getStockLocationCode()
+					storeEntity.getFactoryCode(),
+					storeEntity.getStockLocationCode()
 			);
+		});
+	}
+
+	/**
+	 * 处理Spinner数据初始化及数据加载
+	 */
+	private void processSpinner() {
+		StoreDao storeDao = AppDatabase.getInstance(this).storeDao();
+		List<StoreEntity> allFactoryInfo = storeDao.getAllFactoryInfo();
+		factoryAdapter = new LoginFactoryAdapter(allFactoryInfo, this);
+		factorySp.setAdapter(factoryAdapter);
+
+		stockLocationAdapter = new LoginStockLocationAdapter(stockLocationEntity, this);
+		storeLocationSp.setAdapter(stockLocationAdapter);
+
+		// 工厂选择按钮监听点击
+		factorySp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				StoreEntity adapterItem = (StoreEntity) factoryAdapter.getItem(i);
+				stockLocationEntity.clear();
+				stockLocationEntity.addAll(storeDao.getStockLocaltionInfo(adapterItem.getFactoryCode()));
+				stockLocationAdapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
 		});
 	}
 
@@ -205,13 +222,12 @@ public class LoginActivity extends AppCompatActivity {
 	 */
 	private void loginSuccess(LoggedInUser loggedInUser) {
 
-		Utils.setLoggedInPreferences(LoginActivity.this, loggedInUser);
+		LocalRepository.setLoggedInPreferences(LoginActivity.this, loggedInUser);
 
 		String msg = String.format("Login Success %s", loggedInUser.getDisplayName());
 		Utils.showToast(LoginActivity.this, msg);
 
 		Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-		intent.putParcelableArrayListExtra(Constants.FACTORY_SELECT_ITEMS, new ArrayList<>(mStoreLocationReferenceList));
 		startActivity(intent);
 
 		setResult(Activity.RESULT_OK);
@@ -228,10 +244,15 @@ public class LoginActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * 异步加载库存地参照数据
+	 * 初始化库存地数据
 	 */
 	@SuppressLint("CheckResult")
-	private void loadSpinnerData() {
+	private void InitApplication() {
+
+		StoreDao storeDao = AppDatabase.getInstance(this).storeDao();
+
+		List<StoreEntity> storeEntities = storeDao.getAllStoreInfo();
+		if (!storeEntities.isEmpty()) return;
 
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		retrofitClient.getBackendApi().getStores()
@@ -243,55 +264,16 @@ public class LoginActivity extends AppCompatActivity {
 						List<StoreEntity> stores = listApiResponse.getData();
 
 						if (listApiResponse.getCode() != 200 || stores.size() == 0) {
-							Utils.showToast(LoginActivity.this, "加载库存地数据失败。");
+							Utils.showToast(LoginActivity.this, "获取库存地数据失败。");
 						}
 
-						// 将获取的数据按工厂进行分组
-						Map<String, FactoryReference> groupFactoryMap = new HashMap<>();
-						for (StoreEntity storeEntity : stores) {
-
-							FactoryReference factoryReference =
-									groupFactoryMap.get(storeEntity.getFactoryCode());
-
-							if (factoryReference == null) {
-								factoryReference = new FactoryReference();
-								factoryReference.setCompanyCode(storeEntity.getCompanyCode());
-								factoryReference.setCompanyName(storeEntity.getCompanyName());
-								factoryReference.setFactoryCode(storeEntity.getFactoryCode());
-								factoryReference.setFactoryName(storeEntity.getFactoryName());
-
-								List<StoreLocationReference> storeList = new ArrayList<>();
-								storeList.add(new StoreLocationReference(storeEntity.getStockLocation(),
-										storeEntity.getStoreLocationName(), storeEntity.getStoreCode(),
-										storeEntity.getStoreName()));
-								factoryReference.setStores(storeList);
-
-								groupFactoryMap.put(storeEntity.getFactoryCode(), factoryReference);
-							} else {
-								factoryReference.getStores().add(new StoreLocationReference(
-										storeEntity.getStockLocation(),
-										storeEntity.getStoreLocationName(),
-										storeEntity.getStoreCode(),
-										storeEntity.getStoreName()));
-							}
-						}
-
-						// 将分组后的数据转为List
-						mFactoryReferenceList = new ArrayList<>(groupFactoryMap.values());
-
-						// 排序，具体可以修改实体类的 compareTo 方法
-						Collections.sort(mFactoryReferenceList);
-
-						LoginFactoryReferenceAdapter mLoginFactoryReferenceAdapter = new LoginFactoryReferenceAdapter(
-								mFactoryReferenceList,
-								getApplicationContext()
-						);
-						factorySp.setAdapter(mLoginFactoryReferenceAdapter);
+						storeDao.batchInsert(stores);
+						processSpinner();
 					}
 
 					@Override
 					public void onError(Throwable e) {
-						Utils.showToast(LoginActivity.this, "加载库存地数据失败。\n" + e.getMessage());
+						Utils.showToast(LoginActivity.this, "获取库存地数据失败。\n" + e.getMessage());
 					}
 				});
 	}

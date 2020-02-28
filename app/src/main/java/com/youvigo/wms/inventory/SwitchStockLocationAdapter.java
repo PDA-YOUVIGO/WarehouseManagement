@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,12 +30,13 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.data.entities.StoreEntity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
-public class SwitchStockLocationAdapter extends ListAdapter<StoreLocationReference,
+public class SwitchStockLocationAdapter extends ListAdapter<StoreEntity,
 		SwitchStockLocationAdapter.SwitchStockLocationVH> {
 	public SwitchStockLocationAdapter() {
 		super(new SwitchStockLocationDiffCallback());
@@ -70,18 +70,22 @@ public class SwitchStockLocationAdapter extends ListAdapter<StoreLocationReferen
 
 		@Override
 		public void onClick(View v) {
-			StoreLocationReference switchStockLocation = getItem(getAdapterPosition());
+			StoreEntity storeEntity = getItem(getAdapterPosition());
 
 			new AlertDialog.Builder(itemView.getContext())
-					.setTitle("库存地")
-					.setMessage("切换到该库存地？")
+					.setTitle("库存地切换")
+					.setMessage(String.format("您确认要将库存地切换到 %s 吗?", storeEntity.getStockLocationCode()))
 					.setPositiveButton(R.string.ok, (dialog, which) -> {
 
-						itemView.getContext().getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
-                                Context.MODE_PRIVATE).edit().putString(Constants.FACTORYCODE,
-                                switchStockLocation.getStockLocationCode()).apply();
+						itemView.getContext()
+								.getApplicationContext()
+								.getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES, Context.MODE_PRIVATE)
+								.edit()
+								.putString(Constants.STOCKLOCATION, storeEntity.getStockLocationCode())
+								.apply();
 
-						Toast.makeText(itemView.getContext(), "成功切换库存地。", Toast.LENGTH_SHORT).show();
+						Utils.showToast(itemView.getContext(), String.format("已成功切换到 %s 库存地",
+								storeEntity.getStockLocationCode()));
 
 						if (itemView.getContext() instanceof AppCompatActivity) {
 							AndroidSchedulers.mainThread().scheduleDirect(() -> ((AppCompatActivity) itemView.getContext()).finish());
@@ -90,23 +94,23 @@ public class SwitchStockLocationAdapter extends ListAdapter<StoreLocationReferen
 					.setNegativeButton(R.string.cancel, (dialog, which) -> dialog.cancel()).show();
 		}
 
-		void bind(StoreLocationReference switchStockLocation) {
-			storelocationCode.setText(switchStockLocation.getStockLocationCode());
-			storelocationName.setText(switchStockLocation.getStoreLocationName());
+		void bind(StoreEntity switchStoreEntity) {
+			storelocationCode.setText(switchStoreEntity.getStockLocationCode());
+			storelocationName.setText(switchStoreEntity.getStoreLocationName());
 		}
 	}
 
-	static class SwitchStockLocationDiffCallback extends DiffUtil.ItemCallback<StoreLocationReference> {
+	static class SwitchStockLocationDiffCallback extends DiffUtil.ItemCallback<StoreEntity> {
 		@Override
-		public boolean areItemsTheSame(@NonNull StoreLocationReference oldItem,
-                                       @NonNull StoreLocationReference newItem) {
-			return oldItem.getStoreCode().equals(newItem.getStoreCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
+		public boolean areItemsTheSame(@NonNull StoreEntity oldItem,
+									   @NonNull StoreEntity newItem) {
+			return oldItem.getFactoryCode().equals(newItem.getFactoryCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
 		}
 
 		@Override
-		public boolean areContentsTheSame(@NonNull StoreLocationReference oldItem,
-                                          @NonNull StoreLocationReference newItem) {
-			return oldItem.getStoreCode().equals(newItem.getStoreCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
+		public boolean areContentsTheSame(@NonNull StoreEntity oldItem,
+										  @NonNull StoreEntity newItem) {
+			return oldItem.getFactoryCode().equals(newItem.getFactoryCode()) && oldItem.getStockLocationCode().equals(newItem.getStockLocationCode());
 		}
 	}
 }

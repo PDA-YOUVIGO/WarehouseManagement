@@ -18,9 +18,12 @@ package com.youvigo.wms.util;
 
 public class Constants {
 
+    // 数据库名
+    public static final String DATABASE_NAME = "database";
+
     // 登录状态
     public static final String LOGIN_STATE = "login_state";
-    public static final String FACTORY_SELECT_ITEMS = "FACTORY_SELECT_ITEMS";
+    public static final String LOGIN_FACTORY_CODE = "login_factory_code";
 
     // 用户登录后缓存的数据
     public static final String LOGIN_SHAREDPREFERENCES = "loggedconfig";
@@ -30,12 +33,13 @@ public class Constants {
     public static final String BROADCAST_RESULT = "nlscan.action.SCANNER_RESULT";
 
     // 通用设置
+    public static final String DATE_PATTERN_DEFAULT = "yyyy-MM-dd";
     public static final String DATE_PATTERN = "yyyyMMdd";
     public static final String DATETIME_PATTERN = "yyyy-MM-dd hh:mm:ss";
     public static final String DATETIME_PATTERN_SHORT = "yyyyMMddhhmmss";
 
     /** 登录工厂 */
-    public static final String FACTORYCODE = "factory_code";
+    public static final String FACTORYCODE = "factorycode";
 
     /** 登录库存地 */
     public static final String STOCKLOCATION = "stocklocation";

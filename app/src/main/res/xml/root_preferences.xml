@@ -8,7 +8,10 @@
 			app:key="sap_interface_address"
 			app:title="@string/sap_interface_address_title"
 			android:maxLines="1"
+			android:inputType=""
 			android:summary="@string/sap_interface_address_title"
+			android:defaultValue="http://52.82.87.90:50000"
+			android:dialogLayout="@layout/preference_edit_http_text"
 			app:useSimpleSummaryProvider="true" />
 
 		<EditTextPreference
@@ -28,6 +31,8 @@
 			app:key="pda_interface_address"
 			app:title="@string/pda_interface_address_title"
 			android:maxLines="1"
+			android:defaultValue="http://52.83.32.16:8081"
+			android:dialogLayout="@layout/preference_edit_http_text"
 			app:useSimpleSummaryProvider="true" />
 
 		<EditTextPreference

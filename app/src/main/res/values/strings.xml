@@ -49,12 +49,12 @@
     <string name="internal_order_search">内部订单查询</string>
 
     <!--shelving-->
-    <string name="order_number">单据号</string>
+    <string name="order_number">单据编号</string>
     <string name="query">查询</string>
     <string name="material_document_hint">请输入物料凭证</string>
     <string name="source_unit_hint">请输入来源单位</string>
     <string name="source_unit">来源单位</string>
-    <string name="date">日期</string>
+    <string name="date">单据日期</string>
     <string name="creator">创建人</string>
     <string name="date_hint">请输入日期</string>
     <string name="item_number">物料编号</string>
@@ -154,6 +154,7 @@
     <string name="sap_interface_password_title">SAP接口密码</string>
     <string name="no_reserved_out_bound_details">出库明细</string>
     <string name="title_activity_no_reserved_out_bound_detail">出库信息</string>
+    <string name="order_number_hint">单据号</string>
 
 
 </resources>

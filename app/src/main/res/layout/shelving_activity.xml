@@ -43,43 +43,31 @@
             android:layout_marginStart="@dimen/dp_8"
             android:layout_marginTop="@dimen/dp_4"
             android:text="@string/order_number"
-            android:textSize="@dimen/dp_14"
             android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_source_unit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <EditText
             android:id="@+id/tv_materials_description"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:gravity="start|center"
-            android:maxLines="1"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
-            app:layout_constraintEnd_toStartOf="@id/mbt_query"
-            app:layout_constraintStart_toEndOf="@id/tv_material_document"
-            app:layout_constraintTop_toTopOf="@id/tv_material_document"
-            tools:text="10111111" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mbt_query"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_16"
-            android:paddingStart="@dimen/dp_16"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingEnd="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_8"
-            android:text="@string/query"
-            android:textAppearance="?android:attr/textAppearance"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            app:backgroundTint="@color/colorAccent"
+            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rectangle"
+            android:gravity="start|center"
+            android:hint="转储单号"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             app:layout_constraintBottom_toBottomOf="@id/tv_material_document"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_material_document" />
+            app:layout_constraintStart_toEndOf="@id/tv_material_document"
+            app:layout_constraintTop_toTopOf="@id/tv_material_document"
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/tv_source_unit"
@@ -89,7 +77,7 @@
             android:layout_marginTop="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/source_unit"
-            android:textSize="@dimen/dp_14"
+            android:textSize="18sp"
             android:textColor="@color/colorAccent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_material_document" />
@@ -98,26 +86,30 @@
             android:id="@+id/tv_source_unit_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
             android:layout_marginEnd="@dimen/dp_8"
             android:gravity="start|center"
             android:maxLines="1"
+            android:textSize="18sp"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_source_unit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_source_unit"
-            app:layout_constraintTop_toTopOf="@id/tv_source_unit"
-            tools:text="ThoughtWorks" />
+            app:layout_constraintTop_toTopOf="@id/tv_source_unit" />
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
             android:layout_marginTop="@dimen/dp_4"
             android:layout_marginBottom="@dimen/dp_4"
             android:gravity="start"
             android:text="@string/date"
-            android:textSize="@dimen/dp_14"
+            android:textSize="18sp"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="@id/tv_source_unit"
             app:layout_constraintTop_toBottomOf="@id/tv_source_unit" />
@@ -126,16 +118,19 @@
             android:id="@+id/tv_date_description"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginStart="@dimen/dp_4"
             android:layout_marginEnd="@dimen/dp_8"
             android:gravity="start|center"
             android:maxLines="1"
+            android:textSize="18sp"
+            android:background="@drawable/bg_rectangle"
+            android:paddingLeft="@dimen/dp_4"
+            android:paddingRight="@dimen/dp_4"
             android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_date"
-            app:layout_constraintTop_toTopOf="@id/tv_date"
-            tools:text="2018-12-01" />
+            app:layout_constraintTop_toTopOf="@id/tv_date" />
 
         <View
             android:id="@+id/divider"

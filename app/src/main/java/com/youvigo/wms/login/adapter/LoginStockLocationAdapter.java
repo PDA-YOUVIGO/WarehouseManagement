@@ -24,28 +24,30 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.data.entities.StoreEntity;
 
 import java.util.List;
 
-public class LoginStoreReferenceAdapter extends BaseAdapter {
-
-	private List<StoreLocationReference> mStoreEntity;
+/**
+ * 库存地点适配器
+ */
+public class LoginStockLocationAdapter extends BaseAdapter {
+	private List<StoreEntity> mStockLocations;
 	private Context mContext;
 
-	public LoginStoreReferenceAdapter(List<StoreLocationReference> mStoreEntity, Context mContext) {
-		this.mStoreEntity = mStoreEntity;
+	public LoginStockLocationAdapter(List<StoreEntity> mStores, Context mContext) {
+		this.mStockLocations = mStores;
 		this.mContext = mContext;
 	}
 
 	@Override
 	public int getCount() {
-		return mStoreEntity.size();
+		return mStockLocations.size();
 	}
 
 	@Override
 	public Object getItem(int i) {
-		return mStoreEntity.get(i);
+		return mStockLocations.get(i);
 	}
 
 	@Override
@@ -55,14 +57,15 @@ public class LoginStoreReferenceAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
-
 		if (view == null) {
 			LayoutInflater _layoutInflater = LayoutInflater.from(mContext);
-			view = _layoutInflater.inflate(R.layout.login_stocklocation_item, null);
+			view = _layoutInflater.inflate(R.layout.login_spinner, null);
 		}
 
-		TextView storeTv = view.findViewById(R.id.stockLocationTv);
-		storeTv.setText(mStoreEntity.get(i).toString());
+		TextView tvItem = view.findViewById(R.id.tv_item);
+		StoreEntity item = (StoreEntity) getItem(i);
+
+		tvItem.setText(String.format("%s - %s", item.getStockLocationCode(), item.getStoreLocationName()));
 
 		return view;
 	}

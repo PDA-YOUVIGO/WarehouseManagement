@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,14 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.deliver.DeliverActivity;
 import com.youvigo.wms.outstock.ReservedOutBoundActivity;
@@ -40,34 +40,35 @@ import timber.log.Timber;
 public class SearchActivity extends AppCompatActivity {
 
 	private ProgressBar progressBar;
-	private AppCompatEditText orderNumnerTxt;
-	private SearchAdapter adapter;
-	private TextView startDate;
-	private TextView endDate;
+	private EditText orderNumnerTxt;
+	private TextView startDate, endDate;
 
+	private SearchAdapter adapter;
 	private ArrayList filter_movetypes;
 	private SearchViewModel viewModel;
+
+	// 查询类型
+	private String category;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setContentView(R.layout.search_activity);
-
 		initViews();
-
 		observeData();
-
 		initIntent();
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.search_menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	private void initIntent() {
 		if (getIntent() != null) {
 
-			String category = getIntent().getStringExtra(Constants.CATEGORY);
 			String orderNumber;
-			//List<String> moveTypeCodes = getIntent().getStringArrayListExtra();
 
 			if (category == null) {
 				return;
@@ -117,29 +118,34 @@ public class SearchActivity extends AppCompatActivity {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		String category = getIntent().getStringExtra(Constants.CATEGORY);
-
-		LocalDate localDate = LocalDate.now();
-
 		startDate = findViewById(R.id.tv_start);
-		startDate.setText(localDate.toString());
-
-		startDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-			startDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
-		}, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
-
 		endDate = findViewById(R.id.tv_end);
-		endDate.setText(localDate.toString());
-		endDate.setOnClickListener(v -> new DatePickerDialog(SearchActivity.this, (view, year, month, dayOfMonth) -> {
-			endDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString());
-		}, localDate.getYear(), localDate.getMonthValue() - 1, localDate.getDayOfMonth()).show());
 
-		// 查询
-		MaterialButton materialButton = findViewById(R.id.mbt_query);
-		materialButton.setOnClickListener(v -> {
-			query(category);
+		category = getIntent().getStringExtra(Constants.CATEGORY);
 
-		});
+		// create localdate instance for takeing current year,month,day...
+		LocalDate dateNow = LocalDate.now();
+		String dateNowStr = dateNow.format(DateTimeFormatter.ofPattern(Constants.DATE_PATTERN_DEFAULT));
+		int Day = dateNow.getDayOfMonth();
+		int Month = dateNow.getMonthValue() - 1;
+		int Year = dateNow.getYear();
+
+		// set view default value
+		startDate.setText(dateNowStr);
+		endDate.setText(dateNowStr);
+
+		// set listener
+		startDate.setOnClickListener(v ->
+				new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
+						startDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString()), Year, Month, Day - 1)
+						.show()
+		);
+
+		endDate.setOnClickListener(v ->
+				new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
+						endDate.setText(LocalDate.of(year, month + 1, dayOfMonth).toString()), Year, Month, Day)
+						.show()
+		);
 
 		orderNumnerTxt = findViewById(R.id.edit_text);
 		progressBar = findViewById(R.id.progress_bar);
@@ -166,13 +172,19 @@ public class SearchActivity extends AppCompatActivity {
 
 		switch (category) {
 			case Constants.TYPE_SHELVING:
-				viewModel.shelvingQuery(year, localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				viewModel.shelvingQuery(year, localDateStart.format(dateTimeFormatter),
+						localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" :
+								orderNumnerTxt.getText().toString());
 				break;
 			case Constants.TYPE_DELIVER:
-				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter),
+						localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" :
+								orderNumnerTxt.getText().toString());
 				break;
 			case Constants.TYPE_RESERVED_OUT_BOUND:
-				viewModel.reservedOutBoundQuery(orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(), localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), filter_movetypes);
+				viewModel.reservedOutBoundQuery(orderNumnerTxt.getText() == null ? "" :
+								orderNumnerTxt.getText().toString(), localDateStart.format(dateTimeFormatter),
+						localDateEnd.format(dateTimeFormatter), filter_movetypes);
 				break;
 		}
 	}
@@ -185,7 +197,8 @@ public class SearchActivity extends AppCompatActivity {
 
 		//viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
 
-		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE : View.GONE));
+		viewModel.isLoading().observe(this, isActive -> progressBar.setVisibility(isActive ? View.VISIBLE :
+				View.GONE));
 
 		viewModel.materials().observe(this, materials -> {
 			adapter.submitList(materials);
@@ -206,6 +219,8 @@ public class SearchActivity extends AppCompatActivity {
 		if (item.getItemId() == android.R.id.home) {
 			onBackPressed();
 			return true;
+		} else if (item.getItemId() == R.id.menu_search) {
+			query(category);
 		}
 		return super.onOptionsItemSelected(item);
 	}

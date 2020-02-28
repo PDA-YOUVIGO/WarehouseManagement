@@ -53,6 +53,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import retrofit2.Call;
@@ -94,73 +95,53 @@ public class SearchViewModel extends BaseViewModel {
 
 		shelvingQueryRequest.setRequestDetails(shelvingQueryRequestDetails);
 
-		Call<ShelvingResult> shelvings = sapService.queryOnShelvings(shelvingQueryRequest);
-		shelvings.enqueue(new Callback<ShelvingResult>() {
-			@Override
-			public void onResponse(@NotNull Call<ShelvingResult> call, @NotNull Response<ShelvingResult> response) {
-				if (response.isSuccessful()) {
+		Disposable disposable = sapService.queryOnShelvings(shelvingQueryRequest)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeWith(new DisposableSingleObserver<ShelvingResult>() {
+					@Override
+					public void onSuccess(ShelvingResult shelvingResult) {
 
-					ShelvingResult shelvingResult = response.body();
-
-					if (!shelvingResult.getShelvingQueryResponse().getResult().getSuccess().equalsIgnoreCase("S")) {
-						queryState.setValue(new ResultState(false, shelvingResult.getShelvingQueryResponse().getResult().getMessage()));
-						_isLoading.setValue(false);
-						return;
-					}
-
-					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<MaterialVoucher>>) emitter -> {
-
+						if (!shelvingResult.getShelvingQueryResponse().getResult().getSuccess().equalsIgnoreCase("S")) {
+							queryState.setValue(new ResultState(false,
+									shelvingResult.getShelvingQueryResponse().getResult().getMessage()));
+							_isLoading.setValue(false);
+							return;
+						}
 						List<MaterialVoucher> mockData = new ArrayList<>();
 						List<Shelving> data = shelvingResult.getShelvingQueryResponse().getData();
 
 						// 按单据号分组数据
-						Map<String, List<Shelving>> group = data.stream().collect(Collectors.groupingBy(Shelving::getMaterialVoucherCode));
+						Map<String, List<Shelving>> group =	data.stream()
+								.collect(Collectors.groupingBy(Shelving::getMaterialVoucherCode));
 
 						// 组织数据
-						group.forEach((k,v) -> {
+						group.forEach((k, v) -> {
 							MaterialVoucher materialVoucher = new MaterialVoucher();
 							materialVoucher.orderNumber = v.get(0).getMaterialVoucherCode();
-							materialVoucher.date = LocalDate.parse(v.get(0).getVoucherDate(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+							materialVoucher.date = LocalDate.parse(v.get(0)
+									.getVoucherDate(), dateTimeFormatter)
+									.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 							materialVoucher.creator = v.get(0).getCreator();
 							materialVoucher.supplierName = v.get(0).getSupplierName();
 							materialVoucher.shelvings = v;
 							mockData.add(materialVoucher);
 						});
 
-						emitter.onNext(mockData);
-						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io())
-							.observeOn(AndroidSchedulers.mainThread())
-							.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
-						@Override
-						public void onNext(List<MaterialVoucher> materials) {
-							_materials.setValue(materials);
-						}
+						_materials.setValue(mockData);
+						_isLoading.setValue(false);
+					}
 
-						@Override
-						public void onError(Throwable t) {
-							_isLoading.setValue(false);
-						}
+					@Override
+					public void onError(Throwable e) {
+						queryState.setValue(new ResultState(false, e.getMessage()));
+						_isLoading.setValue(false);
+					}
+				});
 
-						@Override
-						public void onComplete() {
-							_isLoading.setValue(false);
-						}
-					});
-					addSubscription(disposable);
-				}
-			}
-
-			@Override
-			public void onFailure(@NotNull Call<ShelvingResult> call, @NotNull Throwable t) {
-				_isLoading.setValue(false);
-				queryState.setValue(new ResultState(false, t.getMessage()));
-				Timber.e(t);
-			}
-		});
+		addSubscription(disposable);
 
 	}
-
 
 	/**
 	 * 出库下架查询

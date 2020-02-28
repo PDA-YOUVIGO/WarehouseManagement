@@ -25,7 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.youvigo.wms.base.BaseFragment;
-import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.data.LocalRepository;
 import com.youvigo.wms.deliver.DeliverActivity;
 import com.youvigo.wms.inventory.SwitchStockLocationActivity;
 import com.youvigo.wms.outstock.NoReservedOutBoundActivity;
@@ -37,12 +37,8 @@ import com.youvigo.wms.util.Utils;
 import com.youvigo.wms.warehouse.PositionMovementActivity;
 import com.youvigo.wms.warehouse.WarehouseInventoryActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainFragment extends BaseFragment implements View.OnClickListener {
     private MainViewModel mViewModel;
-    private List<StoreLocationReference> storeLocationReferenceList;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -56,10 +52,6 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        if (getArguments() != null) {
-            storeLocationReferenceList = getArguments().getParcelableArrayList("storeLocalData");
-        }
 
         view.findViewById(R.id.tv_shelving).setOnClickListener(this);
         view.findViewById(R.id.tv_finished_products).setOnClickListener(this);
@@ -161,13 +153,12 @@ public class MainFragment extends BaseFragment implements View.OnClickListener {
 
     private void launchSwitchLocationsActivity() {
         Intent intent = new Intent(context, SwitchStockLocationActivity.class);
-        intent.putParcelableArrayListExtra("data", new ArrayList<>(storeLocationReferenceList));
         startActivity(intent);
     }
 
     private void closeApplication() {
         Utils.showDialog(context, "提示", "你确认要退出程序吗？", "退出", (dialog, which) -> {
-            Utils.clearLoggedInPreferences(context);
+            LocalRepository.clearLoggedInPreferences(context);
             System.exit(0);
         });
     }

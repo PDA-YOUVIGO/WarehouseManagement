@@ -64,8 +64,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_move_type_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_move_type_description"
-            app:layout_constraintTop_toTopOf="@id/tv_move_type_description"
-            tools:text="Fast" />
+            app:layout_constraintTop_toTopOf="@id/tv_move_type_description" />
 
         <TextView
             android:id="@+id/tv_internal_order_description"

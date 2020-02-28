@@ -11,10 +11,6 @@ import com.google.gson.GsonBuilder;
 import com.youvigo.wms.BaseApplication;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.backend.api.SapService;
-import com.youvigo.wms.data.dto.base.ControlInfo;
-import com.youvigo.wms.data.dto.request.PrintRequest;
-import com.youvigo.wms.data.dto.request.PrintRequestDetails;
-import com.youvigo.wms.data.dto.response.PrintResponse;
 import com.youvigo.wms.util.Constants;
 
 import java.util.concurrent.TimeUnit;
@@ -22,7 +18,6 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -107,7 +102,7 @@ public class RetrofitClient {
 		return backendApi;
 	}
 
-	private SharedPreferences getSharedPreferences() {
+	private SharedPreferences getDefaultSharedPreferences() {
 		return PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
 	}
 
@@ -117,7 +112,7 @@ public class RetrofitClient {
 
 	/** SAP接口地址 */
 	private String getSapUrl() {
-		return getSharedPreferences().getString(Constants.SAP_URL, "http://172.30.5.11:50000");
+		return getDefaultSharedPreferences().getString(Constants.SAP_URL, "http://172.30.5.11:50000");
 	}
 
 	/** SAP Credentials */
@@ -128,47 +123,22 @@ public class RetrofitClient {
 
 	/** SAP账户 */
 	private String getSapAccount() {
-		return getSharedPreferences().getString(Constants.SAP_ACCOUNT, "zengzx");
+		return getDefaultSharedPreferences().getString(Constants.SAP_ACCOUNT, "zengzx");
 	}
 
 	/** SAP密码 */
 	private String getSapPassword() {
-		return getSharedPreferences().getString(Constants.SAP_PASSWORD, "abcd1234");
+		return getDefaultSharedPreferences().getString(Constants.SAP_PASSWORD, "abcd1234");
 	}
 
 	/** PDA接口地址 */
 	private String getPdaUrl() {
-		return getSharedPreferences().getString(Constants.PDA_URL, "http://172.30.16.16:8081");
-	}
-
-	/**
-	 * 打印预留单
-	 *
-	 * @param pdaOrderNumber Pda生成的单据号
-	 */
-	public Call<PrintResponse> printOrder(String pdaOrderNumber) {
-		SapService sapService = getSapService();
-		SharedPreferences sharedPreferences =
-				PreferenceManager.getDefaultSharedPreferences(BaseApplication.getContext());
-
-		PrintRequest request = new PrintRequest();
-		request.setControlInfo(new ControlInfo());
-
-		PrintRequestDetails details = new PrintRequestDetails();
-		details.setPdaOrderNumber(pdaOrderNumber);
-		details.setPrinterName(sharedPreferences.getString(Constants.PRINTER_NAME, null));
-		details.setProgramName(sharedPreferences.getString(Constants.BUSINESS_TYPE, null));
-		request.setPrintRequestDetails(details);
-
-		return sapService.submitPrint(request);
-
+		return getDefaultSharedPreferences().getString(Constants.PDA_URL, "http://172.30.16.16:8081");
 	}
 
 	// 获取用户登录信息
-
 	private SharedPreferences getLoggedPreferences() {
-		return BaseApplication.getContext().getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,
-				Context.MODE_PRIVATE);
+		return BaseApplication.getContext().getSharedPreferences(Constants.LOGIN_SHAREDPREFERENCES,	Context.MODE_PRIVATE);
 	}
 
 	/** 登录工厂 */
@@ -215,14 +185,14 @@ public class RetrofitClient {
 
 	/** 盘点方式 */
 	public String getInventoryMethod() {
-		return getSharedPreferences().getString(Constants.INVENTORY_METHOD, null);
+		return getDefaultSharedPreferences().getString(Constants.INVENTORY_METHOD, null);
 	}
 
 	/**
 	 * 是否显示合箱
 	 */
 	public Boolean getDisplayMergeBox(){
-		return getSharedPreferences().getBoolean(Constants.DISPLAY_MERGEBOX, false);
+		return getDefaultSharedPreferences().getBoolean(Constants.DISPLAY_MERGEBOX, false);
 	}
 
 }

@@ -16,7 +16,6 @@
 
 package com.youvigo.wms.inventory;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -30,7 +29,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.youvigo.wms.R;
-import com.youvigo.wms.data.entities.StoreLocationReference;
+import com.youvigo.wms.data.AppDatabase;
+import com.youvigo.wms.data.backend.RetrofitClient;
+import com.youvigo.wms.data.entities.StoreEntity;
 
 import java.util.List;
 
@@ -41,20 +42,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
  */
 public class SwitchStockLocationActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
-
     private SwitchStockLocationAdapter adapter;
-
-    private List<StoreLocationReference> storeLocationReferenceList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
-        storeLocationReferenceList = intent.getParcelableArrayListExtra("data");
-
         setContentView(R.layout.switch_stock_location_activity);
-
         initViews();
     }
 
@@ -80,7 +73,10 @@ public class SwitchStockLocationActivity extends AppCompatActivity {
 
     private void refresh() {
         AndroidSchedulers.mainThread().scheduleDirect(() -> {
-            adapter.submitList(storeLocationReferenceList);
+            String factoryCode = RetrofitClient.getInstance().getFactoryCode();
+            List<StoreEntity> stockLocaltionInfo =
+                    AppDatabase.getInstance(this).storeDao().getStockLocaltionInfo(factoryCode);
+            adapter.submitList(stockLocaltionInfo);
             refreshLayout.setRefreshing(false);
         });
     }
