@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.util.Constants;
 
 import timber.log.Timber;
@@ -42,7 +43,7 @@ import timber.log.Timber;
 /**
  * 成品上架页面
  */
-public class FinishedProductsActivity extends BaseActivity {
+public class FinishedProductsActivity extends BaseActivity implements OnItemCompleted {
 
     private EditText materialCoding, batchNumber;
 
@@ -184,5 +185,15 @@ public class FinishedProductsActivity extends BaseActivity {
     protected void onDestroy() {
         mReceiver = null;
         super.onDestroy();
+    }
+
+    @Override
+    public void itemCompleted(int adapterPosition) {
+        if (viewModel.shelves().getValue().get(adapterPosition).getNotOnShelvesQuantity() == 0){
+            adapter.notifyItemRemoved(adapterPosition);
+        }
+        else {
+            adapter.notifyItemChanged(adapterPosition);
+        }
     }
 }

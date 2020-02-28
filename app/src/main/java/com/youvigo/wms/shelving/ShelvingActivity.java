@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.youvigo.wms.R;
 import com.youvigo.wms.base.BaseActivity;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.search.SearchActivity;
 import com.youvigo.wms.util.Constants;
 
@@ -39,7 +40,7 @@ import timber.log.Timber;
 /**
  * 入库上架页面
  */
-public class ShelvingActivity extends BaseActivity {
+public class ShelvingActivity extends BaseActivity implements OnItemCompleted {
     public static final String ORDER_NUMBER = "order_number";
 
     private ProgressBar progressBar;
@@ -132,5 +133,15 @@ public class ShelvingActivity extends BaseActivity {
     protected void onPostResume() {
         super.onPostResume();
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void itemCompleted(int adapterPosition) {
+        if (viewModel.shelvings().getValue().get(adapterPosition).getNotOnShelvesQuantity() == 0){
+            adapter.notifyItemRemoved(adapterPosition);
+        }
+        else {
+            adapter.notifyItemChanged(adapterPosition);
+        }
     }
 }

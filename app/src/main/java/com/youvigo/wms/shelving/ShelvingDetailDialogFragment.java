@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.shelving;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,6 +39,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.youvigo.wms.R;
+import com.youvigo.wms.base.OnItemCompleted;
 import com.youvigo.wms.data.backend.RetrofitClient;
 import com.youvigo.wms.data.backend.api.BackendApi;
 import com.youvigo.wms.data.backend.api.SapService;
@@ -51,6 +53,7 @@ import com.youvigo.wms.data.dto.response.OnShevlingResponse;
 import com.youvigo.wms.data.dto.response.OnShevlingResponseDetails;
 import com.youvigo.wms.data.entities.Shelving;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -59,6 +62,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,6 +74,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     private static final String KEY_SHELVING = "key_shelving";
 
     private BroadcastReceiver mReceiver;
+    private static int location;
 
     // 物料编码
     private TextView materialCoding;
@@ -100,24 +107,27 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     private List<MaterialUnit> auxiliaryUnits = new ArrayList<>();
     private ArrayAdapter<MaterialUnit> auxiliaryUnitsAdapter;
 
+    private OnItemCompleted onItemCompleted;
+
     /**
      * 展示详情页面
      *
      * @param shelving 详情数据
      */
-    public static void show(FragmentManager fragmentManager, Shelving shelving) {
+    public static void show(FragmentManager fragmentManager, Shelving shelving,int adapterPosition) {
         ShelvingDetailDialogFragment dialogFragment = new ShelvingDetailDialogFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(KEY_SHELVING, shelving);
         dialogFragment.setArguments(bundle);
         dialogFragment.show(fragmentManager, TAG);
+        location = adapterPosition;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-
         this.context = context;
+        onItemCompleted = (OnItemCompleted) context;
     }
 
     @Override
@@ -151,7 +161,6 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
 
     /**
      * 获取物料档案
-     *
      * @param materialCode 物料编码
      */
     private void initUnits(String materialCode) {
@@ -193,11 +202,8 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(context).inflate(R.layout.sheling_detail_dialog_fragment, null);
-
         initViews(view);
-
         registerReceiver();
-
         return buildDialog(view);
     }
 
@@ -248,6 +254,7 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
     /**
      * 提交到SAP
      */
+    @SuppressLint("CheckResult")
     private void submit() {
 
         if (!verify()) {
@@ -287,36 +294,42 @@ public class ShelvingDetailDialogFragment extends DialogFragment {
         requestItem.setZZPACKAGING(shelving.getPackaging());
         request.setDetails(requestItem);
 
-        Call<OnShevlingResponse> onShevlingResponseCall = sapService.submitOnSheving(request);
-        onShevlingResponseCall.enqueue(new Callback<OnShevlingResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<OnShevlingResponse> call, @NotNull Response<OnShevlingResponse> response) {
-                if (response.isSuccessful()) {
-                    OnShevlingResponse onShevlingResponse = response.body();
-                    OnShevlingResponseDetails responseDetails = onShevlingResponse.getResponseDetails();
-
-                    double basicQuantity = shelving.getBasicQuantity();
-                    Double currentOnShelveQuantity = Double.valueOf(onShelvesMainQuantity.getText().toString());
-
-                    if (responseDetails.getMSGTYPE().equalsIgnoreCase("E")) {
-                        showMessage(responseDetails.getMSGTXT());
-                    } else if (responseDetails.getMSGTYPE().equalsIgnoreCase("S")) {
-                        double currentNotOnshlveQuantity = basicQuantity - currentOnShelveQuantity;
-                        shelving.setNotOnShelvesQuantity(currentNotOnshlveQuantity);
-                        notOnShelvesQuantity.setText(String.valueOf(currentNotOnshlveQuantity));
-                        onShelveQuantity.setText(onShelveQuantity.getText());
-
-                        showMessage(responseDetails.getMSGTXT());
+        sapService.submitOnShelving(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<OnShevlingResponse>() {
+                    @Override
+                    public void onSuccess(OnShevlingResponse response) {
+                        //原有数量
+                        double basicQuantity = shelving.getBasicQuantity();
+                        //当前上架数量
+                        Double currentOnShelveQuantity = Double.valueOf(onShelvesMainQuantity.getText().toString());
+                        if (response.getResponseDetails().getMSGTYPE().equalsIgnoreCase("E")) {
+                            Utils.showDialog(
+                                    context,
+                                    "提交失败",
+                                    response.getResponseDetails().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> dialog.dismiss());
+                        } else if (response.getResponseDetails().getMSGTYPE().equalsIgnoreCase("S")) {
+                            double currentNotOnShelvingQuantity = basicQuantity - currentOnShelveQuantity;
+                            shelving.setNotOnShelvesQuantity(currentNotOnShelvingQuantity); //设置剩余数量
+                            notOnShelvesQuantity.setText(String.valueOf(currentNotOnShelvingQuantity));// 设置未上架数量
+                            onShelveQuantity.setText(onShelveQuantity.getText()); // 设置上架数量
+                            Utils.showDialog1(
+                                    context,
+                                    "提交成功",
+                                    response.getResponseDetails().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> onItemCompleted.itemCompleted(location),
+                                    (dialog, which) -> onItemCompleted.itemCompleted(location));
+                        }
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<OnShevlingResponse> call, @NotNull Throwable t) {
-                showMessage(t.getMessage());
-            }
-        });
-
+                    @Override
+                    public void onError(Throwable e) {
+                        Utils.showToast(context,e.toString());
+                    }
+                });
     }
 
     private void showMessage(String message) {

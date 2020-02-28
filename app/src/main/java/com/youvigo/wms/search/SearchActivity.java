@@ -166,13 +166,13 @@ public class SearchActivity extends AppCompatActivity {
 
 		switch (category) {
 			case Constants.TYPE_SHELVING:
-				viewModel.shelvingQuery(year, localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				viewModel.shelvingQuery(year, localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(),SearchActivity.this);
 				break;
 			case Constants.TYPE_DELIVER:
-				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString());
+				viewModel.tackOffQuery(localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(),SearchActivity.this);
 				break;
 			case Constants.TYPE_RESERVED_OUT_BOUND:
-				viewModel.reservedOutBoundQuery(orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(), localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), filter_movetypes);
+				viewModel.reservedOutBoundQuery(orderNumnerTxt.getText() == null ? "" : orderNumnerTxt.getText().toString(), localDateStart.format(dateTimeFormatter), localDateEnd.format(dateTimeFormatter), filter_movetypes,SearchActivity.this);
 				break;
 		}
 	}

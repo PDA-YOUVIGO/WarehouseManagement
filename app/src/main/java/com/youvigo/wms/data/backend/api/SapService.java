@@ -62,13 +62,13 @@ public interface SapService {
 	 * 获取SAP入库上架单据
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf_Task_Query_Sender")
-	Call<ShelvingResult> queryOnShelvings(@Body ShelvingQueryRequest request);
+	Flowable<ShelvingResult> queryOnShelving(@Body ShelvingQueryRequest request);
 
 	/**
 	 * 入库上架
 	 */
 	@POST("RESTAdapter/PDA/On_The_Shelf")
-	Call<OnShevlingResponse> submitOnSheving(@Body OnShevingRequest request);
+	Single<OnShevlingResponse> submitOnShelving(@Body OnShevingRequest request);
 
 	/**
 	 * 获取SAP成品上架单据信息
@@ -80,7 +80,7 @@ public interface SapService {
 	 * 获取SAP出库下架任务单
 	 */
 	@POST("RESTAdapter/PDA/Shelf_Task_Query")
-	Call<DeliverQueryResponse> queryDeliver(@Body DeliverQueryRequest request);
+	Flowable<DeliverQueryResponse> queryDeliver(@Body DeliverQueryRequest request);
 
 	/**
 	 * 提交出库下架到SAP
@@ -92,7 +92,7 @@ public interface SapService {
 	 * 获取SAP预留单据
 	 */
 	@POST("RESTAdapter/PDA/Reservation_Query")
-	Call<ReservedOutBoundQueryResponse> queryReservedOutBound(@Body ReservedOutBoundQueryRequest request);
+	Flowable<ReservedOutBoundQueryResponse> queryReservedOutBound(@Body ReservedOutBoundQueryRequest request);
 
 	/**
 	 * 提交预留出库到SAP

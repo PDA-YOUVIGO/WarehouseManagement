@@ -83,10 +83,12 @@
             android:paddingLeft="@dimen/dp_4"
             android:text="吸氧剂"
             app:layout_constrainedHeight="true"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintBottom_toBottomOf="@+id/tv_material_name_description"
             app:layout_constraintEnd_toEndOf="@+id/tv_batch_number"
             app:layout_constraintStart_toEndOf="@id/tv_material_name_description"
-            app:layout_constraintTop_toTopOf="@id/tv_material_name_description" />
+            app:layout_constraintTop_toTopOf="@id/tv_material_name_description"
+            app:layout_constraintRight_toRightOf="parent"/>
 
         <TextView
             android:id="@+id/tv_batch_number_name"
