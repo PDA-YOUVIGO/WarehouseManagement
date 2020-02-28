@@ -78,6 +78,23 @@ public class Utils {
 		builder.show();
 	}
 
-
+	/**
+	 * 显示Dialog弹出框
+	 * @param context activity
+	 * @param title 标题
+	 * @param message 消息
+	 * @param buttonTitle 按钮标题
+	 * @param cancelListener 取消事件
+	 * @param confirmListener 确认事件
+	 */
+	public static void showDialog1(Context context, String title, String message, String buttonTitle,DialogInterface.OnClickListener cancelListener,
+								  DialogInterface.OnClickListener confirmListener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(TextUtils.isEmpty(title) ? "确认" : title);
+		builder.setMessage(message);
+		builder.setPositiveButton(buttonTitle, confirmListener);
+		builder.setNegativeButton("取消",cancelListener);
+		builder.show();
+	}
 
 }

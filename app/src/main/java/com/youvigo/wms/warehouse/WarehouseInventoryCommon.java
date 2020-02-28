@@ -83,7 +83,7 @@ public class WarehouseInventoryCommon {
      */
     public boolean verify(List<WarehouseInventoryModelView> data) {
         boolean flag = true;
-        if (data == null){
+        if (data == null || data.size() ==0){
             Utils.showDialog(context, "数据校验","无数据提交","确定",(dialog, which) -> dialog.dismiss());
             flag = false;
         }

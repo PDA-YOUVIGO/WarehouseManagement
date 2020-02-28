@@ -80,7 +80,7 @@ public class ShelvingAdapter extends ListAdapter<Shelving, ShelvingAdapter.Shelv
             if (itemView.getContext() instanceof AppCompatActivity) {
                 Shelving shelving = getItem(getAdapterPosition());
                 FragmentManager fragmentManager = ((AppCompatActivity) itemView.getContext()).getSupportFragmentManager();
-                ShelvingDetailDialogFragment.show(fragmentManager, shelving);
+                ShelvingDetailDialogFragment.show(fragmentManager, shelving, this.getAdapterPosition());
             }
         }
     }

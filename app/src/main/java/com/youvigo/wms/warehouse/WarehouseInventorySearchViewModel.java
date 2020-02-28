@@ -16,6 +16,8 @@
 
 package com.youvigo.wms.warehouse;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,6 +32,7 @@ import com.youvigo.wms.data.dto.request.WarehouseInventoryQueryRequestDetails;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponse;
 import com.youvigo.wms.data.dto.response.WarehouseInventoryQueryResponseDetails;
 import com.youvigo.wms.data.entities.WarehouseInventoryQueryModelView;
+import com.youvigo.wms.util.Utils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +65,7 @@ public class WarehouseInventorySearchViewModel extends BaseViewModel {
 	 * @param endDate          结束时间
 	 * @param voucherNumber         凭证号
 	 */
-	void query(String startDate, String endDate, String voucherNumber ) {
+	void query(String startDate, String endDate, String voucherNumber, Context context ) {
 		_isLoading.setValue(true);
 		RetrofitClient retrofitClient = RetrofitClient.getInstance();
 		SapService sapService = retrofitClient.getSapService();
@@ -84,61 +87,46 @@ public class WarehouseInventorySearchViewModel extends BaseViewModel {
 		inventoryQueryRequestDetails.setSPDATU(voucherNumber.isEmpty() ? startDate : ""); // 开始时间
 		inventoryQueryRequestDetails.setEPDATU(voucherNumber.isEmpty() ? endDate : ""); // 结束时间
 		inventoryQueryRequest.setData(inventoryQueryRequestDetails);
-
-		Call<WarehouseInventoryQueryResponse> inventory = sapService.queryWarehouseInventory(inventoryQueryRequest);
-		inventory.enqueue(new Callback<WarehouseInventoryQueryResponse>() {
-			@Override
-			public void onResponse(@NotNull Call<WarehouseInventoryQueryResponse> call, @NotNull Response<WarehouseInventoryQueryResponse> response) {
-				if (response.isSuccessful()) {
-					WarehouseInventoryQueryResponse inventoryQueryResult = response.body();
-					assert inventoryQueryResult != null;
-					if (!inventoryQueryResult.getData().getRETURN().getMSGTYPE().equalsIgnoreCase("S")) {
-						queryState.setValue(new ResultState(false, inventoryQueryResult.getData().getRETURN().getMSGTXT()));
+		Disposable disposable =
+				sapService.queryWarehouseInventory(inventoryQueryRequest).map(response -> {
+					if (response.getData().getRETURN().getMSGTYPE().equals("S") && response.getData().getData() == null) {
+						Utils.showToast(context,response.getData().getRETURN().getMSGTXT());
+						queryState.setValue(new ResultState(false, response.getData().getRETURN().getMSGTXT()));
 						_isLoading.setValue(false);
-						return;
+						return new ArrayList<WarehouseInventoryQueryModelView>();
 					}
-					Disposable disposable = Flowable.create((FlowableOnSubscribe<List<WarehouseInventoryQueryModelView>>) emitter -> {
-						List<WarehouseInventoryQueryResponseDetails> data = inventoryQueryResult.getData().getData();
-						List<WarehouseInventoryQueryModelView> modelView = new ArrayList<>();
-						// 按凭证号分组数据
-						Map<String, List<WarehouseInventoryQueryResponseDetails>> inventoryGroup = data.stream().collect(Collectors.groupingBy(WarehouseInventoryQueryResponseDetails::getIVNUM));
-						// 构建数据
-						inventoryGroup.forEach((k,v) -> {
-							WarehouseInventoryQueryModelView wmv = new WarehouseInventoryQueryModelView();
-							WarehouseInventoryQueryResponseDetails details = v.get(0);
-							wmv.setIVNUM(details.getIVNUM());
-							wmv.setLines(v);
-							modelView.add(wmv);
-						});
-						emitter.onNext(modelView);
-						emitter.onComplete();
-					}, BackpressureStrategy.LATEST).subscribeOn(Schedulers.io())
-							.observeOn(AndroidSchedulers.mainThread())
-							.subscribeWith(new DisposableSubscriber<List<WarehouseInventoryQueryModelView>>() {
-						@Override
-						public void onNext(List<WarehouseInventoryQueryModelView> mv) {
-							_inventorys.setValue(mv);
-						}
-						@Override
-						public void onError(Throwable t) {
-							_isLoading.setValue(false);
-						}
-
-						@Override
-						public void onComplete() {
-							_isLoading.setValue(false);
-						}
+					List<WarehouseInventoryQueryResponseDetails> data = response.getData().getData();
+					List<WarehouseInventoryQueryModelView> modelView = new ArrayList<>();
+					// 按凭证号分组数据
+					Map<String, List<WarehouseInventoryQueryResponseDetails>> inventoryGroup = data.stream().collect(Collectors.groupingBy(WarehouseInventoryQueryResponseDetails::getIVNUM));
+					// 构建数据
+					inventoryGroup.forEach((k,v) -> {
+						WarehouseInventoryQueryModelView wmv = new WarehouseInventoryQueryModelView();
+						WarehouseInventoryQueryResponseDetails details = v.get(0);
+						wmv.setIVNUM(details.getIVNUM());
+						wmv.setLines(v);
+						modelView.add(wmv);
 					});
-					addSubscription(disposable);
-				}
-			}
-
-			@Override
-			public void onFailure(@NotNull Call<WarehouseInventoryQueryResponse> call, @NotNull Throwable t) {
-				queryState.setValue(new ResultState(false, t.getMessage()));
-				Timber.e(t);
-			}
-		});
+					return modelView;
+				}).subscribeOn(Schedulers.io())
+						.observeOn(AndroidSchedulers.mainThread())
+						.subscribeWith(new DisposableSubscriber<List<WarehouseInventoryQueryModelView>>() {
+							@Override
+							public void onNext(List<WarehouseInventoryQueryModelView> inventoryModelView) {
+								if (inventoryModelView != null && inventoryModelView.size() > 0) {
+									_inventorys.setValue(inventoryModelView);
+								}
+							}
+							@Override
+							public void onError(Throwable t) {
+								_isLoading.setValue(false);
+							}
+							@Override
+							public void onComplete() {
+								_isLoading.setValue(false);
+							}
+						});
+		addSubscription(disposable);
 	}
 
 	LiveData<Boolean> isLoading() {

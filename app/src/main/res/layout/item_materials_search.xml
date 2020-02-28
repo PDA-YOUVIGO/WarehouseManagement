@@ -64,7 +64,7 @@
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="4dp"
             android:gravity="right"
             android:text="物料名称："
             android:textColor="@color/colorPrimary"
@@ -80,21 +80,19 @@
             android:gravity="start|center"
             android:paddingLeft="@dimen/dp_4"
             android:paddingRight="@dimen/dp_4"
-            android:singleLine="true"
             android:text="吸氧剂"
+            app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toBottomOf="@id/tv_material_name_description"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.222"
             app:layout_constraintStart_toEndOf="@id/tv_material_name_description"
-            app:layout_constraintTop_toTopOf="@id/tv_material_name_description"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@id/tv_material_name_description"/>
 
         <TextView
             android:id="@+id/tv_specification_description"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginTop="4dp"
             android:gravity="center|right"
             android:text="规格："
             android:textColor="@color/colorPrimary"

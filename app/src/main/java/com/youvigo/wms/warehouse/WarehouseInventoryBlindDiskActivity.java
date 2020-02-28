@@ -16,6 +16,7 @@
 
 package com.youvigo.wms.warehouse;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -56,6 +57,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -224,33 +228,42 @@ public class WarehouseInventoryBlindDiskActivity extends BaseActivity implements
     /**
      * 提交数据
      */
+    @SuppressLint("CheckResult")
     private void submit(List<WarehouseInventoryModelView> data){
         RetrofitClient retrofitClient = RetrofitClient.getInstance();
         SapService sapService = retrofitClient.getSapService();
         WarehouseInventoryRequest request = new WarehouseInventoryRequest();
         request.setControlInfo(new ControlInfo());
         request.setRequestDetails(new WarehouseInventoryCommon(this).proData(retrofitClient,data));
-        Call<WarehouseInventoryResponse> call = sapService.submitWarehouseInventory(request);
-        call.enqueue(new Callback<WarehouseInventoryResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Response<WarehouseInventoryResponse> response) {
-                if (response.isSuccessful()) {
-                    WarehouseInventoryResponse Response = response.body();
-                    WarehouseInventoryResponseResult responseResult = Response.getData();
-                    if (responseResult.getMSGTYPE().equalsIgnoreCase("E")) {
-                        Utils.showDialog(WarehouseInventoryBlindDiskActivity.this,"提交失败",responseResult.getMSGTXT(),"确定", (dialog, which) -> {dialog.dismiss();});
-                    } else if (responseResult.getMSGTYPE().equalsIgnoreCase("S")) {
-                        Utils.showDialog(WarehouseInventoryBlindDiskActivity.this,"提交成功",responseResult.getMSGTXT(),"确定", (dialog, which) -> {dialog.dismiss();});
-                        inventoryResult.clear();
-                        adapter.notifyDataSetChanged();
+        sapService.submitWarehouseInventory(request)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<WarehouseInventoryResponse>() {
+                    @Override
+                    public void onSuccess(WarehouseInventoryResponse response) {
+                        if (response.getData().getMSGTYPE().equalsIgnoreCase("E")) {
+                            Utils.showDialog(
+                                    WarehouseInventoryBlindDiskActivity.this,
+                                    "提交失败",
+                                    response.getData().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> dialog.dismiss());
+                        } else if (response.getData().getMSGTYPE().equalsIgnoreCase("S")) {
+                            Utils.showDialog(
+                                    WarehouseInventoryBlindDiskActivity.this,
+                                    "提交成功",
+                                    response.getData().getMSGTXT(),
+                                    "确定",
+                                    (dialog, which) -> dialog.dismiss());
+                            inventoryResult.clear();
+                            adapter.notifyDataSetChanged();
+                        }
                     }
-                }
-            }
-            @Override
-            public void onFailure(@NotNull Call<WarehouseInventoryResponse> call, @NotNull Throwable t) {
-                Utils.showToast(WarehouseInventoryBlindDiskActivity.this,t.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Utils.showToast(WarehouseInventoryBlindDiskActivity.this,e.toString());
+                    }
+                });
     }
 
     /**
