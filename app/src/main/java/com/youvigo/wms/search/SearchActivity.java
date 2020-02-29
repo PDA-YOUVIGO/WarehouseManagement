@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +26,7 @@ import com.youvigo.wms.deliver.DeliverActivity;
 import com.youvigo.wms.outstock.ReservedOutBoundActivity;
 import com.youvigo.wms.shelving.ShelvingActivity;
 import com.youvigo.wms.util.Constants;
+import com.youvigo.wms.util.Utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -204,14 +204,13 @@ public class SearchActivity extends AppCompatActivity {
 
 		viewModel.materials().observe(this, materials -> {
 			adapter.submitList(materials);
-			adapter.notifyDataSetChanged();
 		});
 
 		// 显示查询结果信息
 		viewModel.getQueryState().observe(this, queryState -> {
 			if (queryState == null) return;
 			if (!queryState.isSuccess()) {
-				Toast.makeText(this, queryState.getMessage(), Toast.LENGTH_LONG).show();
+				Utils.showToast(this, queryState.getMessage());
 			}
 		});
 	}

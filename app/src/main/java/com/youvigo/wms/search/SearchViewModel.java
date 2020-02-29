@@ -32,8 +32,6 @@ import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequest;
 import com.youvigo.wms.data.dto.request.ReservedOutBoundQueryRequestDetails;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequest;
 import com.youvigo.wms.data.dto.request.ShelvingQueryRequestDetails;
-import com.youvigo.wms.data.dto.response.DeliverQueryResponse;
-import com.youvigo.wms.data.dto.response.ReservedOutBoundQueryResponse;
 import com.youvigo.wms.data.dto.response.ShelvingResult;
 import com.youvigo.wms.data.entities.MaterialVoucher;
 import com.youvigo.wms.data.entities.ReservedOutBound;
@@ -42,8 +40,6 @@ import com.youvigo.wms.data.entities.TakeOff;
 import com.youvigo.wms.util.Constants;
 import com.youvigo.wms.util.Utils;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -51,18 +47,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class SearchViewModel extends BaseViewModel {
 
@@ -95,51 +84,48 @@ public class SearchViewModel extends BaseViewModel {
 		shelvingQueryRequestDetails.setWarehouseNumber(retrofitClient.getWarehouseNumber());
 		shelvingQueryRequest.setRequestDetails(shelvingQueryRequestDetails);
 
-		Disposable disposable = sapService.queryOnShelving(shelvingQueryRequest).map(response -> {
-			if (response.getShelvingQueryResponse().getResult().getSuccess().equalsIgnoreCase("E") ||
-					(response.getShelvingQueryResponse().getResult().getSuccess().equalsIgnoreCase("S") && response.getShelvingQueryResponse().getData() == null)) {
-				Utils.showToast(
-						context,
-						response.getShelvingQueryResponse().getResult().getMessage());
-				queryState.setValue(new ResultState(false,
-						response.getShelvingQueryResponse().getResult().getMessage()));
-				_isLoading.setValue(false);
-				return new ArrayList<MaterialVoucher>();
-			}
-			List<MaterialVoucher> mockData = new ArrayList<>();
-			List<Shelving> data = response.getShelvingQueryResponse().getData();
-			// 按单据号分组数据
-			Map<String, List<Shelving>> group =
-					data.stream().collect(Collectors.groupingBy(Shelving::getMaterialVoucherCode));
-			// 组织数据
-			group.forEach((k, v) -> {
-				MaterialVoucher materialVoucher = new MaterialVoucher();
-				materialVoucher.orderNumber = v.get(0).getMaterialVoucherCode();
-				materialVoucher.date =
-						LocalDate.parse(v.get(0).getVoucherDate(), dateTimeFormatter).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-				materialVoucher.creator = v.get(0).getCreator();
-				materialVoucher.supplierName = v.get(0).getSupplierName();
-				materialVoucher.shelvings = v;
-				mockData.add(materialVoucher);
-			});
-			return mockData;
-		}).subscribeOn(Schedulers.io())
+		Disposable disposable = sapService.queryOnShelving(shelvingQueryRequest)
+				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribeWith(new DisposableSubscriber<List<MaterialVoucher>>() {
+				.subscribeWith(new DisposableSingleObserver<ShelvingResult>() {
 					@Override
-					public void onNext(List<MaterialVoucher> ModelView) {
-						if (ModelView != null && ModelView.size() > 0) {
-							_materials.setValue(ModelView);
-						}
-					}
+					public void onSuccess(ShelvingResult shelvingResult) {
 
-					@Override
-					public void onError(Throwable t) {
+						if (shelvingResult.getShelvingQueryResponse().getResult().getSuccess().equals("E")
+								|| shelvingResult.getShelvingQueryResponse().getData() == null) {
+							queryState.setValue(new ResultState(false,
+									shelvingResult.getShelvingQueryResponse().getResult().getMessage()));
+							_isLoading.setValue(false);
+							return;
+						}
+
+						List<MaterialVoucher> mockData = new ArrayList<>();
+						List<Shelving> data = shelvingResult.getShelvingQueryResponse().getData();
+
+
+						// 按单据号分组数据
+						Map<String, List<Shelving>> group = data.stream()
+								.collect(Collectors.groupingBy(Shelving::getMaterialVoucherCode));
+
+						// 组织数据
+						group.forEach((k, v) -> {
+							MaterialVoucher materialVoucher = new MaterialVoucher();
+							materialVoucher.orderNumber = v.get(0).getMaterialVoucherCode();
+							materialVoucher.date =
+									LocalDate.parse(v.get(0).getVoucherDate(), dateTimeFormatter).format(DateTimeFormatter
+											.ofPattern(Constants.DATE_PATTERN_DEFAULT));
+							materialVoucher.creator = v.get(0).getCreator();
+							materialVoucher.supplierName = v.get(0).getSupplierName();
+							materialVoucher.shelvings = v;
+							mockData.add(materialVoucher);
+						});
+
+						_materials.setValue(mockData);
 						_isLoading.setValue(false);
 					}
 
 					@Override
-					public void onComplete() {
+					public void onError(Throwable e) {
 						_isLoading.setValue(false);
 					}
 				});

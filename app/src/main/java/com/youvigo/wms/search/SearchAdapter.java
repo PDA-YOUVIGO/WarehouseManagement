@@ -53,7 +53,7 @@ public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.Se
     }
 
     class SearchVH extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView materialDocument;
+        private final TextView voucherCode;
         private final TextView date;
         private final TextView creator;
 
@@ -62,13 +62,13 @@ public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.Se
 
             itemView.setOnClickListener(this);
 
-            materialDocument = itemView.findViewById(R.id.tv_material_document);
+            voucherCode = itemView.findViewById(R.id.tv_material_document);
             date = itemView.findViewById(R.id.tv_date);
             creator = itemView.findViewById(R.id.tv_creator);
         }
 
         void bind(MaterialVoucher materialVoucher) {
-            materialDocument.setText(materialVoucher.orderNumber);
+            voucherCode.setText(materialVoucher.orderNumber);
             date.setText(materialVoucher.date);
             creator.setText(materialVoucher.creator);
         }
@@ -90,12 +90,14 @@ public class SearchAdapter extends ListAdapter<MaterialVoucher, SearchAdapter.Se
 
         @Override
         public boolean areItemsTheSame(@NonNull MaterialVoucher oldItem, @NonNull MaterialVoucher newItem) {
-            return oldItem.orderNumber.equals(newItem.orderNumber);
+            //return oldItem.orderNumber.equals(newItem.orderNumber);
+            return false;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull MaterialVoucher oldItem, @NonNull MaterialVoucher newItem) {
-            return oldItem.creator.equals(newItem.creator) && oldItem.date.equals(newItem.date);
+            //return oldItem.orderNumber.equals(newItem.orderNumber);
+            return false;
         }
     }
 }
